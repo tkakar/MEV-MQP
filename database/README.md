@@ -15,3 +15,11 @@ psql faers < create-tables.sql
 ```bash
 psql faers < create-indices.sql
 ```
+
+## Check schema
+
+```bash
+psql faers
+>>>\dt
+>>>\d demo
+```
