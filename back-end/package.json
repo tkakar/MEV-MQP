@@ -1,0 +1,12 @@
+{
+  "name": "mev-mqp-back-end",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.15.4",
+    "pg": "^7.3.0"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
