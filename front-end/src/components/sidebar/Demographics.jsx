@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setGender } from '../../actions/demographicAction'
+import { setGender } from '../../actions/demographicAction';
 import Gender from './demographics/Gender';
 
 class Demographics extends Component {
@@ -27,7 +27,7 @@ class Demographics extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.setGender} />
+        <button onClick={this.props.setGender} >ADD STUFF </button>
         <Gender gender={this.props.gender} />
       </div>
     );
