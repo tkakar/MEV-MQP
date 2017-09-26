@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import StackedBarVisualization from './visualizations/StackedBarVisualization';
 
 class VisualizationContainer extends Component {
-  visualizationPreference = 'STACKED_BAR';
+  static visualizationPreference = 'STACKED_BAR';
 
   renderVisualization = () => {
     switch (this.visualizationPreference) {
@@ -18,7 +18,7 @@ class VisualizationContainer extends Component {
   }
 
   render = () => (
-    <div>
+    <div id="main-visualization-container" className="col-md-10" >
       {this.renderVisualization()}
     </div>
   )

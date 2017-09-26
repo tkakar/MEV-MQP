@@ -1,7 +1,8 @@
 import React from 'react';
-import './App.css';
 import VisualizationContainer from './VisualizationContainer';
 import SideBarContainer from './SideBarContainer';
+import TimelineContainer from './TimelineContainer';
+import './App.css';
 
 
 export default function App() {
@@ -9,6 +10,7 @@ export default function App() {
     <div className="App">
       <SideBarContainer />
       <VisualizationContainer />
+      <TimelineContainer />
     </div>
   );
 }

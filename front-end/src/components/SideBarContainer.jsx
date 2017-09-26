@@ -3,7 +3,9 @@ import SideBar from './sidebar/SideBar';
 
 class SideBarContainer extends Component {
   render = () => (
-    <SideBar />
+    <div id="sidebar-container" className="col-md-2" >
+      <SideBar />
+    </div>
   )
 }
 

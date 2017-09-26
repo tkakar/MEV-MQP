@@ -8,18 +8,35 @@ const client = new Client({
 });
 
 client.connect()
-
-client.query('SELECT * FROM demo', (err, data) => {
-  console.log(err, data)
-})
   
-app.get('/', (req, res) => {
-  
+
+const allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+}
+
+app.use(allowCrossDomain);
+
+app.get('/getdata', (req, res) => {
+  console.log('got a request')
+  client.query('SELECT * FROM demo limit 50', (err, data) => {
+    console.log(data.rows)
+    res.status(200).send(data);
+  })
+
+  // res.status(200).send({hi: 'hi'})
 })
 
-app.post('/', (req, res) => {
+app.post('/getdata', (req, res) => {
+  console.log('got a request')
+  // client.query('SELECT * FROM demo limit 5', (err, data) => {
+  //   res.send(data);
+  // })
 
-})
+  res.status(200).send({hi: 'hi'})
+});
 
 app.listen(port);
 console.log('listening on ' + port)

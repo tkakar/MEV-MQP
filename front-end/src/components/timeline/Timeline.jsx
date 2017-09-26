@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-import Demograpics from './Demographics';
 import { getData } from '../../actions/visualizationAction';
-import './SideBar.css';
+import './Timeline.css';
 
 class SideBar extends Component {
   static propTypes = {
@@ -14,10 +13,8 @@ class SideBar extends Component {
   asd = () => 2;
 
   render = () => (
-    <div id="sidebar" >
-      {/* <SelectedDate /> */}
-      <Button bsStyle="primary" onClick={this.props.getData}>CLICK ME</Button>
-      <Demograpics />
+    <div id="timeline" className="col-md-12" >
+      <Button bsStyle="primary" onClick={this.props.getData}>Set Date!</Button>
     </div>
   )
 }

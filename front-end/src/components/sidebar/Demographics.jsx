@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap';
 import { setGender } from '../../actions/demographicAction';
 import Gender from './demographics/Gender';
 
@@ -27,7 +28,7 @@ class Demographics extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.props.setGender} >ADD STUFF </button>
+        <Button onClick={this.props.setGender} >ADD STUFF</Button>
         <Gender gender={this.props.gender} />
       </div>
     );
