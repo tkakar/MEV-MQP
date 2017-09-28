@@ -18,7 +18,7 @@ class TimelineContainer extends Component {
   }
 
   render = () => (
-    <div id="timeline-container" className="col-md-12" >
+    <div id="timeline-container" className="col-xs-12 card card-outline-primary" >
       {this.renderTimeline()}
     </div>
   )

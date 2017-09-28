@@ -7,8 +7,9 @@ import thunk from 'redux-thunk';
 
 /* <!-------------- CSS File Imports! --------------!> */
 import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import './resources/cosmoTheme.css';
 import './index.css';
+
 
 import reducers from './reducers/index';
 import App from './components/App';

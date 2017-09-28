@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
 import Demograpics from './Demographics';
-import { getData } from '../../actions/visualizationAction';
+import { getData } from '../../actions/visualizationActions';
 import './SideBar.css';
 
 class SideBar extends Component {
@@ -16,7 +15,7 @@ class SideBar extends Component {
   render = () => (
     <div id="sidebar" >
       {/* <SelectedDate /> */}
-      <Button bsStyle="primary" onClick={this.props.getData}>CLICK ME</Button>
+      <button className="btn btn-primary" onClick={this.props.getData}>CLICK ME</button>
       <Demograpics />
     </div>
   )

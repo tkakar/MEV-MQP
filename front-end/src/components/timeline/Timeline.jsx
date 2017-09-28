@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
-import { getData } from '../../actions/visualizationAction';
+import { FormGroup, InputGroup, FormControl } from 'react-bootstrap';
+import { setSelectedTime } from '../../actions/timelineActions';
 import './Timeline.css';
 
 class SideBar extends Component {
   static propTypes = {
-    getData: PropTypes.func.isRequired,
+    setSelectedTime: PropTypes.func.isRequired,
   }
 
-  asd = () => 2;
+  updateSelectedDate = () => {
+    const startDate = document.getElementById('start_date').value;
+    const endDate = document.getElementById('end_date').value;
+    this.props.setSelectedTime({
+      startDate,
+      endDate,
+    });
+  };
 
   render = () => (
-    <div id="timeline" className="col-md-12" >
-      <Button bsStyle="primary" onClick={this.props.getData}>Set Date!</Button>
+    <div id="timeline" >
+      <button className="btn btn-outline-secondary" onClick={this.updateSelectedDate}>Set Date!</button>
+      <FormGroup>
+        <InputGroup>
+          <FormControl type="text" placeholder="Start Date" id="start_date" defaultValue="20160329" />
+          <InputGroup.Addon>To</InputGroup.Addon>
+          <FormControl type="text" placeholder="End Date" id="end_date" defaultValue="20160512" />
+        </InputGroup>
+      </FormGroup>
     </div>
   )
 }
 
 export default connect(
   null,
-  { getData },
+  { setSelectedTime },
 )(SideBar);

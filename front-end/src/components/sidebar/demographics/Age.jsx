@@ -1,21 +1,18 @@
-// import React from 'react';
-// import PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 
-// const Age = props => (
-//   <div>
-//     <p>{props.gender.male}</p>
-//     <p>{props.gender.female}</p>
-//     <p>{props.gender.unknown}</p>
-//   </div>
-// );
+const Age = props => (
+  <div>
+    <h2>Age</h2>
+    <div className="card card-outline-primary" >
+      <p>{ JSON.stringify(props.age) }</p>
+    </div>
+  </div>
+);
 
-// Gender.propTypes = {
-//   gender: PropTypes.shape({
-//     male: PropTypes.number.isRequired,
-//     female: PropTypes.number.isRequired,
-//     unknown: PropTypes.number.isRequired,
-//   }).isRequired,
-// };
+Age.propTypes = {
+  age: PropTypes.objectOf(PropTypes.number).isRequired,
+};
 
-// export default Gender;
+export default Age;

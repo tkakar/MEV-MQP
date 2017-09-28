@@ -1,0 +1,9 @@
+#sidebar .card {
+  padding: 3px;
+}
+
+#sidebar .demographics-card .card {
+  overflow: scroll;
+  word-wrap: break-word;
+  max-height: 200px;
+}

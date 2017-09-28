@@ -1,15 +1,18 @@
 const initialDemographicState = {
-  gender: {
-    male: 0,
-    female: 0,
-    unknown: 0,
+  sex: {
+    M: 0,
+    F: 0,
+    UNK: 0,
   },
+  age: {},
+  location: {},
 };
 
 export default (state = initialDemographicState, action = {}) => {
   switch (action.type) {
-    case 'SET_GENDER':
-      return Object.assign({}, state, { gender: action.gender });
+    case 'UPDATE_DEMOGRAPHICS':
+      console.log(...action.demographics);
+      return Object.assign({}, state, { ...action.demographics });
     default: return state;
   }
 };

@@ -3,7 +3,7 @@ import SideBar from './sidebar/SideBar';
 
 class SideBarContainer extends Component {
   render = () => (
-    <div id="sidebar-container" className="col-md-2" >
+    <div id="sidebar-container" className="col-xs-2 card card-outline-primary" >
       <SideBar />
     </div>
   )
