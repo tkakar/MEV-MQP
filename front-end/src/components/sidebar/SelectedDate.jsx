@@ -7,14 +7,15 @@ const SelectedDate = props => (
   <div>
     <h2>Selected Date</h2>
     <div className="card card-outline-primary" >
-      <p><Label bsStyle="default">{props.startDate.toDateString()}</Label> to <Label bsStyle="default">{props.endDate.toDateString()}</Label></p>
+      <p><Label bsStyle="default">{props.startDate}</Label> to <Label bsStyle="default">{props.endDate}</Label></p>
+      {/* <p><Label bsStyle="default">{props.startDate.toDateString()}</Label> to <Label bsStyle="default">{props.endDate.toDateString()}</Label></p> */}
     </div>
   </div>
 );
 
 SelectedDate.propTypes = {
-  startDate: PropTypes.instanceOf(Date).isRequired,
-  endDate: PropTypes.instanceOf(Date).isRequired,
+  startDate: PropTypes.number.isRequired,
+  endDate: PropTypes.number.isRequired,
 };
 
 export default SelectedDate;

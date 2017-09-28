@@ -15,9 +15,9 @@ const Sex = props => (
 
 Sex.propTypes = {
   sex: PropTypes.shape({
-    M: PropTypes.number.isRequired,
-    F: PropTypes.number.isRequired,
-    UNK: PropTypes.number.isRequired,
+    M: PropTypes.number,
+    F: PropTypes.number,
+    UNK: PropTypes.number,
   }).isRequired,
 };
 

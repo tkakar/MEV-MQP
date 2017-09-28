@@ -2,26 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Demograpics from './Demographics';
-import { getData } from '../../actions/visualizationActions';
+import SelectedDate from './SelectedDate';
 import './SideBar.css';
 
 class SideBar extends Component {
   static propTypes = {
-    getData: PropTypes.func.isRequired,
+    selectedDates: PropTypes.shape({
+      startDate: PropTypes.number.isRequired,
+      endDate: PropTypes.number.isRequired,
+    }).isRequired,
   }
 
   asd = () => 2;
 
   render = () => (
     <div id="sidebar" >
-      {/* <SelectedDate /> */}
-      <button className="btn btn-primary" onClick={this.props.getData}>CLICK ME</button>
+      <SelectedDate
+        startDate={this.props.selectedDates.startDate}
+        endDate={this.props.selectedDates.endDate}
+      />
       <Demograpics />
     </div>
   )
 }
 
+const mapStateToProps = state => ({
+  selectedDates: state.demographic.selectedDates,
+});
+
 export default connect(
+  mapStateToProps,
   null,
-  { getData },
 )(SideBar);

@@ -47,7 +47,10 @@ export const getData = queryParams => (dispatch) => {
         sex: _(things.rows).map(sexAdapter).countBy().value(),
         age: _(things.rows).map(ageAdapter).countBy(Math.floor).value(),
         location: _(things.rows).map(countryAdapter).countBy().value(),
-        date: _(things.rows).map('rept_dt').countBy().value(),
+        selectedDates: {
+          startDate: Number(queryParams.startDate),
+          endDate: Number(queryParams.endDate),
+        },
       };
       console.log(demographics);
       dispatch({ type: 'UPDATE_DEMOGRAPHICS', demographics });
