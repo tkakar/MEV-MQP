@@ -9,13 +9,13 @@ const client = new Client({
 });
 
 client.connect()
-  
 
-const allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
+
+const allowCrossDomain = function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
 }
 
 app.use(allowCrossDomain);
@@ -24,12 +24,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.get('/getdata', (req, res) => {
+app.get('/', (req, res) => {
   console.log('got a request')
-  client.query('SELECT sex, age, age_cod, occr_country FROM demo limit 500', (err, data) => {
-    // console.log(data.rows)
-    res.status(200).send(data);
-  })
+  res.status(200).send({});
 })
 
 app.post('/getdata', (req, res) => {
