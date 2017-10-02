@@ -5,7 +5,11 @@ const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/faers',
+  user: 'MEVUser',
+  host: 'mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
+  database: 'faers',
+  password: '2UdS1KQo',
+  port: '5432'
 });
 
 client.connect()
