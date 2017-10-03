@@ -15,6 +15,13 @@ class SideBar extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    document.getElementById('timeline-chart').addEventListener('mouseup', (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }, true);
+  }
+
   handleZoom(domain) {
     this.setState({selectedDomain: domain});
   }
@@ -46,15 +53,15 @@ class SideBar extends Component {
           </InputGroup>
         </FormGroup>
       </div>
-      <div>
+      <div id="timeline-chart">
         <VictoryChart
-          padding={{top: 0, left: 50, right: 50, bottom: 30}}
-          width={1000} height={100} scale={{x: "time"}} style={this.chartStyle}
+          padding={{ top: 0, left: 50, right: 50, bottom: 30 }}
+          width={800} height={100} scale={{ x: "time" }}
           containerComponent={
             <VictoryBrushContainer responsive={false}
-              dimension="x"
-              selectedDomain={this.state.selectedDomain}
-              onDomainChange={this.handleBrush.bind(this)}
+              brushDomain={this.state.zoomDomain}
+              brushDimension="x"
+              onBrushDomainChange={this.handleZoom.bind(this)}
             />
           }
         >
@@ -71,19 +78,20 @@ class SideBar extends Component {
           />
           <VictoryLine
             style={{
-              data: {stroke: "tomato"}
+              data: { stroke: "tomato" }
             }}
             data={[
-              {x: new Date(1982, 1, 1), y: 125},
-              {x: new Date(1987, 1, 1), y: 257},
-              {x: new Date(1993, 1, 1), y: 345},
-              {x: new Date(1997, 1, 1), y: 515},
-              {x: new Date(2001, 1, 1), y: 132},
-              {x: new Date(2005, 1, 1), y: 305},
-              {x: new Date(2011, 1, 1), y: 270},
-              {x: new Date(2015, 1, 1), y: 470}
+              { x: new Date(1982, 1, 1), y: 125 },
+              { x: new Date(1987, 1, 1), y: 257 },
+              { x: new Date(1993, 1, 1), y: 345 },
+              { x: new Date(1997, 1, 1), y: 515 },
+              { x: new Date(2001, 1, 1), y: 132 },
+              { x: new Date(2005, 1, 1), y: 305 },
+              { x: new Date(2011, 1, 1), y: 270 },
+              { x: new Date(2015, 1, 1), y: 470 }
             ]}
           />
+
         </VictoryChart>
       </div>
     </div>
