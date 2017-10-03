@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 
 const Age = props => (
-  <div>
+  <div className="col-sm-3">
     <h2>Age</h2>
     <div className="card card-outline-primary" >
       <p>{ JSON.stringify(props.age) }</p>

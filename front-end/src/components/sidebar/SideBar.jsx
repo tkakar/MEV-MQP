@@ -16,7 +16,7 @@ class SideBar extends Component {
   asd = () => 2;
 
   render = () => (
-    <div id="sidebar" >
+    <div id="heading" className="col-sm-12">
       <SelectedDate
         startDate={this.props.selectedDates.startDate}
         endDate={this.props.selectedDates.endDate}

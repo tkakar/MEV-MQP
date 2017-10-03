@@ -46,6 +46,7 @@ export const getData = queryParams => (dispatch) => {
       const demographics = {
         sex: _(things.rows).map(sexAdapter).countBy().value(),
         age: _(things.rows).map(ageAdapter).countBy(Math.floor).value(),
+        
         location: _(things.rows).map(countryAdapter).countBy().value(),
         selectedDates: {
           startDate: Number(queryParams.startDate),

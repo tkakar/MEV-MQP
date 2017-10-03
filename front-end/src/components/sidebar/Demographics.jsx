@@ -19,15 +19,17 @@ class Demographics extends Component {
   }
 
   filter = () => true;
-
+  aggregateLocation = (data) => {
+    console.log(data)
+    return data;
+  }
   render() {
     return (
-      <div>
-        <h1>Demographics</h1>
-        <div className="card card-outline-primary demographics-card" >
+      <div className="col-sm-9">
+        <div className="" >
           <Sex sex={this.props.sex} />
           <Age age={this.props.age} />
-          <Location location={this.props.location} />
+          <Location location={this.aggregateLocation(this.props.location)} />
         </div>
       </div>
     );
