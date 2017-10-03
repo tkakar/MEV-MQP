@@ -20,13 +20,13 @@ class Demographics extends Component {
 
   filter = () => true;
   aggregateLocation = (data) => {
-    console.log(data)
+    console.log(data);
     return data;
   }
   render() {
     return (
       <div className="col-sm-9">
-        <div className="" >
+        <div>
           <Sex sex={this.props.sex} />
           <Age age={this.props.age} />
           <Location location={this.aggregateLocation(this.props.location)} />
