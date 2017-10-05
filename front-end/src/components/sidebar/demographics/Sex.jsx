@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 
 const Sex = props => (
-  <div className="col-sm-3">
+  <div className="col-sm-4">
     <h2>Sex</h2>
     <div className="card card-outline-primary" >
       <p>Male: { props.sex.M }</p>

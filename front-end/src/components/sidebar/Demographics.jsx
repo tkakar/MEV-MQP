@@ -18,18 +18,23 @@ class Demographics extends Component {
     location: PropTypes.objectOf(PropTypes.number).isRequired,
   }
 
-  filter = () => true;
-  aggregateLocation = (data) => {
-    console.log(data);
-    return data;
+  getValues = (data) => {
+    const countries = Object.keys(data);
+    const countryValues = Object.values(data);
+    const newData = { countries, countryValues };
+    return newData;
   }
+
+  filter = () => true;
   render() {
     return (
       <div className="col-sm-9">
         <div>
           <Sex sex={this.props.sex} />
           <Age age={this.props.age} />
-          <Location location={this.aggregateLocation(this.props.location)} />
+          <Location
+            location={this.getValues(this.props.location)}
+          />
         </div>
       </div>
     );
