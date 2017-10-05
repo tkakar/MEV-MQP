@@ -1,4 +1,4 @@
-import { getData } from './visualizationActions';
+import { getData, getTimelineData } from './visualizationActions';
 
 export const setSelectedTime = selectedDates => (dispatch) => {
   const postBody = {
@@ -10,5 +10,6 @@ export const setSelectedTime = selectedDates => (dispatch) => {
   dispatch(getData(postBody));
 };
 
-export const getConfig = id => (dispatch) => {
+export const setSelectedTimeline = () => (dispatch) => {
+  dispatch(getTimelineData());
 };

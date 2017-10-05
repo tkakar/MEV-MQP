@@ -22,6 +22,28 @@ const ageAdapter = (row) => {
 const sexAdapter = row => (row.sex ? row.sex : 'UNK');
 const countryAdapter = row => (row.occr_country ? row.occr_country : 'UNK');
 
+export const getTimelineData = queryParams => (dispatch) => {
+  const fetchData = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  };
+
+  console.log('grabbing timeline data');
+
+  fetch('http://localhost:3001/gettimelinedata', fetchData)
+    .then(response => response.json())
+    .then((things) => {
+      console.log(things.rows);
+      dispatch({ type: 'UPDATE_DATA', things: JSON.stringify(things.rows, null, 2) });
+    })
+    .catch((err) => {
+      console.error.bind(err);
+    });
+};
+
 export const getData = queryParams => (dispatch) => {
   const fetchData = {
     method: 'POST',

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormGroup, InputGroup, FormControl } from 'react-bootstrap';
-import { setSelectedTime } from '../../actions/timelineActions';
+import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
 import './Timeline.css';
 import { VictoryAxis, VictoryBrushContainer, VictoryLine, VictoryChart } from 'victory';
 
@@ -38,6 +38,7 @@ class SideBar extends Component {
     <div>
       <div id="timeline" >
         <button className="btn btn-outline-secondary" onClick={this.updateSelectedDate}>Set Date!</button>
+        <button className="btn btn-outline-secondary" onClick={this.props.setSelectedTimeline}>Set Timeline!</button>
         <FormGroup>
           <InputGroup>
             <FormControl type="text" placeholder="Start Date" id="start_date" defaultValue="20160329" />
@@ -92,5 +93,5 @@ class SideBar extends Component {
 
 export default connect(
   null,
-  { setSelectedTime },
+  { setSelectedTime, setSelectedTimeline },
 )(SideBar);
