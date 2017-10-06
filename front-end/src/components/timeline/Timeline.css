@@ -20,7 +20,21 @@ input.form-control{
   font-size: 10pt;
 }
 
+#timeline-selector {
+  height: 15vh;
+  overflow: hidden;
+}
+
+#timeline {
+  width: 15%
+}
+
 #timeline-chart {
   display: inline-block;
-  width: 100%;
+  width: 85%;
+  height: 15vh;
+}
+
+.recharts-layer.recharts-brush {
+  display: none;
 }
