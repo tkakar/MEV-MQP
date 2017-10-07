@@ -45,7 +45,7 @@ class Timeline extends Component {
       this.setState({ previewStartX: this.state.mouseMovePosition });
 
       document.getElementById('start_date').value = this.state.selectedStartX;
-      // Clear  the Other end to start a new selection
+      // Clear  the Other end to start a new selection TODO
       this.setState({ selectedEndX: 0 });
       this.setState({ previewEndX: 0 });
     }, false);
