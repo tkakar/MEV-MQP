@@ -44,7 +44,7 @@ app.post('/getdata', (req, res) => {
 app.post('/gettimelinedata', (req, res) => {
   console.log('got a request for timeline data')
   let query = 
-  "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end) as serious, count(case when a.outc_cod is null then 1 end) as not_serious "
+  "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end)::INTEGER as serious, count(case when a.outc_cod is null then 1 end)::INTEGER as not_serious "
 + "from (select d.init_fda_dt, o.outc_cod " 
 +       "from (select primaryid, init_fda_dt "
 +             "from demo) d "

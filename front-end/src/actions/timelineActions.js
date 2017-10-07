@@ -25,7 +25,6 @@ export const setSelectedTimeline = () => (dispatch) => {
     .then(response => response.json())
     .then((allReports) => {
       console.log(allReports.rows);
-      // dispatch({ type: 'UPDATE_DATA', things: JSON.stringify(allReports.rows, null, 2) });
       dispatch({ type: 'SET_ENTIRE_TIMELINE', entireTimelineData: allReports.rows });
     })
     .catch((err) => {

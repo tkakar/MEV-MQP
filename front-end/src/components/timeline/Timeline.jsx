@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormGroup, InputGroup, FormControl } from 'react-bootstrap';
-import { AreaChart, Area, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceArea, Brush } from 'recharts';
+import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
 import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
@@ -14,6 +14,7 @@ class Timeline extends Component {
     setSelectedTimeline: PropTypes.func.isRequired,
     entireTimelineData: PropTypes.arrayOf(
       PropTypes.shape({
+        init_fda_dt: PropTypes.string.isRequired,
         serious: PropTypes.number.isRequired,
         not_serious: PropTypes.number.isRequired,
       }),
@@ -29,15 +30,14 @@ class Timeline extends Component {
       previewStartX: 0,
       previewEndX: 0,
 
-      brushStartIndex: 0,
-      brushEndIndex: 14, // Two Weeks
-
       currentlySelecting: false,
       mouseMovePosition: 0,
+      mouseZoomLocation: 0,
     };
   }
 
   componentDidMount() {
+    this.props.setSelectedTimeline();
     document.getElementById('timeline-chart').addEventListener('mousedown', (e) => {
       console.log(e)
       this.setState({ currentlySelecting: true });
@@ -66,6 +66,8 @@ class Timeline extends Component {
     }, true);
   }
 
+  getmouseZoomLocation = () => this.state.mouseZoomLocation;
+
   updateSelectedDate = () => {
     const startDate = document.getElementById('start_date').value;
     const endDate = document.getElementById('end_date').value;
@@ -76,14 +78,81 @@ class Timeline extends Component {
   };
 
   recordMouseMove = (e) => {
+    // console.log(e)
     if (e && e.activeLabel) {
       if (this.state.mouseMovePosition !== e.activeLabel) {
-        this.setState({ mouseMovePosition: e.activeLabel });
+        this.setState({ mouseMovePosition: e.activeLabel, mouseZoomLocation: e.chartX });
       }
     }
   }
 
   data = () => this.props.entireTimelineData;
+
+  renderLoading = () => (
+    <p>we are loading the data</p>
+  )
+
+  renderTimeline = () => (
+    <ResponsiveContainer width="100%" height="100%" >
+      <AreaChartImpl
+        data={this.data()}
+        margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+        onMouseMove={this.recordMouseMove}
+      >
+        <defs>
+          <linearGradient id="colorGrey" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="15%" stopColor="#757575" stopOpacity={0.8} />
+            <stop offset="99%" stopColor="#757575" stopOpacity={0.2} />
+          </linearGradient>
+          <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
+            <stop offset="99%" stopColor="#283593" stopOpacity={0.2} />
+          </linearGradient>
+        </defs>
+        <XAxis dataKey="init_fda_dt" />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip
+          animationDuration={0}
+        />
+        <Area
+          type="monotone"
+          dataKey="serious"
+          stroke="#1A237E"
+          fillOpacity={1}
+          stackId="1"
+          fill="url(#colorRed)"
+          animationDuration={700}
+          connectNulls={false}
+        />
+        <Area
+          type="monotone"
+          dataKey="not_serious"
+          stroke="#424242"
+          fillOpacity={1}
+          stackId="1"
+          fill="url(#colorGrey)"
+          animationDuration={700}
+          connectNulls={false}
+        />
+        <BrushImpl
+          dataKey="init_fda_dt"
+          stroke="#8884d8"
+          height={1}
+          travellerWidth={10}
+          startIndex={this.data().length - 30}
+          endIndex={this.data().length - 1}
+          getmouseZoomLocation={this.getmouseZoomLocation}
+        />
+        <ReferenceArea
+          x1={this.state.previewStartX}
+          x2={this.state.previewEndX}
+          stroke="red"
+          strokeOpacity={0.3}
+          xAxisId={0}
+        />
+      </AreaChartImpl>
+    </ResponsiveContainer>
+  )
 
   render = () => (
     <div id="timeline-selector">
@@ -99,66 +168,7 @@ class Timeline extends Component {
         </FormGroup>
       </div>
       <div id="timeline-chart" className="col col-xs-10">
-        <ResponsiveContainer width="100%" height="100%" >
-          <AreaChartImpl
-            data={this.data()}
-            margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-            onMouseMove={this.recordMouseMove}
-          >
-            <defs>
-              {/* <linearGradient id="colorGreen" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="15%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="99%" stopColor="#82ca9d" stopOpacity={0.2} />
-              </linearGradient> */}
-              <linearGradient id="colorGrey" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="15%" stopColor="#757575" stopOpacity={0.8} />
-                <stop offset="99%" stopColor="#757575" stopOpacity={0.2} />
-              </linearGradient>
-              <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="15%" stopColor="#E53935" stopOpacity={0.8} />
-                <stop offset="99%" stopColor="#E53935" stopOpacity={0.2} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="init_fda_dt" />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            <Area
-              type="monotone"
-              dataKey="serious"
-              stroke="#8884d8"
-              fillOpacity={1}
-              stackId="1"
-              fill="url(#colorRed)"
-              animationDuration={700}
-              connectNulls={false}
-            />
-            <Area
-              type="monotone"
-              dataKey="not_serious"
-              stroke="#424242"
-              fillOpacity={1}
-              stackId="1"
-              fill="url(#colorGrey)"
-              animationDuration={700}
-              connectNulls={false}
-            />
-            <BrushImpl
-              dataKey="init_fda_dt"
-              stroke="#8884d8"
-              height={1}
-              travellerWidth={10}
-              startIndex={0}
-              endIndex={14}
-            />
-            <ReferenceArea
-              x1={this.state.previewStartX}
-              x2={this.state.previewEndX}
-              stroke="red"
-              strokeOpacity={0.3}
-              xAxisId={0}
-            />
-          </AreaChartImpl>
-        </ResponsiveContainer>
+        {(this.data().length > 1) ? this.renderTimeline() : this.renderLoading()}
       </div>
     </div>
   )
