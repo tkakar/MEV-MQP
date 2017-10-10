@@ -1,10 +1,13 @@
 var express = require('express')
   , app = express()
   , port = 3001
+const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
-const client = new Client({
+const cache = redis.createClient();
+
+const db = new Client({
   user: 'MEVUser',
   host: 'mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
   database: 'faers',
@@ -12,8 +15,7 @@ const client = new Client({
   port: '5432'
 });
 
-client.connect()
-
+db.connect()
 
 const allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
@@ -35,7 +37,7 @@ app.get('/', (req, res) => {
 
 app.post('/getdata', (req, res) => {
   console.log('got a request with body:\n ', req.body)
-  client.query('SELECT sex, age, age_cod, occr_country, REPT_DT, occp_cod FROM demo limit 500', (err, data) => {
+  db.query('SELECT sex, age, age_cod, occr_country, REPT_DT FROM demo limit 500', (err, data) => {
     // console.log(data.rows)
     res.status(200).send(data);
   })
@@ -43,19 +45,29 @@ app.post('/getdata', (req, res) => {
 
 app.post('/gettimelinedata', (req, res) => {
   console.log('got a request for timeline data')
-  let query = 
-  "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end)::INTEGER as serious, count(case when a.outc_cod is null then 1 end)::INTEGER as not_serious "
-+ "from (select d.init_fda_dt, o.outc_cod " 
-+       "from (select primaryid, init_fda_dt "
-+             "from demo) d "
-+       "full outer join (select primaryid, outc_cod "
-+             "from outc) o "
-+       "on d.primaryid = o.primaryid) a "
-+ "group by a.init_fda_dt "
-+ "order by a.init_fda_dt"
-  client.query(query, (err, data) => {
-    // console.log(data.rows)
-    res.status(200).send(data.rows);
+  cache.send_command('JSON.GET', ['timeline'], (err, data) => {
+    if (data !== null) {
+      console.log('got timeline data from cache')
+      return res.status(200).send(data)
+    } else {
+      let query = 
+        "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end)::INTEGER as serious, count(case when a.outc_cod is null then 1 end)::INTEGER as not_serious "
+      + "from (select d.init_fda_dt, o.outc_cod " 
+      +       "from (select primaryid, init_fda_dt "
+      +             "from demo) d "
+      +       "full outer join (select primaryid, outc_cod "
+      +             "from outc) o "
+      +       "on d.primaryid = o.primaryid) a "
+      + "group by a.init_fda_dt "
+      + "order by a.init_fda_dt"
+      db.query(query, (err, data) => {
+        // console.log(data.rows)
+        console.log('got timeline data from db');
+        json = JSON.stringify(data.rows);
+        cache.send_command("JSON.SET", ['timeline', '.', json]);
+        res.status(200).send(data.rows);
+      })
+    }
   })
 });
 
