@@ -24,8 +24,8 @@ export const setSelectedTimeline = () => (dispatch) => {
   fetch('http://localhost:3001/gettimelinedata', fetchData)
     .then(response => response.json())
     .then((allReports) => {
-      console.log(allReports.rows);
-      dispatch({ type: 'SET_ENTIRE_TIMELINE', entireTimelineData: allReports.rows });
+      console.log(allReports);
+      dispatch({ type: 'SET_ENTIRE_TIMELINE', entireTimelineData: allReports });
     })
     .catch((err) => {
       console.error.bind(err);
