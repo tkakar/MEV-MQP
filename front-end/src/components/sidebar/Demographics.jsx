@@ -9,25 +9,22 @@ import './Demographics.css';
 
 class Demographics extends Component {
   static propTypes = {
-    sex: PropTypes.shape({
-      M: PropTypes.number,
-      F: PropTypes.number,
-      UNK: PropTypes.number,
-    }).isRequired,
-    age: PropTypes.objectOf(PropTypes.number).isRequired,
-    location: PropTypes.objectOf(PropTypes.number).isRequired,
+    sex: PropTypes.arrayOf(PropTypes.object).isRequired,
+    age: PropTypes.arrayOf(PropTypes.object).isRequired,
+    location: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
   filter = () => true;
 
   render() {
     return (
-      <div>
-        <h1>Demographics</h1>
-        <div className="card card-outline-primary demographics-card" >
+      <div className="col-sm-12">
+        <div>
           <Sex sex={this.props.sex} />
           <Age age={this.props.age} />
-          <Location location={this.props.location} />
+          <Location
+            location={this.props.location}
+          />
         </div>
       </div>
     );
