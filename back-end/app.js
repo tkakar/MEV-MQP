@@ -55,7 +55,7 @@ app.post('/gettimelinedata', (req, res) => {
 + "order by a.init_fda_dt"
   client.query(query, (err, data) => {
     // console.log(data.rows)
-    res.status(200).send(data);
+    res.status(200).send(data.rows);
   })
 });
 
