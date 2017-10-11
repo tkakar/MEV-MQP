@@ -24,16 +24,16 @@
 }
 
 #sidebar-container {
-  height: 85vh;
+  height: 20vh;
   padding: 5px;
   float: left;
 }
 
 #main-visualization-container {
-  height: 85vh;
+  height: 65vh;
   padding: 5px;
-  float: right;
   left: -1px;
+  width:100%;
 }
 
 #timeline-container {

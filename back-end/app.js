@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 
 app.post('/getdata', (req, res) => {
   console.log('got a request with body:\n ', req.body)
-  client.query('SELECT sex, age, age_cod, occr_country, REPT_DT FROM demo limit 500', (err, data) => {
+  client.query('SELECT sex, age, age_cod, occr_country, REPT_DT, occp_cod FROM demo limit 500', (err, data) => {
     // console.log(data.rows)
     res.status(200).send(data);
   })
