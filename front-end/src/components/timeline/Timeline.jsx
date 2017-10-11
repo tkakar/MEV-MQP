@@ -38,8 +38,7 @@ class Timeline extends Component {
 
   componentDidMount() {
     this.props.setSelectedTimeline();
-    document.getElementById('timeline-chart').addEventListener('mousedown', (e) => {
-      console.log(e)
+    document.getElementById('timeline-chart').addEventListener('mousedown', () => {
       this.setState({ currentlySelecting: true });
       this.setState({ selectedStartX: this.state.mouseMovePosition });
       this.setState({ previewStartX: this.state.mouseMovePosition });
@@ -50,14 +49,14 @@ class Timeline extends Component {
       this.setState({ previewEndX: 0 });
     }, false);
 
-    document.getElementById('timeline-chart').addEventListener('mouseup', (e) => {
+    document.getElementById('timeline-chart').addEventListener('mouseup', () => {
       this.setState({ currentlySelecting: false });
       this.setState({ selectedEndX: this.state.mouseMovePosition });
       this.setState({ previewEndX: this.state.mouseMovePosition });
       document.getElementById('end_date').value = this.state.selectedEndX;
     }, false);
 
-    document.getElementById('timeline-chart').addEventListener('mousemove', (e) => {
+    document.getElementById('timeline-chart').addEventListener('mousemove', () => {
       if (this.state.currentlySelecting) {
         if (this.state.previewEndX !== this.state.mouseMovePosition) {
           this.setState({ previewEndX: this.state.mouseMovePosition });
@@ -77,8 +76,14 @@ class Timeline extends Component {
     });
   };
 
+  formatDateTicks = (date) => {
+    const year = date.substring(0, 4);
+    const month = date.substring(4, 6);
+    const day = date.substring(6, 8);
+    return `${month}/${day}/${year}`;
+  }
+
   recordMouseMove = (e) => {
-    // console.log(e)
     if (e && e.activeLabel) {
       if (this.state.mouseMovePosition !== e.activeLabel) {
         this.setState({ mouseMovePosition: e.activeLabel, mouseZoomLocation: e.chartX });
@@ -87,9 +92,42 @@ class Timeline extends Component {
   }
 
   data = () => this.props.entireTimelineData;
+  loadingData = () => [
+    { loading: 1 },
+    { loading: 2 },
+    { loading: 3 },
+    { loading: 4 },
+    { loading: 5 },
+    { loading: 6 },
+    { loading: 7 },
+    { loading: 8 },
+  ];
 
   renderLoading = () => (
-    <p>we are loading the data</p>
+    <ResponsiveContainer width="100%" height="100%" >
+      <AreaChartImpl
+        data={this.loadingData()}
+        margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+        onMouseMove={this.recordMouseMove}
+      >
+        <defs>
+          <linearGradient id="colorGrey" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="15%" stopColor="#757575" stopOpacity={0.8} />
+            <stop offset="99%" stopColor="#757575" stopOpacity={0.2} />
+          </linearGradient>
+          <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
+            <stop offset="99%" stopColor="#283593" stopOpacity={0.2} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="init_fda_dt"
+          tickFormatter={this.loading}
+          minTickGap={15}
+        />
+        <CartesianGrid strokeDasharray="3 3" />
+      </AreaChartImpl>
+    </ResponsiveContainer>
   )
 
   renderTimeline = () => (
@@ -109,9 +147,14 @@ class Timeline extends Component {
             <stop offset="99%" stopColor="#283593" stopOpacity={0.2} />
           </linearGradient>
         </defs>
-        <XAxis dataKey="init_fda_dt" />
+        <XAxis
+          dataKey="init_fda_dt"
+          tickFormatter={this.formatDateTicks}
+          minTickGap={15}
+        />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
+          offset={50}
           animationDuration={0}
         />
         <Area
