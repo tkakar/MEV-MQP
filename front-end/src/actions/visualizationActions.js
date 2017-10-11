@@ -38,7 +38,6 @@ const ageAdapter = (rows) => {
   ];
   const ageRangeCount = new Array(12);
   ageRangeCount.fill(0);
-  console.log('this is the counts var', counts);
   _.forIn(counts, (value, key) => {
     if (key <= 5) {
       ageRangeCount[0] += 1;
