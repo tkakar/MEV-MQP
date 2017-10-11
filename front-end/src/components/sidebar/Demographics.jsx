@@ -14,11 +14,8 @@ class Demographics extends Component {
     location: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
-  componentDidUpdate() {
-    console.log('this is the sex', this.props.sex);
-  }
-
   filter = () => true;
+
   render() {
     return (
       <div className="col-sm-12">
