@@ -1,50 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Bar } from 'react-chartjs-2';
+import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, ResponsiveContainer } from 'recharts';
 
 
 class Location extends Component {
   static propTypes = {
-    location: PropTypes.shape({
-      countries: PropTypes.array,
-      values: PropTypes.array,
-    }).isRequired,
+    location: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
   filter = () => true;
 
   render() {
-    const data = {
-      labels: this.props.location.countries,
-      datasets: [
-        {
-          data: this.props.location.values,
-          backgroundColor: '#FF6384',
-        },
-      ],
-    };
-    const options = {
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              callback(label, index, labels) {
-                return `${  label}`;
-              },
-            },
-          },
-        ],
-      },
-    };
     return (
       <div className="col-sm-4">
-        <h2>Location</h2>
-        <div className="card card-outline-primary" >
-          <Bar
-            data={data}
-            options={options}
-            redraw
-          />
+        <div >
+          <h2>Location
+            <ResponsiveContainer width="100%" height={150}>
+              <BarChart data={this.props.location}>
+                <XAxis dataKey="country" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="count" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer></h2>
         </div>
       </div>
     );

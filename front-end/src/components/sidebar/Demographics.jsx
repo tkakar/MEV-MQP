@@ -9,31 +9,24 @@ import './Demographics.css';
 
 class Demographics extends Component {
   static propTypes = {
-    sex: PropTypes.shape({
-      M: PropTypes.number,
-      F: PropTypes.number,
-      UNK: PropTypes.number,
-    }).isRequired,
-    age: PropTypes.objectOf(PropTypes.number).isRequired,
-    location: PropTypes.objectOf(PropTypes.number).isRequired,
+    sex: PropTypes.arrayOf(PropTypes.object).isRequired,
+    age: PropTypes.arrayOf(PropTypes.object).isRequired,
+    location: PropTypes.arrayOf(PropTypes.object).isRequired,
   }
 
-  getValues = (data) => {
-    const countries = Object.keys(data);
-    const countryValues = Object.values(data);
-    const newData = { countries, countryValues };
-    return newData;
+  componentDidUpdate() {
+    console.log('this is the sex', this.props.sex);
   }
 
   filter = () => true;
   render() {
     return (
-      <div className="col-sm-9">
+      <div className="col-sm-12">
         <div>
           <Sex sex={this.props.sex} />
           <Age age={this.props.age} />
           <Location
-            location={this.getValues(this.props.location)}
+            location={this.props.location}
           />
         </div>
       </div>
