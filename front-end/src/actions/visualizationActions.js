@@ -77,7 +77,6 @@ const ageAdapter = (rows) => {
 const fixSex = row => (row.sex ? row.sex : 'UNK');
 const sexAdapter = (rows) => {
   const counts = _(rows).map(fixSex).countBy().value();
-  console.log('sex counts', counts);
   const sexArray = [];
   _.forIn(counts, (value, key) => {
     sexArray.push({
