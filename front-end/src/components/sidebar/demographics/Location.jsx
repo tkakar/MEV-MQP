@@ -13,19 +13,17 @@ class Location extends Component {
   render() {
     return (
       <div className="col-sm-4">
-        <div >
-          <h2>Location
-            <ResponsiveContainer width="100%" height={150}>
-              <BarChart data={this.props.location}>
-                <XAxis dataKey="country" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="count" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer></h2>
-        </div>
+        <h2>Location
+          <ResponsiveContainer width="100%" height={150}>
+            <BarChart data={this.props.location}>
+              <XAxis dataKey="country" />
+              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="count" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer></h2>
       </div>
     );
   }

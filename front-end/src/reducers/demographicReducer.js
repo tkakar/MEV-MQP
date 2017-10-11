@@ -1,6 +1,6 @@
 const initialDemographicState = {
   sex: [],
-  age: {},
+  age: [],
   location: [],
   selectedDates: {
     startDate: 20170101,
