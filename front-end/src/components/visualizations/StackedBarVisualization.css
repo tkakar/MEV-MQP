@@ -1,24 +1,9 @@
-body {
-  margin: 0;
-}
-
-#container {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 100px;
-  width: 90vh;
-  height: 150px;
-  background-color: #fff;
-}
-
 #main-visualization {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 100%;
-  max-height:65vh;
   height: 100%;
-  /* background-color: lightsalmon; */
-  overflow: scroll;
+  margin: auto;
+  margin-top: 2vh;
+}
+
+#treemap-visualization {
+  min-height: 33%;
 }

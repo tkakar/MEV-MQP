@@ -150,19 +150,48 @@ class StackedBarVisualization extends Component {
   COLORS = (['#8889DD', '#9597E4', '#8DC77B', '#A5D297', '#E2CF45', '#F8C12D']);
 
   render = () => (
-    <div id="main-visualization" >
-      <Treemap
-        width={850}
-        height={150}
-        data={this.data}
-        dataKey="size"
-        ratio={4 / 3}
-        stroke="#fff"
-        fill="#8884d8"
-        content={<CustomizedContent colors={this.COLORS} />}>
-        <Tooltip />
-      </Treemap>
-      <p> {this.props.things} </p>
+    <div id="main-visualization">
+      <div id="treemap-visualization">
+        <Treemap
+          width={1500}
+          height={155}
+          data={this.data}
+          dataKey="size"
+          ratio={4 / 3}
+          stroke="#fff"
+          fill="#8884d8"
+          content={<CustomizedContent colors={this.COLORS} />}
+        >
+          <Tooltip />
+        </Treemap>
+      </div>
+      <div id="treemap-visualization">
+        <Treemap
+          width={1500}
+          height={155}
+          data={this.data}
+          dataKey="size"
+          ratio={4 / 3}
+          stroke="#fff"
+          fill="#8884d8"
+          content={<CustomizedContent colors={this.COLORS} />}
+        >
+          <Tooltip />
+        </Treemap>
+      </div><div id="treemap-visualization">
+        <Treemap
+          width={1500}
+          height={155}
+          data={this.data}
+          dataKey="size"
+          ratio={4 / 3}
+          stroke="#fff"
+          fill="#8884d8"
+          content={<CustomizedContent colors={this.COLORS} />}
+        >
+          <Tooltip />
+        </Treemap>
+      </div>
     </div>
   )
 }
