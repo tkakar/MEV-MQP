@@ -14,140 +14,143 @@ class StackedBarVisualization extends Component {
     things: '',
   }
 
-  data = [
+  getRandomInt = (min, max) =>
+    (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min));
+
+  data = () => ([
     {
-      name: 'axis',
+      name: 'temp1',
       children: [
-        { name: 'Axes', size: 1302 },
-        { name: 'Axis', size: 24593 },
-        { name: 'AxisGridLine', size: 652 },
-        { name: 'AxisLabel', size: 636 },
-        { name: 'CartesianAxes', size: 6703 },
+        { name: 'Axes', size: this.getRandomInt(10, 4000) },
+        { name: 'Axis', size: this.getRandomInt(10, 4000) },
+        { name: 'AxisGridLine', size: this.getRandomInt(10, 4000) },
+        { name: 'AxisLabel', size: this.getRandomInt(10, 4000) },
+        { name: 'CartesianAxes', size: this.getRandomInt(10, 4000) },
       ],
     },
     {
-      name: 'controls',
+      name: 'temp2',
       children: [
-        { name: 'AnchorControl', size: 2138 },
-        { name: 'ClickControl', size: 3824 },
-        { name: 'Control', size: 1353 },
-        { name: 'ControlList', size: 4665 },
-        { name: 'DragControl', size: 2649 },
-        { name: 'ExpandControl', size: 2832 },
-        { name: 'HoverControl', size: 4896 },
-        { name: 'IControl', size: 763 },
-        { name: 'PanZoomControl', size: 5222 },
-        { name: 'SelectionControl', size: 7862 },
-        { name: 'TooltipControl', size: 8435 },
+        { name: 'AnchorControl', size: this.getRandomInt(10, 1500) },
+        { name: 'ClickControl', size: this.getRandomInt(10, 1500) },
+        { name: 'Control', size: this.getRandomInt(10, 1500) },
+        { name: 'ControlList', size: this.getRandomInt(10, 1500) },
+        { name: 'DragControl', size: this.getRandomInt(10, 1500) },
+        { name: 'ExpandControl', size: this.getRandomInt(10, 1500) },
+        { name: 'HoverControl', size: this.getRandomInt(10, 1500) },
+        { name: 'IControl', size: this.getRandomInt(10, 1500) },
+        { name: 'PanZoomControl', size: this.getRandomInt(10, 1500) },
+        { name: 'SelectionControl', size: this.getRandomInt(10, 1500) },
+        { name: 'TooltipControl', size: this.getRandomInt(10, 1500) },
       ],
     },
     {
-      name: 'data',
+      name: 'temp3',
       children: [
-        { name: 'Data', size: 20544 },
-        { name: 'DataList', size: 19788 },
-        { name: 'DataSprite', size: 10349 },
-        { name: 'EdgeSprite', size: 3301 },
-        { name: 'NodeSprite', size: 19382 },
+        { name: 'Data', size: this.getRandomInt(10, 1000) },
+        { name: 'DataList', size: this.getRandomInt(10, 1000) },
+        { name: 'DataSprite', size: this.getRandomInt(10, 1000) },
+        { name: 'EdgeSprite', size: this.getRandomInt(10, 1000) },
+        { name: 'NodeSprite', size: this.getRandomInt(10, 1000) },
         {
           name: 'render',
           children: [
-            { name: 'ArrowType', size: 698 },
-            { name: 'EdgeRenderer', size: 5569 },
-            { name: 'IRenderer', size: 353 },
-            { name: 'ShapeRenderer', size: 2247 },
+            { name: 'ArrowType', size: this.getRandomInt(10, 1000) },
+            { name: 'EdgeRenderer', size: this.getRandomInt(10, 1000) },
+            { name: 'IRenderer', size: this.getRandomInt(10, 1000) },
+            { name: 'ShapeRenderer', size: this.getRandomInt(10, 1000) },
           ],
         },
-        { name: 'ScaleBinding', size: 11275 },
-        { name: 'Tree', size: 7147 },
-        { name: 'TreeBuilder', size: 9930 },
+        { name: 'ScaleBinding', size: this.getRandomInt(10, 1000) },
+        { name: 'Tree', size: this.getRandomInt(10, 1000) },
+        { name: 'TreeBuilder', size: this.getRandomInt(10, 1000) },
       ],
     },
     {
-      name: 'events',
+      name: 'temp4',
       children: [
-        { name: 'DataEvent', size: 7313 },
-        { name: 'SelectionEvent', size: 6880 },
-        { name: 'TooltipEvent', size: 3701 },
-        { name: 'VisualizationEvent', size: 2117 },
+        { name: 'DataEvent', size: this.getRandomInt(10, 1000) },
+        { name: 'SelectionEvent', size: this.getRandomInt(10, 1000) },
+        { name: 'TooltipEvent', size: this.getRandomInt(10, 1000) },
+        { name: 'VisualizationEvent', size: this.getRandomInt(10, 1000) },
       ],
     },
     {
-      name: 'legend',
+      name: 'temp5',
       children: [
-        { name: 'Legend', size: 20859 },
-        { name: 'LegendItem', size: 4614 },
-        { name: 'LegendRange', size: 10530 },
+        { name: 'Legend', size: this.getRandomInt(10, 5000) },
+        { name: 'LegendItem', size: this.getRandomInt(10, 5000) },
+        { name: 'LegendRange', size: this.getRandomInt(10, 5000) },
       ],
     },
     {
-      name: 'operator',
+      name: 'temp6',
       children: [
         {
           name: 'distortion',
           children: [
-            { name: 'BifocalDistortion', size: 4461 },
-            { name: 'Distortion', size: 6314 },
-            { name: 'FisheyeDistortion', size: 3444 },
+            { name: 'BifocalDistortion', size: this.getRandomInt(10, 1000) },
+            { name: 'Distortion', size: this.getRandomInt(10, 1000) },
+            { name: 'FisheyeDistortion', size: this.getRandomInt(10, 1000) },
           ],
         },
         {
           name: 'encoder',
           children: [
-            { name: 'ColorEncoder', size: 3179 },
-            { name: 'Encoder', size: 4060 },
-            { name: 'PropertyEncoder', size: 4138 },
-            { name: 'ShapeEncoder', size: 1690 },
-            { name: 'SizeEncoder', size: 1830 },
+            { name: 'ColorEncoder', size: this.getRandomInt(10, 1000) },
+            { name: 'Encoder', size: this.getRandomInt(10, 1000) },
+            { name: 'PropertyEncoder', size: this.getRandomInt(10, 1000) },
+            { name: 'ShapeEncoder', size: this.getRandomInt(10, 1000) },
+            { name: 'SizeEncoder', size: this.getRandomInt(10, 1000) },
           ],
         },
         {
           name: 'filter',
           children: [
-            { name: 'FisheyeTreeFilter', size: 5219 },
-            { name: 'GraphDistanceFilter', size: 3165 },
-            { name: 'VisibilityFilter', size: 3509 },
+            { name: 'FisheyeTreeFilter', size: this.getRandomInt(10, 1000) },
+            { name: 'GraphDistanceFilter', size: this.getRandomInt(10, 1000) },
+            { name: 'VisibilityFilter', size: this.getRandomInt(10, 1000) },
           ],
         },
-        { name: 'IOperator', size: 1286 },
+        { name: 'IOperator', size: this.getRandomInt(10, 1000) },
         {
           name: 'label',
           children: [
-            { name: 'Labeler', size: 9956 },
-            { name: 'RadialLabeler', size: 3899 },
-            { name: 'StackedAreaLabeler', size: 3202 },
+            { name: 'Labeler', size: this.getRandomInt(10, 1000) },
+            { name: 'RadialLabeler', size: this.getRandomInt(10, 1000) },
+            { name: 'StackedAreaLabeler', size: this.getRandomInt(10, 1000) },
           ],
         },
         {
           name: 'layout',
           children: [
-            { name: 'AxisLayout', size: 6725 },
-            { name: 'BundledEdgeRouter', size: 3727 },
-            { name: 'CircleLayout', size: 9317 },
-            { name: 'CirclePackingLayout', size: 12003 },
-            { name: 'DendrogramLayout', size: 4853 },
-            { name: 'ForceDirectedLayout', size: 8411 },
-            { name: 'IcicleTreeLayout', size: 4864 },
-            { name: 'IndentedTreeLayout', size: 3174 },
-            { name: 'Layout', size: 7881 },
-            { name: 'NodeLinkTreeLayout', size: 12870 },
-            { name: 'PieLayout', size: 2728 },
-            { name: 'RadialTreeLayout', size: 12348 },
-            { name: 'RandomLayout', size: 870 },
-            { name: 'StackedAreaLayout', size: 9121 },
-            { name: 'TreeMapLayout', size: 9191 },
+            { name: 'AxisLayout', size: this.getRandomInt(10, 100) },
+            { name: 'BundledEdgeRouter', size: this.getRandomInt(10, 100) },
+            { name: 'CircleLayout', size: this.getRandomInt(10, 100) },
+            { name: 'CirclePackingLayout', size: this.getRandomInt(10, 100) },
+            { name: 'DendrogramLayout', size: this.getRandomInt(10, 100) },
+            { name: 'ForceDirectedLayout', size: this.getRandomInt(10, 100) },
+            { name: 'IcicleTreeLayout', size: this.getRandomInt(10, 100) },
+            { name: 'IndentedTreeLayout', size: this.getRandomInt(10, 100) },
+            { name: 'Layout', size: this.getRandomInt(10, 100) },
+            { name: 'NodeLinkTreeLayout', size: this.getRandomInt(10, 100) },
+            { name: 'PieLayout', size: this.getRandomInt(10, 100) },
+            { name: 'RadialTreeLayout', size: this.getRandomInt(10, 100) },
+            { name: 'RandomLayout', size: this.getRandomInt(10, 100) },
+            { name: 'StackedAreaLayout', size: this.getRandomInt(10, 100) },
+            { name: 'TreeMapLayout', size: this.getRandomInt(10, 100) },
           ],
         },
-        { name: 'Operator', size: 2490 },
-        { name: 'OperatorList', size: 5248 },
-        { name: 'OperatorSequence', size: 4190 },
-        { name: 'OperatorSwitch', size: 2581 },
-        { name: 'SortOperator', size: 2023 },
+        { name: 'Operator', size: this.getRandomInt(10, 1000) },
+        { name: 'OperatorList', size: this.getRandomInt(10, 1000) },
+        { name: 'OperatorSequence', size: this.getRandomInt(10, 1000) },
+        { name: 'OperatorSwitch', size: this.getRandomInt(10, 1000) },
+        { name: 'SortOperator', size: this.getRandomInt(10, 1000) },
       ],
     },
-  ];
+  ]);
 
-  COLORS = (['#8889DD', '#9597E4', '#8DC77B', '#A5D297', '#E2CF45', '#F8C12D']);
+  COLORS = (['#d53e4f', '#f0027f', '#fbb4ae', '#beaed4', '#67a9cf', '#3288bd']);
 
   render = () => (
     <div id="main-visualization">
@@ -155,7 +158,7 @@ class StackedBarVisualization extends Component {
         <Treemap
           width={1500}
           height={155}
-          data={this.data}
+          data={this.data()}
           dataKey="size"
           ratio={4 / 3}
           stroke="#fff"
@@ -169,7 +172,7 @@ class StackedBarVisualization extends Component {
         <Treemap
           width={1500}
           height={155}
-          data={this.data}
+          data={this.data()}
           dataKey="size"
           ratio={4 / 3}
           stroke="#fff"
@@ -182,7 +185,7 @@ class StackedBarVisualization extends Component {
         <Treemap
           width={1500}
           height={155}
-          data={this.data}
+          data={this.data()}
           dataKey="size"
           ratio={4 / 3}
           stroke="#fff"
