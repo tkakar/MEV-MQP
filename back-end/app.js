@@ -5,7 +5,19 @@ const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
-const cache = redis.createClient();
+// const cache = redis.createClient();
+
+const cache = {
+    get: () => Promise.resolve(null),
+    send_command: (type, from, callback) => {
+      if (callback != null) {
+        callback('', null);
+      } else {
+        Promise.resolve(null);
+      }
+    },
+    set: () => Promise.resolve(),
+  };
 
 const db = new Client({
   user: 'MEVUser',
@@ -50,6 +62,7 @@ app.post('/gettimelinedata', (req, res) => {
       console.log('got timeline data from cache')
       return res.status(200).send(data)
     } else {
+      console.log('Going to Database')
       let query = 
         "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end)::INTEGER as serious, count(case when a.outc_cod is null then 1 end)::INTEGER as not_serious "
       + "from (select d.init_fda_dt, o.outc_cod " 
