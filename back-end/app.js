@@ -5,19 +5,19 @@ const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
-// const cache = redis.createClient();
+const cache = redis.createClient();
 
-const cache = {
-    get: () => Promise.resolve(null),
-    send_command: (type, from, callback) => {
-      if (callback != null) {
-        callback('', null);
-      } else {
-        Promise.resolve(null);
-      }
-    },
-    set: () => Promise.resolve(),
-  };
+// const cache = {
+//     get: () => Promise.resolve(null),
+//     send_command: (type, from, callback) => {
+//       if (callback != null) {
+//         callback('', null);
+//       } else {
+//         Promise.resolve(null);
+//       }
+//     },
+//     set: () => Promise.resolve(),
+//   };
 
 const db = new Client({
   user: 'MEVUser',
