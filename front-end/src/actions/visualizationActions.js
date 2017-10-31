@@ -1,27 +1,43 @@
-import _ from 'lodash';
-
 const fixAge = (row) => {
   switch (row.age_cod) {
     case 'DEC':
-      return row.age * 10;
+      row.age *= 10;
+      break;
     case 'YR':
-      return row.age;
+      break;
     case 'MON':
-      return row.age / 12;
+      row.age /= 12;
+      break;
     case 'WK':
-      return row.age / 52;
+      row.age /= 52;
+      break;
     case 'DY':
-      return row.age / 365;
+      row.age /= 365;
+      break;
     case 'HR':
-      return row.age / 8760;
+      row.age /= 8760;
+      break;
     default:
-      return row.age;
+      row.age = -1;
+      break;
   }
 };
+const fixSex = (row) => {
+  if (!row.sex) row.sex = 'UNK';
+};
+const fixCountry = (row) => {
+  if (!row.occr_country) row.occr_country = 'UNK';
+};
 
-const ageAdapter = (rows) => {
-  const counts = _(rows).map(fixAge).countBy(Math.floor).value();
-  const ageArray = [];
+const fixers = [
+  fixAge,
+  fixSex,
+  fixCountry,
+];
+
+const countCountry = row => row.occr_country;
+const countSex = row => row.sex;
+const countAge = (row) => {
   const ageRange = [
     '0-5',
     '5-10',
@@ -36,69 +52,54 @@ const ageAdapter = (rows) => {
     '90-100',
     '100+',
   ];
-  const ageRangeCount = new Array(12);
-  ageRangeCount.fill(0);
-  _.forIn(counts, (value, key) => {
-    if (key <= 5) {
-      ageRangeCount[0] += 1;
-    } else if (key > 5 && key <= 10) {
-      ageRangeCount[1] += 1;
-    } else if (key > 10 && key <= 20) {
-      ageRangeCount[2] += 1;
-    } else if (key > 20 && key <= 30) {
-      ageRangeCount[3] += 1;
-    } else if (key > 30 && key <= 40) {
-      ageRangeCount[4] += 1;
-    } else if (key > 40 && key <= 50) {
-      ageRangeCount[5] += 1;
-    } else if (key > 50 && key <= 60) {
-      ageRangeCount[6] += 1;
-    } else if (key > 60 && key <= 70) {
-      ageRangeCount[7] += 1;
-    } else if (key > 70 && key <= 80) {
-      ageRangeCount[8] += 1;
-    } else if (key > 80 && key <= 90) {
-      ageRangeCount[9] += 1;
-    } else if (key > 90 && key <= 100) {
-      ageRangeCount[10] += 1;
-    } else {
-      ageRangeCount[11] += 1;
-    }
-  });
-  for (let i = 0; i < ageRange.length; i += 1) {
-    ageArray.push({
-      age: ageRange[i],
-      count: ageRangeCount[i],
-    });
+  if (row.age <= 5) {
+    return ageRange[0];
+  } else if (row.age > 5 && row.age <= 10) {
+    return ageRange[1];
+  } else if (row.age > 10 && row.age <= 20) {
+    return ageRange[2];
+  } else if (row.age > 20 && row.age <= 30) {
+    return ageRange[3];
+  } else if (row.age > 30 && row.age <= 40) {
+    return ageRange[4];
+  } else if (row.age > 40 && row.age <= 50) {
+    return ageRange[5];
+  } else if (row.age > 50 && row.age <= 60) {
+    return ageRange[6];
+  } else if (row.age > 60 && row.age <= 70) {
+    return ageRange[7];
+  } else if (row.age > 70 && row.age <= 80) {
+    return ageRange[8];
+  } else if (row.age > 80 && row.age <= 90) {
+    return ageRange[9];
+  } else if (row.age > 90 && row.age <= 100) {
+    return ageRange[10];
   }
-  return ageArray;
+  return ageRange[11];
 };
 
-const fixSex = row => (row.sex ? row.sex : 'UNK');
-const sexAdapter = (rows) => {
-  const counts = _(rows).map(fixSex).countBy().value();
-  const sexArray = [];
-  _.forIn(counts, (value, key) => {
-    sexArray.push({
-      sex: key,
-      count: value,
-    });
-  });
-  return sexArray;
+const counters = {
+  sex: countSex,
+  age: countAge,
+  country: countCountry,
 };
 
-const fixCountry = row => (row.occr_country ? row.occr_country : 'UNK');
-const countryAdapter = (rows) => {
-  const counts = _(rows).map(fixCountry).countBy().value();
-  const countryArray = [];
-  _.forIn(counts, (value, key) => {
-    countryArray.push({
-      country: key,
-      count: value,
-    });
-  });
-  return countryArray;
+const handleAccumulator = (accumulator, row) => {
+  for (const type in counters) {
+    const label = counters[type](row);
+    if (!(label in accumulator[type])) {
+      accumulator[type][label] = 1;
+    } else {
+      accumulator[type][label] += 1;
+    }
+  }
 };
+
+const reduceData = rows => rows.reduce((accumulator, row) => {
+  fixers.forEach(fix => fix(row));
+  handleAccumulator(accumulator, row);
+  return accumulator;
+}, { sex: [], age: [], country: [] });
 
 export const getData = queryParams => (dispatch) => {
   const fetchData = {
@@ -119,16 +120,20 @@ export const getData = queryParams => (dispatch) => {
     .then((things) => {
       console.log(things.rows);
       dispatch({ type: 'UPDATE_DATA', things: JSON.stringify(things.rows, null, 2) });
-
+      const reducedData = reduceData(things.rows);
       const demographics = {
-        sex: sexAdapter(things.rows),
-        age: ageAdapter(things.rows),
-        location: countryAdapter(things.rows),
+        sex: Object.keys(reducedData.sex)
+          .map(sexRange => ({ sex: [sexRange], count: reducedData.sex[sexRange] })),
+        age: Object.keys(reducedData.age)
+          .map(ageRange => ({ age: [ageRange], count: reducedData.age[ageRange] })),
+        location: Object.keys(reducedData.country)
+          .map(countryRange => ({ country: [countryRange], count: reducedData.country[countryRange] })),
         selectedDates: {
           startDate: Number(queryParams.startDate),
           endDate: Number(queryParams.endDate),
         },
       };
+      console.log('demographics');
       console.log(demographics);
       dispatch({ type: 'UPDATE_DEMOGRAPHICS', demographics });
     })
