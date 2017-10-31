@@ -18,7 +18,7 @@ class VisualizationContainer extends Component {
   }
 
   render = () => (
-    <div id="main-visualization-container" className="col-xs-10 card card-outline-primary" >
+    <div id="main-visualization-container">
       {this.renderVisualization()}
     </div>
   )

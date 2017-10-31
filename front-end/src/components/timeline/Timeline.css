@@ -26,15 +26,32 @@ input.form-control{
 }
 
 #timeline {
-  width: 15%
+  /* width: 15% */
 }
 
 #timeline-chart {
   display: inline-block;
-  width: 85%;
-  height: 15vh;
+  width: 100%;
+  height: calc(15vh - 5px);
 }
 
 .recharts-layer.recharts-brush {
   display: none;
+}
+
+.ranges , .daterangepicker_input {
+  display: none;
+}
+
+.daterangepicker {
+  display: none;
+}
+
+#dateRangePicker {
+  display: block;
+  transform: translateY(0px)
+}
+
+.cal-button {
+  margin: 5px;
 }

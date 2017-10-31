@@ -1,10 +1,25 @@
 var express = require('express')
   , app = express()
   , port = 3001
+const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
-const client = new Client({
+// const cache = redis.createClient();
+
+const cache = {
+    get: () => Promise.resolve(null),
+    send_command: (type, from, callback) => {
+      if (callback != null) {
+        callback('', null);
+      } else {
+        Promise.resolve(null);
+      }
+    },
+    set: () => Promise.resolve(),
+  };
+
+const db = new Client({
   user: 'MEVUser',
   host: 'test-mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
   database: 'faers',
@@ -12,8 +27,7 @@ const client = new Client({
   port: '5432'
 });
 
-client.connect()
-
+db.connect()
 
 const allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
@@ -47,18 +61,30 @@ app.post('/getdata', (req, res) => {
 
 app.post('/gettimelinedata', (req, res) => {
   console.log('got a request for timeline data')
-  let query = 
-  "SELECT a.init_fda_dt, count(CASE WHEN a.outc_cod is not null then 1 end)::INTEGER as serious, count(CASE WHEN a.outc_cod is null then 1 end)::INTEGER as not_serious "
-+ "FROM (SELECT d.init_fda_dt, o.outc_cod " 
-+       "FROM (SELECT primaryid, init_fda_dt "
-+             "FROM demo) d "
-+       "FULL OUTER JOIN (SELECT primaryid, outc_cod "
-+             "FROM outc) o "
-+       "ON d.primaryid = o.primaryid) a "
-+ "GROUP BY a.init_fda_dt "
-+ "ORDER BY a.init_fda_dt"
-  client.query(query, (err, data) => {
-    res.status(200).send(data.rows);
+  cache.send_command('JSON.GET', ['timeline'], (err, data) => {
+    if (data !== null) {
+      console.log('got timeline data from cache')
+      return res.status(200).send(data)
+    } else {
+      console.log('Going to Database')
+        let query = 
+          "SELECT a.init_fda_dt, count(CASE WHEN a.outc_cod is not null then 1 end)::INTEGER as serious, count(CASE WHEN a.outc_cod is null then 1 end)::INTEGER as not_serious "
+          + "FROM (SELECT d.init_fda_dt, o.outc_cod " 
+          +       "FROM (SELECT primaryid, init_fda_dt "
+          +             "FROM demo) d "
+          +       "FULL OUTER JOIN (SELECT primaryid, outc_cod "
+          +             "FROM outc) o "
+          +       "ON d.primaryid = o.primaryid) a "
+          + "GROUP BY a.init_fda_dt "
+          + "ORDER BY a.init_fda_dt"
+      db.query(query, (err, data) => {
+        // console.log(data.rows)
+        console.log('got timeline data from db');
+        json = JSON.stringify(data.rows);
+        cache.send_command("JSON.SET", ['timeline', '.', json]);
+        res.status(200).send(data.rows);
+      })
+    }
   })
 });
 
