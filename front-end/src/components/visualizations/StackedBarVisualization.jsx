@@ -2,20 +2,44 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Treemap, Tooltip } from 'recharts';
+import { withStyles } from 'material-ui/styles';
+import Paper from 'material-ui/Paper';
 import './StackedBarVisualization.css';
 import CustomizedContent from './CustomizedContent';
 
+const styles = {
+
+};
+
 class StackedBarVisualization extends Component {
   static propTypes = {
-    things: PropTypes.string,
+    classes: PropTypes.shape({
+    }).isRequired,
   }
 
   static defaultProps = {
     things: '',
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      mainWidth: 1,
+    };
+
+    window.addEventListener('resize', () => this.resizeTreeWidth());
+  }
+
+  componentDidMount() {
+    this.resizeTreeWidth();
+  }
+
+
   getRandomInt = (min, max) =>
     (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min));
+
+  resizeTreeWidth = () =>
+    this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 })
 
   data = () => ([
     {
@@ -23,8 +47,6 @@ class StackedBarVisualization extends Component {
       children: [
         { name: 'Axes', size: this.getRandomInt(10, 4000) },
         { name: 'Axis', size: this.getRandomInt(10, 4000) },
-        { name: 'AxisGridLine', size: this.getRandomInt(10, 4000) },
-        { name: 'AxisLabel', size: this.getRandomInt(10, 4000) },
         { name: 'CartesianAxes', size: this.getRandomInt(10, 4000) },
       ],
     },
@@ -33,13 +55,6 @@ class StackedBarVisualization extends Component {
       children: [
         { name: 'AnchorControl', size: this.getRandomInt(10, 1500) },
         { name: 'ClickControl', size: this.getRandomInt(10, 1500) },
-        { name: 'Control', size: this.getRandomInt(10, 1500) },
-        { name: 'ControlList', size: this.getRandomInt(10, 1500) },
-        { name: 'DragControl', size: this.getRandomInt(10, 1500) },
-        { name: 'ExpandControl', size: this.getRandomInt(10, 1500) },
-        { name: 'HoverControl', size: this.getRandomInt(10, 1500) },
-        { name: 'IControl', size: this.getRandomInt(10, 1500) },
-        { name: 'PanZoomControl', size: this.getRandomInt(10, 1500) },
         { name: 'SelectionControl', size: this.getRandomInt(10, 1500) },
         { name: 'TooltipControl', size: this.getRandomInt(10, 1500) },
       ],
@@ -48,16 +63,11 @@ class StackedBarVisualization extends Component {
       name: 'temp3',
       children: [
         { name: 'Data', size: this.getRandomInt(10, 1000) },
-        { name: 'DataList', size: this.getRandomInt(10, 1000) },
-        { name: 'DataSprite', size: this.getRandomInt(10, 1000) },
-        { name: 'EdgeSprite', size: this.getRandomInt(10, 1000) },
         { name: 'NodeSprite', size: this.getRandomInt(10, 1000) },
         {
           name: 'render',
           children: [
             { name: 'ArrowType', size: this.getRandomInt(10, 1000) },
-            { name: 'EdgeRenderer', size: this.getRandomInt(10, 1000) },
-            { name: 'IRenderer', size: this.getRandomInt(10, 1000) },
             { name: 'ShapeRenderer', size: this.getRandomInt(10, 1000) },
           ],
         },
@@ -70,9 +80,6 @@ class StackedBarVisualization extends Component {
       name: 'temp4',
       children: [
         { name: 'DataEvent', size: this.getRandomInt(10, 1000) },
-        { name: 'SelectionEvent', size: this.getRandomInt(10, 1000) },
-        { name: 'TooltipEvent', size: this.getRandomInt(10, 1000) },
-        { name: 'VisualizationEvent', size: this.getRandomInt(10, 1000) },
       ],
     },
     {
@@ -99,52 +106,17 @@ class StackedBarVisualization extends Component {
           children: [
             { name: 'ColorEncoder', size: this.getRandomInt(10, 1000) },
             { name: 'Encoder', size: this.getRandomInt(10, 1000) },
-            { name: 'PropertyEncoder', size: this.getRandomInt(10, 1000) },
-            { name: 'ShapeEncoder', size: this.getRandomInt(10, 1000) },
             { name: 'SizeEncoder', size: this.getRandomInt(10, 1000) },
-          ],
-        },
-        {
-          name: 'filter',
-          children: [
-            { name: 'FisheyeTreeFilter', size: this.getRandomInt(10, 1000) },
-            { name: 'GraphDistanceFilter', size: this.getRandomInt(10, 1000) },
-            { name: 'VisibilityFilter', size: this.getRandomInt(10, 1000) },
-          ],
-        },
-        { name: 'IOperator', size: this.getRandomInt(10, 1000) },
-        {
-          name: 'label',
-          children: [
-            { name: 'Labeler', size: this.getRandomInt(10, 1000) },
-            { name: 'RadialLabeler', size: this.getRandomInt(10, 1000) },
-            { name: 'StackedAreaLabeler', size: this.getRandomInt(10, 1000) },
           ],
         },
         {
           name: 'layout',
           children: [
             { name: 'AxisLayout', size: this.getRandomInt(10, 100) },
-            { name: 'BundledEdgeRouter', size: this.getRandomInt(10, 100) },
-            { name: 'CircleLayout', size: this.getRandomInt(10, 100) },
-            { name: 'CirclePackingLayout', size: this.getRandomInt(10, 100) },
-            { name: 'DendrogramLayout', size: this.getRandomInt(10, 100) },
-            { name: 'ForceDirectedLayout', size: this.getRandomInt(10, 100) },
-            { name: 'IcicleTreeLayout', size: this.getRandomInt(10, 100) },
-            { name: 'IndentedTreeLayout', size: this.getRandomInt(10, 100) },
-            { name: 'Layout', size: this.getRandomInt(10, 100) },
-            { name: 'NodeLinkTreeLayout', size: this.getRandomInt(10, 100) },
-            { name: 'PieLayout', size: this.getRandomInt(10, 100) },
-            { name: 'RadialTreeLayout', size: this.getRandomInt(10, 100) },
-            { name: 'RandomLayout', size: this.getRandomInt(10, 100) },
-            { name: 'StackedAreaLayout', size: this.getRandomInt(10, 100) },
-            { name: 'TreeMapLayout', size: this.getRandomInt(10, 100) },
           ],
         },
         { name: 'Operator', size: this.getRandomInt(10, 1000) },
         { name: 'OperatorList', size: this.getRandomInt(10, 1000) },
-        { name: 'OperatorSequence', size: this.getRandomInt(10, 1000) },
-        { name: 'OperatorSwitch', size: this.getRandomInt(10, 1000) },
         { name: 'SortOperator', size: this.getRandomInt(10, 1000) },
       ],
     },
@@ -154,46 +126,74 @@ class StackedBarVisualization extends Component {
 
   render = () => (
     <div id="main-visualization">
-      <div id="treemap-visualization">
-        <Treemap
-          width={1500}
-          height={155}
-          data={this.data()}
-          dataKey="size"
-          ratio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomizedContent colors={this.COLORS} />}
-        >
-          <Tooltip />
-        </Treemap>
+      <div className="treemap-visualization">
+        <div className="tree-paper">
+          <defs>
+            <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
+              <stop offset="99%" stopColor="#283593" stopOpacity={0.4} />
+            </linearGradient>
+          </defs>
+          <Paper elevation={16}>
+            <Treemap
+              width={this.state.mainWidth}
+              height={155}
+              data={this.data()}
+              dataKey="size"
+              ratio={4 / 3}
+              stroke="#ddd"
+              fill="url(#colorBlue)"
+              isAnimationActive={false}
+              animationDuration={0}
+            >
+              <Tooltip
+                isAnimationActive={false}
+              />
+            </Treemap>
+          </Paper>
+        </div>
       </div>
-      <div id="treemap-visualization">
-        <Treemap
-          width={1500}
-          height={155}
-          data={this.data()}
-          dataKey="size"
-          ratio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomizedContent colors={this.COLORS} />}
-        >
-          <Tooltip />
-        </Treemap>
-      </div><div id="treemap-visualization">
-        <Treemap
-          width={1500}
-          height={155}
-          data={this.data()}
-          dataKey="size"
-          ratio={4 / 3}
-          stroke="#fff"
-          fill="#8884d8"
-          content={<CustomizedContent colors={this.COLORS} />}
-        >
-          <Tooltip />
-        </Treemap>
+      <div className="treemap-visualization">
+        <div className="tree-paper">
+          <Paper elevation={16}>
+            <Treemap
+              width={this.state.mainWidth}
+              height={155}
+              data={this.data()}
+              dataKey="size"
+              ratio={4 / 3}
+              stroke="#ddd"
+              fill="url(#colorBlue)"
+              isAnimationActive={false}
+              animationDuration={0}
+            >
+              <Tooltip
+                isAnimationActive={false}
+              />
+            </Treemap>
+          </Paper>
+        </div>
+      </div>
+      <div className="treemap-visualization">
+        <div className="tree-paper">
+          <Paper elevation={16}>
+            <Treemap
+              width={this.state.mainWidth}
+              height={155}
+              data={this.data()}
+              dataKey="size"
+              ratio={4 / 3}
+              stroke="#ddd"
+              fill="url(#colorBlue)"
+              isAnimationActive={false}
+              animationDuration={0}
+            >
+              <Tooltip
+                isAnimationActive={false}
+              />
+            </Treemap>
+          </Paper>
+        </div>
       </div>
     </div>
   )
@@ -206,4 +206,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   null,
-)(StackedBarVisualization);
+)(withStyles(styles)(StackedBarVisualization));

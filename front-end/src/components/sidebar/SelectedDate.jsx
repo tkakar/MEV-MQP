@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Label } from 'react-bootstrap';
+import './SelectedDate.css';
 
 
 const SelectedDate = props => (
-  <div className="col-sm-12">   
-    <div >
-      <p><span>Selected Date &nbsp;</span><Label bsStyle="default">{props.startDate}</Label> to <Label bsStyle="default">{props.endDate}</Label></p>
-    </div>
+  <div id="demographics-selectedDate" >
+    <p><span>Selected Date &nbsp;</span><Label bsStyle="default">{props.startDate}</Label> to <Label bsStyle="default">{props.endDate}</Label></p>
   </div>
 );
 

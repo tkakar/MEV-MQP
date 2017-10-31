@@ -13,3 +13,7 @@
   overflow-x:scroll;
   white-space:normal;
 }
+
+h1 {
+  margin: 0px;
+}

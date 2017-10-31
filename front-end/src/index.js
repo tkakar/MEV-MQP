@@ -6,8 +6,6 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 /* <!-------------- CSS File Imports! --------------!> */
-import 'bootstrap/dist/css/bootstrap.css';
-import './resources/cosmoTheme.css';
 import './index.css';
 
 

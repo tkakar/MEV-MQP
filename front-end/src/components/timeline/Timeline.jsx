@@ -1,12 +1,38 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import Grid from 'material-ui/Grid';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
 import { FormGroup, InputGroup, FormControl } from 'react-bootstrap';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
 import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
 import './Timeline.css';
+
+const styles = {
+  dateSelectedTextField: {
+    width: '100%',
+    'font-size': '0.8em',
+  },
+  gridContainer: {
+    padding: '10px 2px',
+    width: '100%',
+    margin: '0px',
+  },
+  timelineChartWrapper: {
+    height: 'calc(15vh - 18px)',
+    overflow: 'hidden',
+  },
+  calendartWrapper: {
+    height: 'calc(15vh - 18px)',
+    overflow: 'hidden',
+    padding: '8px',
+  },
+};
 
 class Timeline extends Component {
   static propTypes = {
@@ -19,6 +45,12 @@ class Timeline extends Component {
         not_serious: PropTypes.number.isRequired,
       }),
     ).isRequired,
+    classes: PropTypes.shape({
+      dateSelectedTextField: PropTypes.string,
+      gridContainer: PropTypes.string,
+      timelineChartWrapper: PropTypes.string,
+      calendartWrapper: PropTypes.string,
+    }).isRequired,
   }
 
   constructor() {
@@ -115,7 +147,7 @@ class Timeline extends Component {
             <stop offset="15%" stopColor="#757575" stopOpacity={0.8} />
             <stop offset="99%" stopColor="#757575" stopOpacity={0.2} />
           </linearGradient>
-          <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
             <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
             <stop offset="99%" stopColor="#283593" stopOpacity={0.2} />
           </linearGradient>
@@ -142,7 +174,7 @@ class Timeline extends Component {
             <stop offset="15%" stopColor="#757575" stopOpacity={0.8} />
             <stop offset="99%" stopColor="#757575" stopOpacity={0.2} />
           </linearGradient>
-          <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
             <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
             <stop offset="99%" stopColor="#283593" stopOpacity={0.2} />
           </linearGradient>
@@ -163,7 +195,7 @@ class Timeline extends Component {
           stroke="#1A237E"
           fillOpacity={1}
           stackId="1"
-          fill="url(#colorRed)"
+          fill="url(#colorBlue)"
           animationDuration={700}
           connectNulls={false}
         />
@@ -199,20 +231,29 @@ class Timeline extends Component {
 
   render = () => (
     <div id="timeline-selector">
-      <div id="timeline" className="col col-xs-2" >
-        <button className="btn btn-outline-secondary" onClick={this.updateSelectedDate}>Set Date!</button>
-        <button className="btn btn-outline-secondary" onClick={this.props.setSelectedTimeline}>Set Timeline!</button>
-        <FormGroup>
-          <InputGroup>
-            <FormControl type="text" placeholder="Start Date" id="start_date" defaultValue="20160329" />
-            <InputGroup.Addon>To</InputGroup.Addon>
-            <FormControl type="text" placeholder="End Date" id="end_date" defaultValue="20160512" />
-          </InputGroup>
-        </FormGroup>
-      </div>
-      <div id="timeline-chart" className="col col-xs-10">
-        {(this.data().length > 1) ? this.renderTimeline() : this.renderLoading()}
-      </div>
+      <Grid container spacing={8} className={this.props.classes.gridContainer} >
+        <Grid item sm={3} md={2}>
+          <Paper elevation={4} className={this.props.classes.calendartWrapper} >
+            <Button raised className="cal-button" color="primary" onClick={this.updateSelectedDate} >Set Date!</Button>
+            <Button raised className="cal-button" onClick={this.props.setSelectedTimeline} >Set Timeline!</Button>
+            <FormGroup style={{ display: 'none' }}>
+              <InputGroup>
+                <FormControl type="text" placeholder="Start Date" id="start_date" defaultValue="20160329" />
+                <InputGroup.Addon>To</InputGroup.Addon>
+                <FormControl type="text" placeholder="End Date" id="end_date" defaultValue="20160512" />
+              </InputGroup>
+            </FormGroup>
+            <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="asd" id="dateRangePicker" />
+          </Paper>
+        </Grid>
+        <Grid item sm={9} md={10}>
+          <Paper elevation={4} className={this.props.classes.timelineChartWrapper} >
+            <div id="timeline-chart">
+              {(this.data().length > 1) ? this.renderTimeline() : this.renderLoading()}
+            </div>
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   )
 }
@@ -224,4 +265,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { setSelectedTime, setSelectedTimeline },
-)(Timeline);
+)(withStyles(styles)(Timeline));

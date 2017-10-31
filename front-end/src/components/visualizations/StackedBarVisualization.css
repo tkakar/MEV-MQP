@@ -1,9 +1,17 @@
 #main-visualization {
   height: 100%;
   margin: auto;
-  margin-top: 2vh;
+  padding: 10px;
 }
 
-#treemap-visualization {
-  min-height: 33%;
+.treemap-visualization {
+  height: 33%;
+  overflow-x: scroll;
+  overflow: visible;
+  display: table;
+}
+
+.treemap-visualization .tree-paper {
+  vertical-align: middle;
+  display: table-cell;
 }
