@@ -5,23 +5,23 @@ const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
 
-const cache = redis.createClient();
+// const cache = redis.createClient();
 
-// const cache = {
-//     get: () => Promise.resolve(null),
-//     send_command: (type, from, callback) => {
-//       if (callback != null) {
-//         callback('', null);
-//       } else {
-//         Promise.resolve(null);
-//       }
-//     },
-//     set: () => Promise.resolve(),
-//   };
+const cache = {
+    get: () => Promise.resolve(null),
+    send_command: (type, from, callback) => {
+      if (callback != null) {
+        callback('', null);
+      } else {
+        Promise.resolve(null);
+      }
+    },
+    set: () => Promise.resolve(),
+  };
 
 const db = new Client({
   user: 'MEVUser',
-  host: 'mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
+  host: 'test-mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
   database: 'faers',
   password: '2UdS1KQo',
   port: '5432'
@@ -49,8 +49,12 @@ app.get('/', (req, res) => {
 
 app.post('/getdata', (req, res) => {
   console.log('got a request with body:\n ', req.body)
-  db.query('SELECT sex, age, age_cod, occr_country, REPT_DT FROM demo limit 500', (err, data) => {
-    // console.log(data.rows)
+  let query = 
+  "SELECT sex, age, age_cod, occr_country, REPT_DT, occp_cod "
++ "FROM demo "
++ "WHERE REPT_DT BETWEEN " + req.body.startDate + " AND " + req.body.endDate;
+  console.log(query);
+  client.query(query, (err, data) => {
     res.status(200).send(data);
   })
 });
@@ -63,16 +67,16 @@ app.post('/gettimelinedata', (req, res) => {
       return res.status(200).send(data)
     } else {
       console.log('Going to Database')
-      let query = 
-        "select a.init_fda_dt, count(case when a.outc_cod is not null then 1 end)::INTEGER as serious, count(case when a.outc_cod is null then 1 end)::INTEGER as not_serious "
-      + "from (select d.init_fda_dt, o.outc_cod " 
-      +       "from (select primaryid, init_fda_dt "
-      +             "from demo) d "
-      +       "full outer join (select primaryid, outc_cod "
-      +             "from outc) o "
-      +       "on d.primaryid = o.primaryid) a "
-      + "group by a.init_fda_dt "
-      + "order by a.init_fda_dt"
+        let query = 
+          "SELECT a.init_fda_dt, count(CASE WHEN a.outc_cod is not null then 1 end)::INTEGER as serious, count(CASE WHEN a.outc_cod is null then 1 end)::INTEGER as not_serious "
+          + "FROM (SELECT d.init_fda_dt, o.outc_cod " 
+          +       "FROM (SELECT primaryid, init_fda_dt "
+          +             "FROM demo) d "
+          +       "FULL OUTER JOIN (SELECT primaryid, outc_cod "
+          +             "FROM outc) o "
+          +       "ON d.primaryid = o.primaryid) a "
+          + "GROUP BY a.init_fda_dt "
+          + "ORDER BY a.init_fda_dt"
       db.query(query, (err, data) => {
         // console.log(data.rows)
         console.log('got timeline data from db');
