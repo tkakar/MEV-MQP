@@ -6,7 +6,6 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import { FormGroup, InputGroup, FormControl } from 'react-bootstrap';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
@@ -70,41 +69,52 @@ class Timeline extends Component {
 
   componentDidMount() {
     this.props.setSelectedTimeline();
-    document.getElementById('timeline-chart').addEventListener('mousedown', () => {
+
+    document.getElementById('timeline-chart').addEventListener('mousedown', (e) => {
       this.setState({ currentlySelecting: true });
       this.setState({ selectedStartX: this.state.mouseMovePosition });
       this.setState({ previewStartX: this.state.mouseMovePosition });
 
-      document.getElementById('start_date').value = this.state.selectedStartX;
-      document.getElementById('end_date').value = this.state.selectedStartX;
+      const dateRange = this.formatDateRange(this.state.selectedStartX, this.state.selectedStartX);
+      document.getElementById('dateRangePicker').value = dateRange;
+
       // Clear  the Other end to start a new selection TODO
       this.setState({ selectedEndX: 0 });
       this.setState({ previewEndX: 0 });
+      e.preventDefault();
     }, false);
 
     document.getElementById('timeline-chart').addEventListener('mouseup', () => {
+      let dateRange;
       this.setState({ currentlySelecting: false });
       this.setState({ selectedEndX: this.state.mouseMovePosition });
       this.setState({ previewEndX: this.state.mouseMovePosition });
       if (this.state.selectedEndX > this.state.selectedStartX) {
-        document.getElementById('end_date').value = this.state.selectedEndX;
+        dateRange = this.formatDateRange(this.state.selectedStartX, this.state.selectedEndX);
+        document.getElementById('dateRangePicker').value = dateRange;
       } else {
-        document.getElementById('start_date').value = this.state.selectedEndX;
+        dateRange = this.formatDateRange(this.state.selectedEndX, this.state.selectedStartX);
+        document.getElementById('dateRangePicker').value = dateRange;
       }
+      const event = new Event('keyup');
+      document.getElementById('dateRangePicker').dispatchEvent(event);
     }, false);
 
     document.getElementById('timeline-chart').addEventListener('mousemove', () => {
+      let dateRange;
       if (this.state.currentlySelecting) {
         if (this.state.previewEndX !== this.state.mouseMovePosition) {
           this.setState({ previewEndX: this.state.mouseMovePosition });
         }
         if (this.state.previewEndX > this.state.selectedStartX) {
-          document.getElementById('end_date').value = this.state.previewEndX;
+          dateRange = this.formatDateRange(this.state.selectedStartX, this.state.previewEndX);
+          document.getElementById('dateRangePicker').value = dateRange;
         } else if (this.state.previewEndX === this.state.selectedStartX) {
-          document.getElementById('end_date').value = this.state.previewEndX;
-          document.getElementById('start_date').value = this.state.previewEndX;
+          dateRange = this.formatDateRange(this.state.selectedStartX, this.state.previewEndX);
+          document.getElementById('dateRangePicker').value = dateRange;
         } else {
-          document.getElementById('start_date').value = this.state.previewEndX;
+          dateRange = this.formatDateRange(this.state.previewEndX, this.state.selectedStartX);
+          document.getElementById('dateRangePicker').value = dateRange;
         }
       }
     }, true);
@@ -112,21 +122,38 @@ class Timeline extends Component {
 
   getmouseZoomLocation = () => this.state.mouseZoomLocation;
 
+  getUnformattedDateFromFormattedRange = (dateRange) => {
+    const splitRange = dateRange.split(' ');
+    const formattedStart = splitRange[0];
+    const formattedEnd = splitRange[2];
+
+    const splitFormattedStart = formattedStart.split('/');
+    const splitFormattedEnd = formattedEnd.split('/');
+
+    return {
+      startDate: `${splitFormattedStart[2]}${splitFormattedStart[0]}${splitFormattedStart[1]}`,
+      endDate: `${splitFormattedEnd[2]}${splitFormattedEnd[0]}${splitFormattedEnd[1]}`,
+    };
+  }
+
   updateSelectedDate = () => {
-    const startDate = document.getElementById('start_date').value;
-    const endDate = document.getElementById('end_date').value;
+    const dateRange = document.getElementById('dateRangePicker').value;
+    const dates = this.getUnformattedDateFromFormattedRange(dateRange);
+
     this.props.setSelectedTime({
-      startDate,
-      endDate,
+      ...dates,
     });
   };
 
-  formatDateTicks = (date) => {
-    const year = date.substring(0, 4);
-    const month = date.substring(4, 6);
-    const day = date.substring(6, 8);
+  formatDate = (date) => {
+    const dateString = `${date}`;
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
     return `${month}/${day}/${year}`;
   }
+
+  formatDateRange = (startDate, endDate) => `${this.formatDate(startDate)} - ${this.formatDate(endDate)}`
 
   recordMouseMove = (e) => {
     if (e && e.activeLabel) {
@@ -137,6 +164,7 @@ class Timeline extends Component {
   }
 
   data = () => this.props.entireTimelineData;
+
   loadingData = () => [
     { loading: 1 },
     { loading: 2 },
@@ -194,13 +222,14 @@ class Timeline extends Component {
         </defs>
         <XAxis
           dataKey="init_fda_dt"
-          tickFormatter={this.formatDateTicks}
+          tickFormatter={this.formatDate}
           minTickGap={15}
         />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
           offset={50}
           animationDuration={0}
+          labelFormatter={this.formatDate}
         />
         <Area
           type="monotone"
@@ -249,13 +278,6 @@ class Timeline extends Component {
           <Paper elevation={4} className={this.props.classes.calendartWrapper} >
             <Button raised className="cal-button" color="primary" onClick={this.updateSelectedDate} >Set Date!</Button>
             <Button raised className="cal-button" onClick={this.props.setSelectedTimeline} >Set Timeline!</Button>
-            <FormGroup style={{ display: 'none' }}>
-              <InputGroup>
-                <FormControl type="text" placeholder="Start Date" id="start_date" defaultValue="20160329" />
-                <InputGroup.Addon>To</InputGroup.Addon>
-                <FormControl type="text" placeholder="End Date" id="end_date" defaultValue="20160512" />
-              </InputGroup>
-            </FormGroup>
             <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="asd" id="dateRangePicker" />
           </Paper>
         </Grid>

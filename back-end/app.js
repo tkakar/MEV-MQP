@@ -54,7 +54,7 @@ app.post('/getdata', (req, res) => {
 + "FROM demo "
 + "WHERE REPT_DT BETWEEN " + req.body.startDate + " AND " + req.body.endDate;
   console.log(query);
-  client.query(query, (err, data) => {
+  db.query(query, (err, data) => {
     res.status(200).send(data);
   })
 });
