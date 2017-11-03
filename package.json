@@ -21,9 +21,9 @@
   "scripts": {
     "start": "cross-os setup",
     "setup": {
-      "win32": "concurrently \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\"",
-      "darwin": "concurrently \"./back-end/redis/src/redis-server --loadmodule back-end/redis/rejson.so\" \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\"",
-      "linux": "concurrently \"./back-end/redis/src/redis-server --loadmodule back-end/redis/rejson.so\" \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\""
+      "win32": "concurrently -n \"back-end,front-end\" \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\"",
+      "darwin": "concurrently -n \"cache,back-end,front-end\" \"./back-end/redis/src/redis-server --loadmodule back-end/redis/rejson.so\" \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\"",
+      "linux": "concurrently -n \"cache,back-end,front-end\" \"./back-end/redis/src/redis-server --loadmodule back-end/redis/rejson.so\" \"npm start --prefix ./back-end\" \"npm start --prefix ./front-end\""
     },
     "test": "echo \"Error: no test specified\" && exit 1"
   }
