@@ -4,20 +4,28 @@ var express = require('express')
 const redis = require('redis')
 const { Client } = require('pg')
 const bodyParser = require('body-parser');
+const os = require('os');
 
-// const cache = redis.createClient();
+let cache = {
+  get: () => Promise.resolve(null),
+  send_command: (type, from, callback) => {
+    if (callback != null) {
+      callback('', null);
+    } else {
+      Promise.resolve(null);
+    }
+  },
+  set: () => Promise.resolve(),
+};
 
-const cache = {
-    get: () => Promise.resolve(null),
-    send_command: (type, from, callback) => {
-      if (callback != null) {
-        callback('', null);
-      } else {
-        Promise.resolve(null);
-      }
-    },
-    set: () => Promise.resolve(),
-  };
+if (os.platform() === 'linux' || os.platform() === 'darwin') {
+  console.log('on linux or mac, using local cache');
+  cache = redis.createClient();  
+}
+
+if (os.platform() === 'win32') {
+  console.log('on window, not using local cache');
+}
 
 const db = new Client({
   user: 'MEVUser',
