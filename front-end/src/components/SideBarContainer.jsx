@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import SideBar from './sidebar/SideBar';
-
-const styles = {
-  sideBar: {
-    width: '100%',
-    height: '20vh',
-    padding: '0px',
-  },
-};
+import styles from './SideBarContainerStyles';
 
 class SideBarContainer extends Component {
   static propTypes = {
@@ -19,10 +12,12 @@ class SideBarContainer extends Component {
     }).isRequired,
   }
 
+  asd = () => 123;
+
   render = () => (
-    // <Paper id="sidebar-container" className={this.props.classes.sideBar} elevation={4}>
+    <div className={this.props.classes.sideBar} >
       <SideBar />
-    // </Paper>
+    </div>
   )
 }
 

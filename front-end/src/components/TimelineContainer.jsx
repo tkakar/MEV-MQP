@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
 import Timeline from './timeline/Timeline';
-
-const styles = {
-  timeline: {
-    width: '100%',
-    height: 'calc(15vh-10px)',
-    padding: '0px',
-    top: '-1px',
-    border: 'none',
-  },
-};
+import styles from './TimelineContainerStyles';
 
 class TimelineContainer extends Component {
   static TimelinePreference = 'SLIDING_TIMELINE';
@@ -27,7 +17,9 @@ class TimelineContainer extends Component {
     switch (this.TimelinePreference) {
       case 'SLIDING_TIMELINE':
         return (
-          <Timeline />
+          <div className={this.props.classes.timeline} >
+            <Timeline />
+          </div>
         );
       default:
         return (

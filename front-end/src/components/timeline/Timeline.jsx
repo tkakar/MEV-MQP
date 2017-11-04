@@ -10,28 +10,8 @@ import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
 import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
+import styles from './TimelineStyles';
 import './Timeline.css';
-
-const styles = {
-  dateSelectedTextField: {
-    width: '100%',
-    'font-size': '0.8em',
-  },
-  gridContainer: {
-    padding: '10px 2px',
-    width: '100%',
-    margin: '0px',
-  },
-  timelineChartWrapper: {
-    height: 'calc(15vh - 18px)',
-    overflow: 'hidden',
-  },
-  calendartWrapper: {
-    height: 'calc(15vh - 18px)',
-    overflow: 'hidden',
-    padding: '8px',
-  },
-};
 
 class Timeline extends Component {
   static propTypes = {
@@ -48,6 +28,7 @@ class Timeline extends Component {
       dateSelectedTextField: PropTypes.string,
       gridContainer: PropTypes.string,
       timelineChartWrapper: PropTypes.string,
+      timelineChart: PropTypes.string,
       calendartWrapper: PropTypes.string,
     }).isRequired,
   }
@@ -272,24 +253,21 @@ class Timeline extends Component {
   )
 
   render = () => (
-    <div id="timeline-selector">
-      <Grid container spacing={8} className={this.props.classes.gridContainer} >
-        <Grid item sm={3} md={2}>
-          <Paper elevation={4} className={this.props.classes.calendartWrapper} >
-            <Button raised className="cal-button" color="primary" onClick={this.updateSelectedDate} >Set Date!</Button>
-            <Button raised className="cal-button" onClick={this.props.setSelectedTimeline} >Set Timeline!</Button>
-            <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="asd" id="dateRangePicker" />
-          </Paper>
-        </Grid>
-        <Grid item sm={9} md={10}>
-          <Paper elevation={4} className={this.props.classes.timelineChartWrapper} >
-            <div id="timeline-chart">
-              {(this.data().length > 1) ? this.renderTimeline() : this.renderLoading()}
-            </div>
-          </Paper>
-        </Grid>
+    <Grid container spacing={8} className={this.props.classes.gridContainer}>
+      <Grid item sm={3} md={2}>
+        <Paper elevation={4} className={this.props.classes.calendartWrapper} >
+          <Button raised className="cal-button" color="primary" onClick={this.updateSelectedDate} >Set Date!</Button>
+          <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="asd" id="dateRangePicker" />
+        </Paper>
       </Grid>
-    </div>
+      <Grid item sm={9} md={10}>
+        <Paper elevation={4} className={this.props.classes.timelineChartWrapper} >
+          <div className={this.props.classes.timelineChart} id="timeline-chart" >
+            {(this.data().length > 1) ? this.renderTimeline() : this.renderLoading()}
+          </div>
+        </Paper>
+      </Grid>
+    </Grid>
   )
 }
 

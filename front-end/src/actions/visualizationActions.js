@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const fixAge = (row) => {
   switch (row.age_cod) {
     case 'DEC':
@@ -40,7 +42,7 @@ const countSex = row => row.sex;
 const countAge = (row) => {
   const ageRange = [
     '0-5',
-    '5-10',
+    '05-10',
     '10-20',
     '20-30',
     '30-40',
@@ -49,8 +51,8 @@ const countAge = (row) => {
     '60-70',
     '70-80',
     '80-90',
-    '90-100',
-    '100+',
+    '90-99',
+    '99+',
   ];
   if (row.age <= 5) {
     return ageRange[0];
@@ -72,7 +74,7 @@ const countAge = (row) => {
     return ageRange[8];
   } else if (row.age > 80 && row.age <= 90) {
     return ageRange[9];
-  } else if (row.age > 90 && row.age <= 100) {
+  } else if (row.age > 90 && row.age <= 99) {
     return ageRange[10];
   }
   return ageRange[11];
@@ -122,12 +124,12 @@ export const getData = queryParams => (dispatch) => {
       dispatch({ type: 'UPDATE_DATA', things: JSON.stringify(things.rows, null, 2) });
       const reducedData = reduceData(things.rows);
       const demographics = {
-        sex: Object.keys(reducedData.sex)
-          .map(sexRange => ({ sex: [sexRange], count: reducedData.sex[sexRange] })),
-        age: Object.keys(reducedData.age)
-          .map(ageRange => ({ age: [ageRange], count: reducedData.age[ageRange] })),
-        location: Object.keys(reducedData.country)
-          .map(countryRange => ({ country: [countryRange], count: reducedData.country[countryRange] })),
+        sex: _.sortBy(Object.keys(reducedData.sex)
+          .map(sexRange => ({ sex: sexRange, count: reducedData.sex[sexRange] })), 'sex'),
+        age: _.sortBy(Object.keys(reducedData.age)
+          .map(ageRange => ({ age: ageRange, count: reducedData.age[ageRange] })), 'age'),
+        location: _.reverse(_.sortBy(Object.keys(reducedData.country)
+          .map(countryRange => ({ country: countryRange, count: reducedData.country[countryRange] })), 'count')),
         selectedDates: {
           startDate: Number(queryParams.startDate),
           endDate: Number(queryParams.endDate),

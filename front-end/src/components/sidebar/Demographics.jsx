@@ -7,15 +7,7 @@ import Paper from 'material-ui/Paper';
 import Sex from './demographics/Sex';
 import Age from './demographics/Age';
 import Location from './demographics/Location';
-import './Demographics.css';
-
-const styles = {
-  gridContainer: {
-    padding: '0px 2px',
-    width: '100%',
-    margin: '0px',
-  },
-};
+import styles from './DemographicsStyles';
 
 class Demographics extends Component {
   static propTypes = {

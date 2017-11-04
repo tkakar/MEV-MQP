@@ -4,16 +4,15 @@ import { connect } from 'react-redux';
 import { Treemap, Tooltip } from 'recharts';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
-import './StackedBarVisualization.css';
 import CustomizedContent from './CustomizedContent';
-
-const styles = {
-
-};
+import styles from './StackedBarVisualizationStyles';
 
 class StackedBarVisualization extends Component {
   static propTypes = {
     classes: PropTypes.shape({
+      mainVisualization: PropTypes.string,
+      treemapVisualization: PropTypes.string,
+      treePaper: PropTypes.string,
     }).isRequired,
   }
 
@@ -27,7 +26,11 @@ class StackedBarVisualization extends Component {
       mainWidth: 1,
     };
 
-    window.addEventListener('resize', () => this.resizeTreeWidth());
+    let stillResizingTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(stillResizingTimer);
+      stillResizingTimer = setTimeout(this.resizeTreeWidth, 100);
+    });
   }
 
   componentDidMount() {
@@ -125,9 +128,9 @@ class StackedBarVisualization extends Component {
   COLORS = (['#d53e4f', '#f0027f', '#fbb4ae', '#beaed4', '#67a9cf', '#3288bd']);
 
   render = () => (
-    <div id="main-visualization">
-      <div className="treemap-visualization">
-        <div className="tree-paper">
+    <div className={this.props.classes.mainVisualization} id="main-visualization" >
+      <div className={this.props.classes.treemapVisualization} >
+        <div className={this.props.classes.treePaper} >
           <defs>
             <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
               <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
@@ -153,8 +156,8 @@ class StackedBarVisualization extends Component {
           </Paper>
         </div>
       </div>
-      <div className="treemap-visualization">
-        <div className="tree-paper">
+      <div className={this.props.classes.treemapVisualization}>
+        <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
               width={this.state.mainWidth}
@@ -174,8 +177,8 @@ class StackedBarVisualization extends Component {
           </Paper>
         </div>
       </div>
-      <div className="treemap-visualization">
-        <div className="tree-paper">
+      <div className={this.props.classes.treemapVisualization}>
+        <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
               width={this.state.mainWidth}

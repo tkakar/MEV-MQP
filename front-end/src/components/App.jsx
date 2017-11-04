@@ -5,7 +5,6 @@ import { blue, green, red } from 'material-ui/colors';
 import VisualizationContainer from './VisualizationContainer';
 import SideBarContainer from './SideBarContainer';
 import TimelineContainer from './TimelineContainer';
-import './App.css';
 
 const blueTheme = createMuiTheme({
   palette: {
@@ -22,7 +21,8 @@ const styles = theme => ({});
 
 class App extends Component {
   static propTypes = {
-    classes: PropTypes.object.isRequired,
+    classes: PropTypes.shape({
+    }).isRequired,
   }
 
   asd = () => 123;
