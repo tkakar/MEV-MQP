@@ -5,7 +5,7 @@ export default {
     padding: '10px',
   },
   treemapVisualization: {
-    height: '33%',
+    height: '25%',
     'overflow-x': 'scroll',
     overflow: 'visible',
     display: 'table',

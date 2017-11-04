@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Bar, ResponsiveContainer } from 'recharts';
+import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Bar, ResponsiveContainer } from 'recharts';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 
@@ -11,6 +11,9 @@ const styles = {
   responsiveContainer: {
     'margin-left': '-15px',
   },
+  maxHeight: {
+    height: '100%',
+  },
 };
 
 class Sex extends Component {
@@ -19,18 +22,44 @@ class Sex extends Component {
     classes: PropTypes.shape({
       labelFont: PropTypes.string,
       responsiveContainer: PropTypes.string,
+      maxHeight: PropTypes.string,
     }).isRequired,
   }
 
-  filter = () => true;
+  constructor(props) {
+    super(props);
+    this.state = {
+      graphHeight: '85%',
+    };
+
+    let stillResizingTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(stillResizingTimer);
+      stillResizingTimer = setTimeout(this.resizeGraph, 250);
+    });
+  }
+
+  componentDidMount() {
+    this.resizeGraph();
+  }
+
+  resizeGraph = () => {
+    const container = document.getElementById('sex-container');
+    const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
+    const graphTitle = document.getElementById('sex-graph-title');
+    const graphTitleHeight = window.getComputedStyle(graphTitle, null).getPropertyValue('height');
+    this.setState({
+      graphHeight: (parseInt(containerHeight, 10) - parseInt(graphTitleHeight, 10)) + 10,
+    });
+  }
 
   render() {
     return (
-      <div>
-        <Typography className={this.props.classes.labelFont} type="title" align="center" component="h1">
+      <div id="sex-container" className={this.props.classes.maxHeight} >
+        <Typography id="sex-graph-title" className={this.props.classes.labelFont} type="title" align="center" component="h1">
           Sex
         </Typography>
-        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={150}>
+        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight} >
           <BarChart data={this.props.sex}>
             <defs>
               <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">

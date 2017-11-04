@@ -24,17 +24,24 @@ class StackedBarVisualization extends Component {
     super(props);
     this.state = {
       mainWidth: 1,
+      treeMapHeight: 155,
     };
 
     let stillResizingTimer;
     window.addEventListener('resize', () => {
       clearTimeout(stillResizingTimer);
-      stillResizingTimer = setTimeout(this.resizeTreeWidth, 100);
+      stillResizingTimer = setTimeout(this.resizeTreeWidth, 250);
     });
   }
 
   componentDidMount() {
     this.resizeTreeWidth();
+
+    const elem = document.getElementById('thisID1');
+    const theCSSprop = window.getComputedStyle(elem, null).getPropertyValue('height');
+    console.log(parseInt(theCSSprop, 10));
+    this.setState({ treeMapHeight: parseInt(theCSSprop, 10) - 10 });
+
   }
 
 
@@ -129,7 +136,7 @@ class StackedBarVisualization extends Component {
 
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
-      <div className={this.props.classes.treemapVisualization} >
+      <div className={this.props.classes.treemapVisualization} id="thisID1" >
         <div className={this.props.classes.treePaper} >
           <defs>
             <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
@@ -140,7 +147,7 @@ class StackedBarVisualization extends Component {
           <Paper elevation={16}>
             <Treemap
               width={this.state.mainWidth}
-              height={155}
+              height={this.state.treeMapHeight}
               data={this.data()}
               dataKey="size"
               ratio={4 / 3}
@@ -161,7 +168,7 @@ class StackedBarVisualization extends Component {
           <Paper elevation={16}>
             <Treemap
               width={this.state.mainWidth}
-              height={155}
+              height={this.state.treeMapHeight}
               data={this.data()}
               dataKey="size"
               ratio={4 / 3}
@@ -182,7 +189,28 @@ class StackedBarVisualization extends Component {
           <Paper elevation={16}>
             <Treemap
               width={this.state.mainWidth}
-              height={155}
+              height={this.state.treeMapHeight}
+              data={this.data()}
+              dataKey="size"
+              ratio={4 / 3}
+              stroke="#ddd"
+              fill="url(#colorBlue)"
+              isAnimationActive={false}
+              animationDuration={0}
+            >
+              <Tooltip
+                isAnimationActive={false}
+              />
+            </Treemap>
+          </Paper>
+        </div>
+      </div>
+      <div className={this.props.classes.treemapVisualization}>
+        <div className={this.props.classes.treePaper}>
+          <Paper elevation={16}>
+            <Treemap
+              width={this.state.mainWidth}
+              height={this.state.treeMapHeight}
               data={this.data()}
               dataKey="size"
               ratio={4 / 3}

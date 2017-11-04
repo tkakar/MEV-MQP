@@ -16,6 +16,7 @@ class Demographics extends Component {
     location: PropTypes.arrayOf(PropTypes.object).isRequired,
     classes: PropTypes.shape({
       gridContainer: PropTypes.string,
+      maxHeight: PropTypes.string,
     }).isRequired,
   }
 
@@ -25,17 +26,17 @@ class Demographics extends Component {
     return (
       <Grid container spacing={8} className={this.props.classes.gridContainer} >
         <Grid item xs={2}>
-          <Paper className="" elevation={4}>
+          <Paper className={this.props.classes.maxHeight} elevation={4} >
             <Sex sex={this.props.sex} />
           </Paper>
         </Grid>
         <Grid item xs={3}>
-          <Paper className="" elevation={4}>
+          <Paper className={this.props.classes.maxHeight} elevation={4}>
             <Age age={this.props.age} />
           </Paper>
         </Grid>
         <Grid item xs={7}>
-          <Paper className="" elevation={4}>
+          <Paper className={this.props.classes.maxHeight} elevation={4}>
             <Location
               location={this.props.location}
             />

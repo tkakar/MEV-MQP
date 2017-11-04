@@ -11,6 +11,9 @@ const styles = {
   responsiveContainer: {
     'margin-left': '-15px',
   },
+  maxHeight: {
+    height: '100%',
+  },
 };
 
 class Age extends Component {
@@ -19,19 +22,44 @@ class Age extends Component {
     classes: PropTypes.shape({
       labelFont: PropTypes.string,
       responsiveContainer: PropTypes.string,
+      maxHeight: PropTypes.string,
     }).isRequired,
   }
 
-  filter = () => true;
+  constructor(props) {
+    super(props);
+    this.state = {
+      graphHeight: '85%',
+    };
+
+    let stillResizingTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(stillResizingTimer);
+      stillResizingTimer = setTimeout(this.resizeGraph, 250);
+    });
+  }
+
+  componentDidMount() {
+    this.resizeGraph();
+  }
+
+  resizeGraph = () => {
+    const container = document.getElementById('age-container');
+    const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
+    const graphTitle = document.getElementById('age-graph-title');
+    const graphTitleHeight = window.getComputedStyle(graphTitle, null).getPropertyValue('height');
+    this.setState({
+      graphHeight: (parseInt(containerHeight, 10) - parseInt(graphTitleHeight, 10)) + 10,
+    });
+  }
 
   render() {
     return (
-      <div>
-        {/* <h2>Age</h2> */}
-        <Typography className={this.props.classes.labelFont} type="title" align="center" component="h1">
+      <div id="age-container" className={this.props.classes.maxHeight} >
+        <Typography id="age-graph-title" className={this.props.classes.labelFont} type="title" align="center" component="h1">
           Age
         </Typography>
-        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={150}>
+        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight}>
           <BarChart data={this.props.age}>
             <defs>
               <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
