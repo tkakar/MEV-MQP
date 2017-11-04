@@ -30,26 +30,24 @@ class StackedBarVisualization extends Component {
     let stillResizingTimer;
     window.addEventListener('resize', () => {
       clearTimeout(stillResizingTimer);
-      stillResizingTimer = setTimeout(this.resizeTreeWidth, 250);
+      stillResizingTimer = setTimeout(this.resizeTreeMap, 250);
     });
   }
 
   componentDidMount() {
-    this.resizeTreeWidth();
-
-    const elem = document.getElementById('thisID1');
-    const theCSSprop = window.getComputedStyle(elem, null).getPropertyValue('height');
-    console.log(parseInt(theCSSprop, 10));
-    this.setState({ treeMapHeight: parseInt(theCSSprop, 10) - 10 });
-
+    this.resizeTreeMap();
   }
-
 
   getRandomInt = (min, max) =>
     (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min));
 
-  resizeTreeWidth = () =>
-    this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 })
+  resizeTreeMap = () => {
+    const firstTreeMap = document.getElementById('firstTreeMap');
+    const firstTreeMapHeight = window.getComputedStyle(firstTreeMap, null).getPropertyValue('height');
+    console.log(parseInt(firstTreeMapHeight, 10) - 10);
+    this.setState({ treeMapHeight: parseInt(firstTreeMapHeight, 10) - 10 });
+    this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 });
+  }
 
   data = () => ([
     {
@@ -136,7 +134,7 @@ class StackedBarVisualization extends Component {
 
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
-      <div className={this.props.classes.treemapVisualization} id="thisID1" >
+      <div className={this.props.classes.treemapVisualization} id="firstTreeMap" >
         <div className={this.props.classes.treePaper} >
           <defs>
             <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">

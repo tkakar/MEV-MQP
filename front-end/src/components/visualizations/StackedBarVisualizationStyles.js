@@ -2,16 +2,15 @@ export default {
   mainVisualization: {
     height: '100%',
     margin: 'auto',
-    padding: '10px',
+    padding: '10px 10px 0px 10px',
   },
   treemapVisualization: {
     height: '25%',
-    'overflow-x': 'scroll',
     overflow: 'visible',
-    display: 'table',
+    display: 'block',
   },
   treePaper: {
     'vertical-align': 'middle',
-    display: 'table-cell',
+    display: 'inline-block',
   },
 };
