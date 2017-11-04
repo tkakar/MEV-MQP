@@ -60,7 +60,7 @@ app.post('/getdata', (req, res) => {
   let query = 
   "SELECT sex, age, age_cod, occr_country, REPT_DT, occp_cod "
 + "FROM demo "
-+ "WHERE REPT_DT BETWEEN " + req.body.startDate + " AND " + req.body.endDate;
++ "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end;
   console.log(query);
   db.query(query, (err, data) => {
     res.status(200).send(data);

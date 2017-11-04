@@ -9,13 +9,15 @@ import Button from 'material-ui/Button';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
-import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
+import { filterData } from '../../actions/filterActions';
+import { setSelectedDate, setSelectedTimeline } from '../../actions/timelineActions';
 import styles from './TimelineStyles';
 import './Timeline.css';
 
 class Timeline extends Component {
   static propTypes = {
-    setSelectedTime: PropTypes.func.isRequired,
+    filterData: PropTypes.func.isRequired,
+    setSelectedDate: PropTypes.func.isRequired,
     setSelectedTimeline: PropTypes.func.isRequired,
     entireTimelineData: PropTypes.arrayOf(
       PropTypes.shape({
@@ -121,7 +123,7 @@ class Timeline extends Component {
     const dateRange = document.getElementById('dateRangePicker').value;
     const dates = this.getUnformattedDateFromFormattedRange(dateRange);
 
-    this.props.setSelectedTime({
+    this.props.setSelectedDate({
       ...dates,
     });
   };
@@ -257,6 +259,7 @@ class Timeline extends Component {
       <Grid item sm={3} md={2}>
         <Paper elevation={4} className={this.props.classes.calendartWrapper} >
           <Button raised className="cal-button" color="primary" onClick={this.updateSelectedDate} >Set Date!</Button>
+          <Button raised className="cal-button" color="default" onClick={this.props.filterData} >Update filter!</Button>
           <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="asd" id="dateRangePicker" />
         </Paper>
       </Grid>
@@ -277,5 +280,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setSelectedTime, setSelectedTimeline },
+  { filterData, setSelectedDate, setSelectedTimeline },
 )(withStyles(styles)(Timeline));
