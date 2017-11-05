@@ -9,13 +9,13 @@ import Button from 'material-ui/Button';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
-import { setSelectedTime, setSelectedTimeline } from '../../actions/timelineActions';
+import { setSelectedDate, setSelectedTimeline } from '../../actions/timelineActions';
 import styles from './TimelineStyles';
 import './Timeline.css';
 
 class Timeline extends Component {
   static propTypes = {
-    setSelectedTime: PropTypes.func.isRequired,
+    setSelectedDate: PropTypes.func.isRequired,
     setSelectedTimeline: PropTypes.func.isRequired,
     entireTimelineData: PropTypes.arrayOf(
       PropTypes.shape({
@@ -121,7 +121,7 @@ class Timeline extends Component {
     const dateRange = document.getElementById('dateRangePicker').value;
     const dates = this.getUnformattedDateFromFormattedRange(dateRange);
 
-    this.props.setSelectedTime({
+    this.props.setSelectedDate({
       ...dates,
     });
   };
@@ -277,5 +277,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setSelectedTime, setSelectedTimeline },
+  { setSelectedDate, setSelectedTimeline },
 )(withStyles(styles)(Timeline));

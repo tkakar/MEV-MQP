@@ -1,12 +1,4 @@
-import { getData } from './visualizationActions';
-
-export const setSelectedTime = selectedDates => (dispatch) => {
-  const postBody = {
-    ...selectedDates,
-  };
-
-  dispatch(getData(postBody));
-};
+import { filterData } from './filterActions';
 
 export const setSelectedTimeline = () => (dispatch) => {
   const fetchData = {
@@ -28,4 +20,10 @@ export const setSelectedTimeline = () => (dispatch) => {
     .catch((err) => {
       console.error.bind(err);
     });
+};
+
+export const setSelectedDate = selectedDates => (dispatch) => {
+  dispatch({ type: 'SET_DATE_RANGE', REPT_DT: { start: selectedDates.startDate, end: selectedDates.endDate } });
+  console.log('Setting Date Range');
+  dispatch(filterData());
 };

@@ -19,6 +19,7 @@ const styles = {
 class Sex extends Component {
   static propTypes = {
     sex: PropTypes.arrayOf(PropTypes.object).isRequired,
+    toggleFilter: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       labelFont: PropTypes.string,
       responsiveContainer: PropTypes.string,
@@ -43,6 +44,10 @@ class Sex extends Component {
     this.resizeGraph();
   }
 
+  handleClick = (e) => {
+    this.props.toggleFilter(e.activeLabel);
+  }
+
   resizeGraph = () => {
     const container = document.getElementById('sex-container');
     const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
@@ -60,7 +65,10 @@ class Sex extends Component {
           Sex
         </Typography>
         <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight} >
-          <BarChart data={this.props.sex}>
+          <BarChart
+            data={this.props.sex}
+            onClick={this.handleClick}
+          >
             <defs>
               <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />

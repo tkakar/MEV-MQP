@@ -17,7 +17,7 @@ class StackedBarVisualization extends Component {
   }
 
   static defaultProps = {
-    things: '',
+    data: '',
   }
 
   constructor(props) {
@@ -44,7 +44,6 @@ class StackedBarVisualization extends Component {
   resizeTreeMap = () => {
     const firstTreeMap = document.getElementById('firstTreeMap');
     const firstTreeMapHeight = window.getComputedStyle(firstTreeMap, null).getPropertyValue('height');
-    console.log(parseInt(firstTreeMapHeight, 10) - 10);
     this.setState({ treeMapHeight: parseInt(firstTreeMapHeight, 10) - 10 });
     this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 });
   }
@@ -229,7 +228,7 @@ class StackedBarVisualization extends Component {
 }
 
 const mapStateToProps = state => ({
-  things: state.data.things,
+  data: state.mainVisualization.data,
 });
 
 export default connect(
