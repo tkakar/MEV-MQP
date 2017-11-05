@@ -30,15 +30,6 @@ class Demographics extends Component {
     }).isRequired,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      sexFilter: [],
-      ageFilter: [],
-      locationFilter: [],
-    };
-  }
-
   // If state changes, we want to re-query the database
   componentDidUpdate() {
     // console.log(this.props.filters);

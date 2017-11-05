@@ -42,6 +42,7 @@ const countCountry = row => row.occr_country;
 const countSex = row => row.sex;
 const countAge = (row) => {
   const ageRange = [
+    'UNK',
     '0-5',
     '05-10',
     '10-20',
@@ -55,30 +56,32 @@ const countAge = (row) => {
     '90-99',
     '99+',
   ];
-  if (row.age <= 5) {
+  if (row.age < 0) {
     return ageRange[0];
-  } else if (row.age > 5 && row.age <= 10) {
+  } else if (row.age >= 0 && row.age <= 5) {
     return ageRange[1];
-  } else if (row.age > 10 && row.age <= 20) {
+  } else if (row.age > 5 && row.age <= 10) {
     return ageRange[2];
-  } else if (row.age > 20 && row.age <= 30) {
+  } else if (row.age > 10 && row.age <= 20) {
     return ageRange[3];
-  } else if (row.age > 30 && row.age <= 40) {
+  } else if (row.age > 20 && row.age <= 30) {
     return ageRange[4];
-  } else if (row.age > 40 && row.age <= 50) {
+  } else if (row.age > 30 && row.age <= 40) {
     return ageRange[5];
-  } else if (row.age > 50 && row.age <= 60) {
+  } else if (row.age > 40 && row.age <= 50) {
     return ageRange[6];
-  } else if (row.age > 60 && row.age <= 70) {
+  } else if (row.age > 50 && row.age <= 60) {
     return ageRange[7];
-  } else if (row.age > 70 && row.age <= 80) {
+  } else if (row.age > 60 && row.age <= 70) {
     return ageRange[8];
-  } else if (row.age > 80 && row.age <= 90) {
+  } else if (row.age > 70 && row.age <= 80) {
     return ageRange[9];
-  } else if (row.age > 90 && row.age <= 99) {
+  } else if (row.age > 80 && row.age <= 90) {
     return ageRange[10];
+  } else if (row.age > 90 && row.age <= 99) {
+    return ageRange[11];
   }
-  return ageRange[11];
+  return ageRange[12];
 };
 
 const counters = {

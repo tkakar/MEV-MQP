@@ -4,7 +4,6 @@ export const filterData = () => (dispatch, getState) => {
   const postBody = {
     ...getState().filters,
   };
-
   console.log('Updated filter with: ', postBody);
 
   dispatch(getDemographicData(postBody));
