@@ -1,3 +1,5 @@
+import { filterData } from './filterActions';
+
 export const setSelectedTimeline = () => (dispatch) => {
   const fetchData = {
     method: 'POST',
@@ -22,4 +24,6 @@ export const setSelectedTimeline = () => (dispatch) => {
 
 export const setSelectedDate = selectedDates => (dispatch) => {
   dispatch({ type: 'SET_DATE_RANGE', REPT_DT: { start: selectedDates.startDate, end: selectedDates.endDate } });
+  console.log('Setting Date Range');
+  dispatch(filterData());
 };

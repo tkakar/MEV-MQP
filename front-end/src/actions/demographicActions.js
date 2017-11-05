@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { filterData } from './filterActions';
 
 const fixAge = (row) => {
   switch (row.age_cod) {
@@ -147,15 +148,17 @@ export const getDemographicData = queryParams => (dispatch) => {
 export const toggleSexFilter = filter => (dispatch, getState) => {
   if (getState().filters.sex.includes(filter)) {
     dispatch({ type: 'SET_SEX', sex: getState().filters.sex.filter(item => item !== filter) });
+    dispatch(filterData());
   } else {
     dispatch({ type: 'SET_SEX', sex: getState().filters.sex.concat(filter) });
+    dispatch(filterData());
   }
 };
 
 export const toggleAgeFilter = filter => (dispatch) => {
-  this.setState({ ageFilter: filter });
 };
 
 export const toggleLocationFilter = filter => (dispatch) => {
   dispatch({ type: 'SET_LOCATION', occr_country: filter });
+  dispatch(filterData());
 };

@@ -41,7 +41,7 @@ class Demographics extends Component {
 
   // If state changes, we want to re-query the database
   componentDidUpdate() {
-    console.log(this.props.filters);
+    // console.log(this.props.filters);
     // this.props.filterData({
     //   ...this.props.filters,
     // });
