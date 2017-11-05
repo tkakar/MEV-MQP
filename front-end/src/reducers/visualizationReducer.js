@@ -1,11 +1,13 @@
 const initialVisualizationState = {
-  data: '',
+  meType: [],
+  stage: [],
+  cause: [],
 };
 
 export default (state = initialVisualizationState, action = {}) => {
   switch (action.type) {
-    case 'UPDATE_DATA':
-      return Object.assign({}, state, { data: action.data });
+    case 'UPDATE_VIS':
+      return Object.assign({}, state, { ...action.visData });
     default: return state;
   }
 };

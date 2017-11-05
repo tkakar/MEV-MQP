@@ -67,6 +67,31 @@ app.post('/getdata', (req, res) => {
   })
 });
 
+app.post('/getvis', (req, res) => {
+  console.log('got a request with body:\n ', req.body)
+  let returnObject = {};
+  let meTypeQuery = "SELECT me_type, count(*) FROM demo"
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
+  + "GROUP BY me_type";
+  let stageQuery = "SELECT stage, count(*) FROM demo"
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
+  + "GROUP BY stage"; 
+  let causeQuery = "SELECT cause, count(*) FROM demo"
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
+  + "GROUP BY cause";
+  db.query(meTypeQuery, (err, meTypeData) => {
+    db.query(stageQuery, (err, stageData) => {
+      db.query(causeQuery, (err, causeData) => {
+        returnObject = { 
+          meType: meTypeData,
+          stage: stageData,
+          cause: causeData,
+        }
+        res.status(200).send(returnObject);
+      })
+    })
+  })
+});
 app.post('/gettimelinedata', (req, res) => {
   console.log('got a request for timeline data')
   cache.send_command('JSON.GET', ['timeline'], (err, data) => {

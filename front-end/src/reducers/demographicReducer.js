@@ -13,7 +13,6 @@ const initialDemographicState = {
 export default (state = initialDemographicState, action = {}) => {
   switch (action.type) {
     case 'UPDATE_DEMOGRAPHICS':
-      console.log(...action.demographics);
       return Object.assign({}, state, { ...action.demographics });
     default: return state;
   }
