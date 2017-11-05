@@ -16,6 +16,7 @@ export const getVisData = queryParams => (dispatch) => {
     .then(response => response.json())
     .then((allReports) => {
       const visData = allReports;
+      console.log(visData);
       dispatch({ type: 'UPDATE_VIS', visData });
     })
     .catch((err) => {

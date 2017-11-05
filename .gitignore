@@ -3,6 +3,9 @@
 # data
 database/data
 
+# redis
+back-end/redis
+
 # dependencies
 **node_modules
 **package-lock.json
