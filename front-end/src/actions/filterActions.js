@@ -9,6 +9,9 @@ export const filterData = () => (dispatch, getState) => {
   console.log('Updated filter with: ', postBody);
 
   dispatch(getDemographicData(postBody));
+
+  console.log('Update viz');
+
   dispatch(getVisData(postBody));
   // TODO: Call to get main visualization data
 };

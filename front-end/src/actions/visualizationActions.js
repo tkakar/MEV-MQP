@@ -10,8 +10,6 @@ export const getVisData = queryParams => (dispatch) => {
     }),
   };
 
-  console.log(fetchData.body);
-
   fetch('http://localhost:3001/getvis', fetchData)
     .then(response => response.json())
     .then((allReports) => {
