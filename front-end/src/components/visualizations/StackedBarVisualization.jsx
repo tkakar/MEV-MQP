@@ -15,14 +15,6 @@ class StackedBarVisualization extends Component {
       treePaper: PropTypes.string,
     }).isRequired,
   }
-
-  static defaultProps = {
-    meType: [{ name: 'meType', size: 1 }],
-    products: [{ name: 'products', size: 1 }],
-    stage: [{ name: 'stage', size: 1 }],
-    cause: [{ name: 'cause', size: 1 }],
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,16 +22,16 @@ class StackedBarVisualization extends Component {
       treeMapHeight: 155,
     };
 
-    //let stillResizingTimer;
-    //window.addEventListener('resize', () => {
-      //clearTimeout(stillResizingTimer);
-      //stillResizingTimer = setTimeout(this.resizeTreeMap, 250);
-    //});
+    let stillResizingTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(stillResizingTimer);
+      stillResizingTimer = setTimeout(this.resizeTreeMap, 250);
+    });
   }
 
-  //componentDidMount() {
-    // this.resizeTreeMap();
-  //}
+  componentDidMount() {
+    this.resizeTreeMap();
+  }
 
   getRandomInt = (min, max) =>
     (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min));
@@ -55,12 +47,12 @@ class StackedBarVisualization extends Component {
 
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
-      <div className={this.props.classes.treemapVisualization}>
+      <div className={this.props.classes.treemapVisualization} id="firstTreeMap">
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
-              width={700}
-              height={100}
+              width={this.state.mainWidth}
+              height={this.state.treeMapHeight}
               data={this.props.meType}
               dataKey="size"
               ratio={4 / 3}
@@ -76,13 +68,14 @@ class StackedBarVisualization extends Component {
           </Paper>
         </div>
       </div>
+      {console.log("Me Type: ")}
       {console.log(this.props.meType)}
       <div className={this.props.classes.treemapVisualization}>
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
-              width={700}
-              height={100}
+              width={this.state.mainWidth}
+              height={this.state.treeMapHeight}
               data={this.props.stage}
               dataKey="size"
               ratio={4 / 3}
@@ -102,8 +95,8 @@ class StackedBarVisualization extends Component {
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
-              width={700}
-              height={100}
+              width={this.state.mainWidth}
+              height={this.state.treeMapHeight}
               data={this.props.cause}
               dataKey="size"
               ratio={4 / 3}

@@ -70,13 +70,13 @@ app.post('/getdata', (req, res) => {
 app.post('/getvis', (req, res) => {
   console.log('got a request with body:\n ', req.body)
   let returnObject = {};
-  let meTypeQuery = "SELECT me_type as name, count(*) as size FROM demo "
+  let meTypeQuery = "SELECT me_type as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
   + "GROUP BY me_type";
-  let stageQuery = "SELECT stage as name, count(*) as size FROM demo "
+  let stageQuery = "SELECT stage as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
   + "GROUP BY stage"; 
-  let causeQuery = "SELECT cause as name, count(*) as size FROM demo "
+  let causeQuery = "SELECT cause as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
   + "GROUP BY cause";
   db.query(meTypeQuery, (err, meTypeData) => {
