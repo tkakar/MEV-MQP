@@ -58,18 +58,36 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorBlue)"
+              content={<CustomizedContent colors={this.COLORS} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip
-                isAnimationActive={false}
-              />
+              <Tooltip />
             </Treemap>
           </Paper>
         </div>
       </div>
-      {console.log("Me Type: ")}
-      {console.log(this.props.meType)}
+
+      <div className={this.props.classes.treemapVisualization}>
+        <div className={this.props.classes.treePaper}>
+          <Paper elevation={16}>
+            <Treemap
+              width={this.state.mainWidth}
+              height={this.state.treeMapHeight}
+              data={this.props.product}
+              dataKey="size"
+              ratio={4 / 3}
+              stroke="#ddd"
+              fill="url(#colorBlue)"
+              content={<CustomizedContent colors={this.COLORS} />}
+              isAnimationActive={false}
+              animationDuration={0}
+            >
+              <Tooltip />
+            </Treemap>
+          </Paper>
+        </div>
+      </div>
       <div className={this.props.classes.treemapVisualization}>
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
@@ -81,12 +99,11 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorBlue)"
+              content={<CustomizedContent colors={this.COLORS} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip
-                isAnimationActive={false}
-              />
+              <Tooltip />
             </Treemap>
           </Paper>
         </div>
@@ -102,12 +119,11 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorBlue)"
+              content={<CustomizedContent colors={this.COLORS} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip
-                isAnimationActive={false}
-              />
+              <Tooltip />
             </Treemap>
           </Paper>
         </div>
@@ -118,6 +134,7 @@ class StackedBarVisualization extends Component {
 
 const mapStateToProps = state => ({
   meType: state.mainVisualization.meType,
+  product: state.mainVisualization.product,
   stage: state.mainVisualization.stage,
   cause: state.mainVisualization.cause,
 });

@@ -23,7 +23,7 @@ class CustomizedContent extends Component {
           width={this.props.width}
           height={this.props.height}
           style={{
-            fill: this.props.depth < 2 ? this.props.colors[Math.floor(this.props.index)] : 'None',
+            fill: this.props.colors[this.props.index],
             stroke: '#fff',
             strokeWidth: 2 / (this.props.depth + 1e-10),
             strokeOpacity: 1 / (this.props.depth + 1e-10),
@@ -39,19 +39,6 @@ class CustomizedContent extends Component {
               fontSize={14}
             >
               {this.props.name}
-            </text>
-            : null
-        }
-        {
-          this.props.depth === 1 ?
-            <text
-              x={this.props.x + 4}
-              y={this.props.y + 18}
-              fill="#fff"
-              fontSize={16}
-              fillOpacity={0.9}
-            >
-              {this.props.index + 1}
             </text>
             : null
         }

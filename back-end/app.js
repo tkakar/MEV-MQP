@@ -76,21 +76,30 @@ app.post('/getvis', (req, res) => {
   let stageQuery = "SELECT stage as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
   + "GROUP BY stage"; 
+  let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
+  + "FROM (SELECT b.drugname " 
+      + "FROM (SELECT primaryid, REPT_DT FROM demo " 
+        + "WHERE REPT_DT between " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + ") a "
+      + "INNER JOIN (SELECT primaryid::integer as id, drugname FROM drug) b ON a.primaryid = b.id) z "
+      + "GROUP BY z.drugname"; 
   let causeQuery = "SELECT cause as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
   + "GROUP BY cause";
   db.query(meTypeQuery, (err, meTypeData) => {
-    db.query(stageQuery, (err, stageData) => {
-      db.query(causeQuery, (err, causeData) => {
-        returnObject = { 
-          meType: meTypeData.rows,
-          stage: stageData.rows,
-          cause: causeData.rows,
-        }
-        console.log(returnObject);
-        res.status(200).send(returnObject);
+    //db.query(productQuery, (err, productData) => {
+      db.query(stageQuery, (err, stageData) => {
+        db.query(causeQuery, (err, causeData) => {
+          returnObject = { 
+            meType: meTypeData.rows,
+            product: [],
+            stage: stageData.rows,
+            cause: causeData.rows,
+          }
+          console.log(returnObject);
+          res.status(200).send(returnObject);
+        })
       })
-    })
+    //})
   })
 });
 app.post('/gettimelinedata', (req, res) => {
