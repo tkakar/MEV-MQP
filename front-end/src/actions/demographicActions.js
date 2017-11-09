@@ -124,8 +124,6 @@ export const getDemographicData = queryParams => (dispatch) => {
   fetch('http://localhost:3001/getdata', fetchData)
     .then(response => response.json())
     .then((allReports) => {
-      console.log(allReports.rows);
-      dispatch({ type: 'UPDATE_DATA', data: JSON.stringify(allReports.rows, null, 2) });
       const reducedData = reduceData(allReports.rows);
       const demographics = {
         sex: _.sortBy(Object.keys(reducedData.sex)
@@ -139,8 +137,6 @@ export const getDemographicData = queryParams => (dispatch) => {
           endDate: Number(queryParams.endDate),
         },
       };
-      console.log('demographics');
-      console.log(demographics);
       dispatch({ type: 'UPDATE_DEMOGRAPHICS', demographics });
     })
     .catch((err) => {
