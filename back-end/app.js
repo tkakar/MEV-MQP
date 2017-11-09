@@ -126,20 +126,33 @@ app.post('/getvis', (req, res) => {
   console.log('got a request with body:\n ', req.body)
   let returnObject = {};
   let meTypeQuery = "SELECT me_type as name, count(*)::INTEGER as size FROM demo "
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
-  + "GROUP BY me_type";
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  meTypeQuery += sexBuilder(req.body.sex);
+  meTypeQuery += locationBuilder(req.body.occr_country);
+  meTypeQuery += "GROUP BY me_type";
+
   let stageQuery = "SELECT stage as name, count(*)::INTEGER as size FROM demo "
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
-  + "GROUP BY stage"; 
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  stageQuery += sexBuilder(req.body.sex);
+  stageQuery += locationBuilder(req.body.occr_country);
+  stageQuery += "GROUP BY stage"; 
+
   let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
   + "FROM (SELECT b.drugname " 
       + "FROM (SELECT primaryid, REPT_DT FROM demo " 
-        + "WHERE REPT_DT between " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + ") a "
+        + "WHERE REPT_DT between " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+        productQuery += sexBuilder(req.body.sex);
+        productQuery += locationBuilder(req.body.occr_country);
+        productQuery += ") a "
       + "INNER JOIN (SELECT primaryid::integer as id, drugname FROM drug) b ON a.primaryid = b.id) z "
       + "GROUP BY z.drugname"; 
+
   let causeQuery = "SELECT cause as name, count(*)::INTEGER as size FROM demo "
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end + " "
-  + "GROUP BY cause";
+  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  causeQuery += sexBuilder(req.body.sex);
+  causeQuery += locationBuilder(req.body.occr_country);
+  causeQuery += "GROUP BY cause";
+
   db.query(meTypeQuery, (err, meTypeData) => {
     //db.query(productQuery, (err, productData) => {
       db.query(stageQuery, (err, stageData) => {
