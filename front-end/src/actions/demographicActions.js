@@ -101,11 +101,33 @@ const handleAccumulator = (accumulator, row) => {
   }
 };
 
+const defaultSexObject = {
+  F: 0,
+  M: 0,
+  UNK: 0,
+};
+
+const defaultAgeObject = {
+  '0-5': 0,
+  '05-10': 0,
+  '10-20': 0,
+  '20-30': 0,
+  '30-40': 0,
+  '40-50': 0,
+  '50-60': 0,
+  '60-70': 0,
+  '70-80': 0,
+  '80-90': 0,
+  '90-99': 0,
+  '99+': 0,
+  UNK: 0,
+};
+
 const reduceData = rows => rows.reduce((accumulator, row) => {
   fixers.forEach(fix => fix(row));
   handleAccumulator(accumulator, row);
   return accumulator;
-}, { sex: [], age: [], country: [] });
+}, { sex: Object.assign({}, defaultSexObject), age: Object.assign({}, defaultAgeObject), country: [] });
 
 export const getDemographicData = queryParams => (dispatch) => {
   const fetchData = {
@@ -157,7 +179,12 @@ export const toggleSexFilter = filter => (dispatch, getState) => {
 export const toggleAgeFilter = filter => (dispatch) => {
 };
 
-export const toggleLocationFilter = filter => (dispatch) => {
-  dispatch({ type: 'SET_LOCATION', occr_country: filter });
-  dispatch(filterData());
+export const toggleLocationFilter = filter => (dispatch, getState) => {
+  if (getState().filters.occr_country.includes(filter)) {
+    dispatch({ type: 'SET_LOCATION', occr_country: getState().filters.occr_country.filter(item => item !== filter) });
+    dispatch(filterData());
+  } else {
+    dispatch({ type: 'SET_LOCATION', occr_country: getState().filters.occr_country.concat(filter) });
+    dispatch(filterData());
+  }
 };

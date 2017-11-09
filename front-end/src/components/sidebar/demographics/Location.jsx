@@ -10,6 +10,7 @@ const styles = {
   },
   responsiveContainer: {
     'margin-left': '-15px',
+    'font-size': '10pt',
   },
   maxHeight: {
     height: '100%',
@@ -19,6 +20,7 @@ const styles = {
 class Location extends Component {
   static propTypes = {
     location: PropTypes.arrayOf(PropTypes.object).isRequired,
+    toggleFilter: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       labelFont: PropTypes.string,
       responsiveContainer: PropTypes.string,
@@ -43,6 +45,12 @@ class Location extends Component {
     this.resizeGraph();
   }
 
+  handleClick = (e) => {
+    if (e && e.activeLabel) {
+      this.props.toggleFilter(e.activeLabel);
+    }
+  }
+
   resizeGraph = () => {
     const container = document.getElementById('location-container');
     const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
@@ -60,7 +68,10 @@ class Location extends Component {
           Location
         </Typography>
         <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight}>
-          <BarChart data={this.props.location}>
+          <BarChart
+            data={this.props.location}
+            onClick={this.handleClick}
+          >
             <defs>
               <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
@@ -70,7 +81,10 @@ class Location extends Component {
             <XAxis dataKey="country" />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
+            <Tooltip
+              cursor={{ stroke: '#424242', strokeWidth: 1 }}
+              wrapperStyle={{ padding: '4px' }}
+            />
             <Bar dataKey="count" stroke="#1A237E" fill="url(#colorBlue)" />
           </BarChart>
         </ResponsiveContainer>
