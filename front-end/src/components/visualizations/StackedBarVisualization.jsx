@@ -43,7 +43,10 @@ class StackedBarVisualization extends Component {
     this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 });
   }
 
-  COLORS = (['#d53e4f', '#f0027f', '#fbb4ae', '#beaed4', '#67a9cf', '#3288bd']);
+  // COLORS = (['#34557F', '#67AAFF', '#4D80BF', '#20467D', '#5D99E5']);
+  // COLORS = (['#1C267F', '#374BFF', '#2939BF', '#20467D', '#3244E5']);
+  // COLORS = (['#3D51DF', '#283593', '#171E53', '#2B3AA0', '#212C79']);
+  COLORS = (['url(#colorBlue1)', 'url(#colorBlue2)', 'url(#colorBlue3)', 'url(#colorBlue4)', 'url(#colorBlue5)']);
 
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
