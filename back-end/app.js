@@ -6,6 +6,7 @@ const { Client } = require('pg')
 const bodyParser = require('body-parser');
 const os = require('os');
 
+// Initialze a dummy cache for systems that can't run REDIS
 let cache = {
   get: () => Promise.resolve(null),
   send_command: (type, from, callback) => {
@@ -18,15 +19,18 @@ let cache = {
   set: () => Promise.resolve(),
 };
 
+// Connect to the REDIS cache if we are on MacOS or Liux
 if (os.platform() === 'linux' || os.platform() === 'darwin') {
   console.log('on linux or mac, using local cache');
   cache = redis.createClient();  
 }
 
+// We cannot use REDIS if on Windows
 if (os.platform() === 'win32') {
   console.log('on window, not using local cache');
 }
 
+// Connect to the Database on AWS
 const db = new Client({
   user: 'MEVUser',
   host: 'test-mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
@@ -55,15 +59,19 @@ app.get('/', (req, res) => {
   res.status(200).send({});
 })
 
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Sex Filtering
+ * @param {Array} sex List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Sex filters
+ */
 function sexBuilder(sex) {
   let sexString = ` AND `;
   
-  if (sex.length === 0) {
+  if (sex.length === 0 || sex.length === 3) {
     return '';
   }
 
   if (sex.length === 1) {
-    console.log(sex)
     if (sex[0] === 'UNK') {
         return sexString + `(sex = '${sex}' OR sex IS NULL)`;
       } else {
@@ -83,6 +91,11 @@ function sexBuilder(sex) {
   }
 } 
 
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Location Filtering
+ * @param {Array} location List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Location filters
+ */
 function locationBuilder(location) {
   let locationString = ` AND `;
   
@@ -104,17 +117,68 @@ function locationBuilder(location) {
     });
     return `${locationString}(${locationMap.join(' OR ')})`
   }
+}
+
+/**
+ * Parses a range of dates into the low and high end
+ * @param {String} filter this is a range of years to filter for
+ * @return {Object} containing the lowEnd and highEnd of the age Range
+ */
+function getAgeRange(filter) {
+  if (filter === '99+') return { lowEnd: 99, highEnd: 1000000 };
+  const splitAge = filter.split('-');
+  const lowEnd = splitAge[0];
+  const highEnd = splitAge[1];
+  return { lowEnd, highEnd };
+}
+
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Age Filtering
+ * @param {Array} age List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Age filters
+ */
+function ageBuilder(age) {
+  let ageString = ` AND `;
+  
+  if (age.length === 0 || age.length === 13) {
+    return '';
+  }
+
+  if (age.length === 1) {
+    if (age[0] === 'UNK') {
+      return ageString + `age_year IS NULL`;
+    } else {
+      const { lowEnd, highEnd } = getAgeRange(age[0])
+      return ageString + `age_year BETWEEN ${lowEnd} AND ${highEnd}`
+    }
+  }
+  
+  if (age.length > 1) {
+    const ageMap = age.map(filter => {
+      if (filter === 'UNK') {
+        return `age_year IS NULL`;
+      } else {
+        const { lowEnd, highEnd } = getAgeRange(filter)
+        return `age_year BETWEEN ${lowEnd} AND ${highEnd}`;
+      }
+    });
+    return `${ageString}(${ageMap.join(' OR ')})`
+  }
 } 
 
+/**
+ * Endpoint that takes in some body with filters to query the database and return the data for the main visualization
+ */
 app.post('/getdata', (req, res) => {
   console.log('got a request with body:\n ', req.body)
   let query = 
-  `SELECT sex, age, age_cod, occr_country, REPT_DT, occp_cod `
-+ `FROM demo `
+  `SELECT sex, age_year as age, occr_country, REPT_DT, occp_cod, outc_cod `
++ `FROM demo_outcome `
 + `WHERE (REPT_DT BETWEEN ${req.body.REPT_DT.start} AND ${req.body.REPT_DT.end})`;
 
   query += sexBuilder(req.body.sex);
   query += locationBuilder(req.body.occr_country);
+  query += ageBuilder(req.body.age);
 
   console.log(query);
   db.query(query, (err, data) => {
@@ -129,13 +193,17 @@ app.post('/getvis', (req, res) => {
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
   meTypeQuery += sexBuilder(req.body.sex);
   meTypeQuery += locationBuilder(req.body.occr_country);
-  meTypeQuery += "GROUP BY me_type";
+  meTypeQuery += ageBuilder(req.body.age);
+  meTypeQuery += " GROUP BY me_type";
+
+  console.log(meTypeQuery)
 
   let stageQuery = "SELECT stage as name, count(*)::INTEGER as size FROM demo "
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
   stageQuery += sexBuilder(req.body.sex);
   stageQuery += locationBuilder(req.body.occr_country);
-  stageQuery += "GROUP BY stage"; 
+  stageQuery += ageBuilder(req.body.age);
+  stageQuery += " GROUP BY stage"; 
 
   let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
   + "FROM (SELECT b.drugname " 
@@ -143,6 +211,7 @@ app.post('/getvis', (req, res) => {
         + "WHERE REPT_DT between " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
         productQuery += sexBuilder(req.body.sex);
         productQuery += locationBuilder(req.body.occr_country);
+        productQuery += ageBuilder(req.body.age);
         productQuery += ") a "
       + "INNER JOIN (SELECT primaryid::integer as id, drugname FROM drug) b ON a.primaryid = b.id) z "
       + "GROUP BY z.drugname"; 
@@ -151,9 +220,11 @@ app.post('/getvis', (req, res) => {
   + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
   causeQuery += sexBuilder(req.body.sex);
   causeQuery += locationBuilder(req.body.occr_country);
-  causeQuery += "GROUP BY cause";
+  causeQuery += ageBuilder(req.body.age);
+  causeQuery += " GROUP BY cause";
 
   db.query(meTypeQuery, (err, meTypeData) => {
+    console.log(err)
     //db.query(productQuery, (err, productData) => {
       db.query(stageQuery, (err, stageData) => {
         db.query(causeQuery, (err, causeData) => {
@@ -170,6 +241,10 @@ app.post('/getvis', (req, res) => {
     //})
   })
 });
+
+/**
+ * Endpoint that takes in some body with a date range to query the database and return the data for the timeline visualization
+ */
 app.post('/gettimelinedata', (req, res) => {
   console.log('got a request for timeline data')
   cache.send_command('JSON.GET', ['timeline'], (err, data) => {
