@@ -52,6 +52,7 @@ class Timeline extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.entireTimelineData)
     // Add listener for when the user clicks and drags to select a time range for filtering.
     document.getElementById('timeline-chart').addEventListener('mousedown', (e) => {
       this.setState({

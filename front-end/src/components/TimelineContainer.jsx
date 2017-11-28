@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import Button from 'material-ui/Button';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
@@ -36,7 +34,7 @@ class TimelineContainer extends Component {
         );
       default:
         return (
-          <div>
+          <div className={this.props.classes.timeline} >
             <Timeline />
           </div>
         );

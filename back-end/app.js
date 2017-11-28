@@ -319,7 +319,7 @@ app.post('/getvis', (req, res) => {
             stage: stageData.rows,
             cause: causeData.rows,
           }
-          console.log(returnObject);
+          // console.log(returnObject);
           res.status(200).send(returnObject);
         })
       })

@@ -59,18 +59,27 @@ class Location extends Component {
     super(props);
     this.state = {
       graphHeight: '85%',
+      stillResizingTimer: '',
     };
 
     // Listen for window resize, but wait till they have stopped to do the size calculations.
-    let stillResizingTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(stillResizingTimer);
-      stillResizingTimer = setTimeout(this.resizeGraph, 250);
-    });
+    window.addEventListener('resize', this.resizeTimer);
   }
 
   componentDidMount() {
     this.resizeGraph();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeTimer);
+  }
+
+  /**
+   * After 250ms of not resizing, we will then resize the graph (this improves performance)
+   */
+  resizeTimer = () => {
+    clearTimeout(this.state.stillResizingTimer);
+    this.state.stillResizingTimer = setTimeout(this.resizeGraph, 250);
   }
 
   /**

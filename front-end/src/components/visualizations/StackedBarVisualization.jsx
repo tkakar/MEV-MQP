@@ -24,19 +24,20 @@ class StackedBarVisualization extends Component {
     this.state = {
       mainWidth: 1,
       treeMapHeight: 155,
+      stillResizingTimer: '',
     };
 
     // Listen for window resize, but wait till they have stopped to do the size calculations.
-    let stillResizingTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(stillResizingTimer);
-      stillResizingTimer = setTimeout(this.resizeTreeMap, 250);
-    });
+    window.addEventListener('resize', this.resizeTimer);
   }
 
   componentDidMount() {
     // Once the screen has loaded, optimize the size of the TreeMap
-    this.resizeTreeMap();
+    this.resizeGraph();
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeTimer);
   }
 
   /**
@@ -59,6 +60,14 @@ class StackedBarVisualization extends Component {
   }
 
   /**
+   * After 250ms of not resizing, we will then resize the graph (this improves performance)
+   */
+  resizeTimer = () => {
+    clearTimeout(this.state.stillResizingTimer);
+    this.state.stillResizingTimer = setTimeout(this.resizeGraph, 250);
+  }
+
+  /**
    * Toggles the filter in Redux State for the bar clicked on in the chart
    */
   handleFilterClickToggle = type => (e) => {
@@ -72,7 +81,7 @@ class StackedBarVisualization extends Component {
   /**
    * Calculates the best size for the visualization for better scalability
    */
-  resizeTreeMap = () => {
+  resizeGraph = () => {
     const firstTreeMap = document.getElementById('firstTreeMap');
     const firstTreeMapHeight = window.getComputedStyle(firstTreeMap, null).getPropertyValue('height');
     this.setState({
