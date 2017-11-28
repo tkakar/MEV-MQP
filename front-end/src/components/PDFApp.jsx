@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
-import { blue, green, red } from 'material-ui/colors';
+import classNames from 'classnames';
+import { withStyles } from 'material-ui/styles';
+import { CircularProgress } from 'material-ui/Progress';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Paper from 'material-ui/Paper';
@@ -13,22 +14,12 @@ import Dialog, {
 import Button from 'material-ui/Button';
 import styles from './PDFAppStyles';
 
-const blueTheme = createMuiTheme({
-  palette: {
-    primary: blue,
-    secondary: {
-      ...green,
-      A400: '#00e677',
-    },
-    error: red,
-  },
-});
-
 class PDFApp extends Component {
   static propTypes = {
     classes: PropTypes.shape({
       pdfView: PropTypes.string,
       dialog: PropTypes.string,
+      editorWindow: PropTypes.string,
     }).isRequired,
     match: PropTypes.shape({
       params: PropTypes.shape({
@@ -61,7 +52,7 @@ class PDFApp extends Component {
   componentDidMount() {
     this.processID(Number(this.props.match.params.id, 10));
     window.addEventListener('beforeunload', this.onUnload);
-    this.autosave = setInterval(() => this.saveWork(), 5000);
+    this.autosave = setInterval(() => this.saveWork(), 10000);
   }
 
   componentWillUnmount() {
@@ -72,8 +63,19 @@ class PDFApp extends Component {
   onUnload = () => this.saveWork()
 
   saveWork = () => {
-    console.log('saving ', !_.isEqual(this.state.current, this.state.saved));
-    if (!_.isEqual(this.state.current, this.state.saved)) {
+    if (!this.state.saving && !_.isEqual(this.state.current, this.state.saved)) {
+      console.log('saving!');
+      this.setState({
+        success: false,
+        saving: true,
+      }, () => {
+        setTimeout(() => {
+          this.setState({
+            saving: false,
+            success: true,
+          });
+        }, 2000);
+      });
       const fetchData = {
         method: 'PUT',
         mode: 'cors',
@@ -85,6 +87,7 @@ class PDFApp extends Component {
           tags: this.state.current.tags,
           primaryid: Number(this.props.match.params.id, 10) }),
       };
+      console.log('done!');
       fetch('http://localhost:3001/savereporttext', fetchData);
       this.setState({ saved: this.state.current });
     }
@@ -92,7 +95,7 @@ class PDFApp extends Component {
 
   processID = (id) => {
     if (isNaN(id)) {
-      this.setState({ loading: false, open: true, error: 'No ID found in URL' });
+      this.setState({ saving: true, success: false, loading: false, open: true, error: 'No ID found in URL' });
     } else {
       const fetchData = {
         method: 'POST',
@@ -107,6 +110,8 @@ class PDFApp extends Component {
         .then((report) => {
           if (report.rows.length > 0) {
             this.setState({
+              saving: false,
+              success: true,
               loading: false,
               current: {
                 reportText: report.rows[0].report_text,
@@ -115,9 +120,8 @@ class PDFApp extends Component {
                 reportText: report.rows[0].report_text,
                 tags: report.rows[0].tags },
             });
-            console.log('grabbed from db, stage = ', this.state.current);
           } else {
-            this.setState({ loading: false, open: true, error: `ID ${id} not found in DB` });
+            this.setState({ saving: true, success: false, loading: false, open: true, error: `ID ${id} not found in DB` });
           }
         });
     }
@@ -137,7 +141,7 @@ class PDFApp extends Component {
     if (blueRe.exec(value)) {
       newTags.blueTag = 't';
     }
-    this.setState({ current: { reportText: value, tags: newTags } });
+    this.setState({ success: false, current: { reportText: value, tags: newTags } });
   }
 
   handleClose = () => {
@@ -153,51 +157,70 @@ class PDFApp extends Component {
         ['clean'],
       ],
       history: {
-        delay: 2000,
+        delay: 500,
         maxStack: 500,
         userOnly: true,
       },
     } };
 
+    const buttonClassname = classNames({
+      [this.props.classes.buttonSuccess]: this.state.success,
+    });
+
     return (
-      <MuiThemeProvider theme={blueTheme} >
-        <div className={this.props.classes.pdfView}>
-          <Dialog
-            open={this.state.open}
-            onRequestClose={this.handleClose}
-            style={{
-              height: '40vh',
-              maxWidth: 'none',
-            }}
-          >
-            <DialogTitle>
-              <div className={this.props.classes.dialog}>
-                <h4>{this.state.error}</h4>
-              </div>
-            </DialogTitle>
-            <DialogActions>
-              <Button
-                onClick={this.handleClose}
-                color={'primary'}
-              >
+      <div className={this.props.classes.pdfView}>
+        <Dialog
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+          style={{
+            height: '40vh',
+            maxWidth: 'none',
+          }}
+        >
+          <DialogTitle>
+            <div className={this.props.classes.dialog}>
+              <h4>{this.state.error}</h4>
+            </div>
+          </DialogTitle>
+          <DialogActions>
+            <Button
+              onClick={this.handleClose}
+              color={'primary'}
+            >
                 Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-          <h1>PDF View</h1>
-          <Paper elevation={4}>
-            <ReactQuill
-              theme="snow"
-              readOnly={this.state.error !== ''}
-              value={this.state.loading ? '' : this.state.current.reportText}
-              onChange={this.state.loading ? null : this.handleChange}
-              modules={modules.modules}
-            />
-          </Paper>
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <h1>PDF View</h1>
+        <Paper elevation={4} className={this.props.classes.paperWindow}>
+          {this.state.loading ? null : <ReactQuill
+            className={this.props.classes.editorWindow}
+            readOnly={this.state.error !== ''}
+            value={this.state.current.reportText}
+            onChange={this.handleChange}
+            modules={modules.modules}
+          /> }
+        </Paper>
+        <div className={this.props.classes.wrapper}>
+          <Button
+            raised
+            color="primary"
+            className={buttonClassname}
+            disabled={this.state.saving}
+            onClick={this.saveWork}
+          >
+            Save
+          </Button>
+          {this.state.saving && this.state.error === '' &&
+            <CircularProgress
+              size={24}
+              className={this.props.classes.buttonProgress}
+            />}
         </div>
-      </MuiThemeProvider>
+      </div>
     );
   }
 }
 
 export default withStyles(styles)(PDFApp);
+
