@@ -215,6 +215,29 @@ app.post('/getdemographicdata', (req, res) => {
   })
 });
 
+app.post('/getreporttext', (req, res) => {
+  console.log('got a report text request with body:\n ', req.body)
+  let query =
+  'SELECT report_text, tags '
++ 'FROM demo '
++ 'WHERE primaryid = ' + req.body.primaryid;
+  db.query(query, (err, data) => {
+    res.status(200).send(data);
+  });
+});
+
+app.put('/savereporttext', (req, res) => {
+  console.log('got a save report text request');
+  tags = JSON.stringify(req.body.tags) === '{}' ? 'null' : '\'' + JSON.stringify(req.body.tags) + '\'';
+  let query =
+  'UPDATE demo '
++ 'SET report_text = $$' + req.body.text + '$$, tags = (' + tags + ') '
++ 'WHERE primaryid = ' + req.body.primaryid;
+  db.query(query, (err, data) => {
+    res.status(200).send();
+  });
+});
+
 /**
  * Endpoint that takes in some body with filters to query the database and return the data for the main visualization
  */

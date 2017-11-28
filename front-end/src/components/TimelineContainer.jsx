@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Button from 'material-ui/Button';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
@@ -29,12 +31,16 @@ class TimelineContainer extends Component {
       case 'SLIDING_TIMELINE':
         return (
           <div className={this.props.classes.timeline} >
+            <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
             <Timeline />
           </div>
         );
       default:
         return (
-          <Timeline />
+          <div>
+            <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
+            <Timeline />
+          </div>
         );
     }
   }
