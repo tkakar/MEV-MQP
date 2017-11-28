@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import { toggleSexFilter, toggleAgeFilter, toggleLocationFilter } from '../../actions/demographicActions';
+import { toggleSexFilter, toggleAgeFilter, toggleLocationFilter, toggleOccupationFilter } from '../../actions/demographicActions';
 import Sex from './demographics/Sex';
 import Age from './demographics/Age';
 import Location from './demographics/Location';
+import ReportedBy from './demographics/ReportedBy';
 import styles from './DemographicsStyles';
 
 /**
@@ -18,9 +19,11 @@ class Demographics extends Component {
     toggleSexFilter: PropTypes.func.isRequired,
     toggleAgeFilter: PropTypes.func.isRequired,
     toggleLocationFilter: PropTypes.func.isRequired,
+    toggleOccupationFilter: PropTypes.func.isRequired,
     sex: PropTypes.arrayOf(PropTypes.object).isRequired,
     age: PropTypes.arrayOf(PropTypes.object).isRequired,
     location: PropTypes.arrayOf(PropTypes.object).isRequired,
+    occp_cod: PropTypes.arrayOf(PropTypes.object).isRequired,
     filters: PropTypes.shape({
       occr_country: PropTypes.array,
       sex: PropTypes.array,
@@ -44,7 +47,7 @@ class Demographics extends Component {
             />
           </Paper>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <Paper className={this.props.classes.maxHeight} elevation={4}>
             <Age
               age={this.props.age}
@@ -52,11 +55,19 @@ class Demographics extends Component {
             />
           </Paper>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={3}>
           <Paper className={this.props.classes.maxHeight} elevation={4}>
             <Location
               location={this.props.location}
               toggleFilter={this.props.toggleLocationFilter}
+            />
+          </Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper className={this.props.classes.maxHeight} elevation={4}>
+            <ReportedBy
+              occp_cod={this.props.occp_cod}
+              toggleFilter={this.props.toggleOccupationFilter}
             />
           </Paper>
         </Grid>
@@ -69,6 +80,7 @@ const mapStateToProps = state => ({
   sex: state.demographic.sex,
   age: state.demographic.age,
   location: state.demographic.location,
+  occp_cod: state.demographic.occp_cod,
   filters: {
     occr_country: state.filters.occr_country,
     sex: state.filters.sex,
@@ -83,5 +95,5 @@ const mapStateToProps = state => ({
  */
 export default connect(
   mapStateToProps,
-  { toggleSexFilter, toggleAgeFilter, toggleLocationFilter },
+  { toggleSexFilter, toggleAgeFilter, toggleLocationFilter, toggleOccupationFilter },
 )(withStyles(styles)(Demographics));

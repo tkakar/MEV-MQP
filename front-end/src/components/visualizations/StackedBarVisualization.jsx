@@ -6,6 +6,7 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import CustomizedContent from './CustomizedContent';
 import styles from './StackedBarVisualizationStyles';
+import CustomTooltip from './CustomTooltip';
 
 /**
  * This is the component for the TreeMap visualization
@@ -47,11 +48,22 @@ class StackedBarVisualization extends Component {
   getRandomInt = (min, max) =>
     (Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min))) + Math.ceil(min));
 
+  getMaxSerious = (type) => {
+    if (this.props[type]) {
+      return this.props[type].reduce((maxSerious, category) => {
+        const numSerious = category.size - category.UNK;
+        return (numSerious > maxSerious) ? numSerious : maxSerious;
+      }, 1);
+    }
+    return 1;
+  }
+
   /**
    * Toggles the filter in Redux State for the bar clicked on in the chart
    */
   handleFilterClickToggle = type => (e) => {
-    console.log('Click on treemap', e)
+    // console.log('Click on treemap', e)
+    console.log(this.getMaxSerious(type))
     if (e && e.name) {
       // this.props.toggleFilter(e.name);
     }
@@ -63,14 +75,11 @@ class StackedBarVisualization extends Component {
   resizeTreeMap = () => {
     const firstTreeMap = document.getElementById('firstTreeMap');
     const firstTreeMapHeight = window.getComputedStyle(firstTreeMap, null).getPropertyValue('height');
-    this.setState({ treeMapHeight: parseInt(firstTreeMapHeight, 10) - 10 });
-    this.setState({ mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20 });
+    this.setState({
+      treeMapHeight: parseInt(firstTreeMapHeight, 10) - 10,
+      mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20,
+    });
   }
-
-  // COLORS = (['#34557F', '#67AAFF', '#4D80BF', '#20467D', '#5D99E5']);
-  // COLORS = (['#1C267F', '#374BFF', '#2939BF', '#20467D', '#3244E5']);
-  // COLORS = (['#3D51DF', '#283593', '#171E53', '#2B3AA0', '#212C79']);
-  COLORS = (['url(#colorBlue1)', 'url(#colorBlue2)', 'url(#colorBlue3)', 'url(#colorBlue4)', 'url(#colorBlue5)']);
 
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
@@ -84,18 +93,21 @@ class StackedBarVisualization extends Component {
               dataKey="size"
               ratio={4 / 3}
               stroke="#ddd"
-              fill="url(#colorBlue)"
+              fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('ME-Type')}
-              content={<CustomizedContent colors={this.COLORS} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('meType')} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ stroke: '#424242', strokeWidth: 1 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+              />
             </Treemap>
           </Paper>
         </div>
       </div>
-
       <div className={this.props.classes.treemapVisualization}>
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
@@ -106,13 +118,17 @@ class StackedBarVisualization extends Component {
               dataKey="size"
               ratio={4 / 3}
               stroke="#ddd"
-              fill="url(#colorBlue)"
+              fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('Product')}
-              content={<CustomizedContent colors={this.COLORS} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('product')} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ stroke: '#424242', strokeWidth: 1 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+              />
             </Treemap>
           </Paper>
         </div>
@@ -127,13 +143,17 @@ class StackedBarVisualization extends Component {
               dataKey="size"
               ratio={4 / 3}
               stroke="#ddd"
-              fill="url(#colorBlue)"
+              fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('Stage')}
-              content={<CustomizedContent colors={this.COLORS} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('stage')} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ stroke: '#424242', strokeWidth: 1 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+              />
             </Treemap>
           </Paper>
         </div>
@@ -148,13 +168,17 @@ class StackedBarVisualization extends Component {
               dataKey="size"
               ratio={4 / 3}
               stroke="#ddd"
-              fill="url(#colorBlue)"
+              fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('Cause')}
-              content={<CustomizedContent colors={this.COLORS} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('cause')} />}
               isAnimationActive={false}
               animationDuration={0}
             >
-              <Tooltip />
+              <Tooltip
+                content={<CustomTooltip />}
+                cursor={{ stroke: '#424242', strokeWidth: 1 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+              />
             </Treemap>
           </Paper>
         </div>

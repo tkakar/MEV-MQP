@@ -4,15 +4,27 @@ import { withStyles } from 'material-ui/styles';
 // import Typography from 'material-ui/Typography';
 
 const styles = {
+  // toolTipStyle: {
+  //   'font-size': '10pt',
+  //   padding: '5px',
+  //   'background-color': 'white',
+  //   overflow: 'hidden',
+  //   border: '1px solid rgba(102,102,102,1)',
+  //   color: 'rgba(0,0,0,1)',
+  //   'text-overflow': 'ellipsis',
+  //   background: '#f4f4f4',
+  //   '-webkit-box-shadow': '1px 1px 1px 0 rgba(0,0,0,0.3)',
+  //   'box-shadow': '1px 1px 1px 0 rgba(0,0,0,0.3)',
+  //   'text-shadow': '1px 1px 1px rgba(0,0,0,0.2)',
+  //   'z-index': '10000',
+  // },
   toolTipStyle: {
     'font-size': '10pt',
     padding: '5px',
     'background-color': 'rgba(75,75,75,0.85)',
     overflow: 'hidden',
-    // border: '1px solid rgba(102,102,102,1)',
     color: 'rgba(255,255,255,1)',
     'text-overflow': 'ellipsis',
-    // background: '#f4f4f4',
     '-webkit-box-shadow': '2px 5px 5px 0 rgba(0,0,0,0.3)',
     'box-shadow': '2px 5px 5px 0 rgba(0,0,0,0.3)',
     'text-shadow': '1px 1px 1px rgba(0,0,0,0.2)',
@@ -24,11 +36,10 @@ const styles = {
 };
 
 /**
- * This is the component that displays the Tooltip for the Demographic visualizations
+ * This is the component that displays the Tooltip for the TreeMap visualizations
  */
 class CustomTooltip extends Component {
   static propTypes = {
-    demographic: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     payload: PropTypes.arrayOf(PropTypes.object),
     classes: PropTypes.shape({
@@ -42,7 +53,7 @@ class CustomTooltip extends Component {
   }
 
   outcomeCodes = {
-    count: 'Total Count',
+    size: 'Total Count',
     DE: 'Death',
     CA: 'Congenital Anomaly',
     DS: 'Disability',
@@ -53,39 +64,6 @@ class CustomTooltip extends Component {
     UNK: 'Not Serious',
   }
 
-  occupationTitleCodes = {
-    MD: 'Physician',
-    PH: 'Pharmacist',
-    OT: 'Other Health Professional',
-    LW: 'Lawyer',
-    CN: 'Consumer',
-    UNK: 'Unknown',
-  }
-
-  sexTitleCodes = {
-    M: 'Male',
-    F: 'Female',
-    UNK: 'Unknown',
-  }
-
-  renderTooltipTitle = () => {
-    const payload = this.props.payload[0].payload;
-    switch (this.props.demographic) {
-      case 'occp_cod':
-        return (
-          <b>{this.occupationTitleCodes[payload[this.props.demographic]]}</b>
-        );
-      case 'sex':
-        return (
-          <b>{this.sexTitleCodes[payload[this.props.demographic]]}</b>
-        );
-      default:
-        return (
-          <b>{payload[this.props.demographic]}</b>
-        );
-    }
-  }
-
   renderToolTip = () => {
     let payload = {};
     if (this.props.payload[0]) {
@@ -94,18 +72,19 @@ class CustomTooltip extends Component {
     return (
       <div id="custom-tooltip" className={this.props.classes.toolTipStyle}>
         <p className={this.props.classes.toolTipParagraph}>
-          {this.renderTooltipTitle()}
+          <b>{payload.name}</b>
         </p>
-        {Object.keys(payload).map(key => ((key !== this.props.demographic && key !== 'serious')
-          ? (
-            <p
-              className={this.props.classes.toolTipParagraph}
-              key={key}
-            >
-              {this.outcomeCodes[key]}: {payload[key]}
-            </p>
-          )
-          : null
+        {Object.keys(payload).map(key => (
+          (Object.keys(this.outcomeCodes).includes(key) && payload[key])
+            ? (
+              <p
+                className={this.props.classes.toolTipParagraph}
+                key={key}
+              >
+                {this.outcomeCodes[key]}: {payload[key]}
+              </p>
+            )
+            : null
         ))}
       </div>
     );

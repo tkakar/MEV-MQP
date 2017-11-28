@@ -22,6 +22,9 @@ const styles = {
   maxHeight: {
     height: '100%',
   },
+  noOverflow: {
+    overflow: 'hidden',
+  },
   clearFilterChip: {
     'font-size': '9pt',
     height: '14pt',
@@ -58,6 +61,7 @@ class Sex extends Component {
       chipAvatar: PropTypes.string,
       responsiveContainer: PropTypes.string,
       maxHeight: PropTypes.string,
+      noOverflow: PropTypes.string,
     }).isRequired,
   }
 
@@ -111,37 +115,33 @@ class Sex extends Component {
   render() {
     return (
       <div id="sex-container" className={this.props.classes.maxHeight} >
-        <Chip
-          avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
-          label="Clear Filter"
-          onClick={this.clearFilter}
-          className={this.props.classes.clearFilterChip}
-        />
-        <Typography id="sex-graph-title" className={this.props.classes.labelFont} type="title" component="h1">
-          Sex
-        </Typography>
+        <div id="sex-header" className={this.props.classes.noOverflow} >
+          <Chip
+            avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+            label="Clear Filter"
+            onClick={this.clearFilter}
+            className={this.props.classes.clearFilterChip}
+          />
+          <Typography id="sex-graph-title" className={this.props.classes.labelFont} type="title" component="h1">
+            Sex
+          </Typography>
+        </div>
         <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight} >
           <BarChart
             data={this.props.sex}
             onClick={this.handleFilterClickToggle}
           >
-            <defs>
-              <linearGradient id="colorBlue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="15%" stopColor="#283593" stopOpacity={0.8} />
-                <stop offset="99%" stopColor="#283593" stopOpacity={0.4} />
-              </linearGradient>
-            </defs>
             <XAxis dataKey="sex" />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip
               content={<CustomTooltip />}
               cursor={{ stroke: '#424242', strokeWidth: 1 }}
-              wrapperStyle={{ padding: '4px' }}
+              wrapperStyle={{ padding: '4px', zIndex: 1000 }}
               demographic="sex"
             />
-            <Bar dataKey="serious" stroke="#1A237E" stackId="a" fill="url(#colorBlue)" />
-            <Bar dataKey="UNK" stroke="#424242" stackId="a" fill="url(#colorGrey)" />
+            <Bar dataKey="serious" stroke="#1A237E" stackId="a" fill="url(#colorSevere)" />
+            <Bar dataKey="UNK" stroke="#424242" stackId="a" fill="url(#colorNotSerious)" />
           </BarChart>
         </ResponsiveContainer>
       </div>
