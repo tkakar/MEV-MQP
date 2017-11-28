@@ -24,12 +24,6 @@ class SideBar extends Component {
 
   render = () => (
     <Grid container spacing={0} className={this.props.classes.sideBar}>
-      {/* <Grid item xs={12}>
-          <SelectedDate
-            startDate={this.props.selectedDates.startDate}
-            endDate={this.props.selectedDates.endDate}
-          />
-        </Grid> */}
       <Grid item xs={12}>
         <Demograpics />
       </Grid>

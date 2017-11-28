@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
@@ -310,6 +311,7 @@ class Timeline extends Component {
       <Grid item sm={3} md={2}>
         <Paper elevation={4} className={this.props.classes.calendartWrapper} >
           <Button raised color="primary" onClick={this.updateSelectedDate} id="setDateBtn" >Set Date!</Button>
+          <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
           <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/16/2017 - 03/31/2017" id="dateRangePicker" />
         </Paper>
       </Grid>
