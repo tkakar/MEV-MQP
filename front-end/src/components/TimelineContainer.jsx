@@ -31,14 +31,12 @@ class TimelineContainer extends Component {
       case 'SLIDING_TIMELINE':
         return (
           <div className={this.props.classes.timeline} >
-            <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
             <Timeline />
           </div>
         );
       default:
         return (
           <div>
-            <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
             <Timeline />
           </div>
         );
