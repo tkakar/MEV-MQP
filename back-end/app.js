@@ -200,9 +200,9 @@ function ageBuilder(age) {
 app.post('/getdemographicdata', (req, res) => {
   console.log('got a request with body:\n ', req.body)
   let query = 
-  `SELECT sex, age_year as age, occr_country, REPT_DT, occp_cod, outc_cod `
+  `SELECT sex, age_year as age, occr_country, init_fda_dt, occp_cod, outc_cod `
 + `FROM demo_outcome `
-+ `WHERE (REPT_DT BETWEEN ${req.body.REPT_DT.start} AND ${req.body.REPT_DT.end})`;
++ `WHERE (init_fda_dt BETWEEN ${req.body.init_fda_dt.start} AND ${req.body.init_fda_dt.end})`;
 
   query += sexBuilder(req.body.sex);
   query += locationBuilder(req.body.occr_country);
@@ -254,7 +254,7 @@ app.post('/getvis', (req, res) => {
     + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
     + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
   + `FROM demo_outcome `
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   meTypeQuery += sexBuilder(req.body.sex);
   meTypeQuery += locationBuilder(req.body.occr_country);
   meTypeQuery += ageBuilder(req.body.age);
@@ -273,7 +273,7 @@ app.post('/getvis', (req, res) => {
   + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
   + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
 + `FROM demo_outcome `
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   stageQuery += sexBuilder(req.body.sex);
   stageQuery += locationBuilder(req.body.occr_country);
   stageQuery += ageBuilder(req.body.age);
@@ -290,7 +290,7 @@ app.post('/getvis', (req, res) => {
   + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
   + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
 + `FROM demo_outcome `
-  + "WHERE REPT_DT BETWEEN " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+  + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   causeQuery += sexBuilder(req.body.sex);
   causeQuery += locationBuilder(req.body.occr_country);
   causeQuery += ageBuilder(req.body.age);
@@ -299,8 +299,8 @@ app.post('/getvis', (req, res) => {
   
   let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
   + "FROM (SELECT b.drugname " 
-    + "FROM (SELECT primaryid, REPT_DT FROM demo " 
-      + "WHERE REPT_DT between " + req.body.REPT_DT.start + " AND " + req.body.REPT_DT.end
+    + "FROM (SELECT primaryid, init_fda_dt FROM demo " 
+      + "WHERE init_fda_dt between " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
       productQuery += sexBuilder(req.body.sex);
       productQuery += locationBuilder(req.body.occr_country);
       productQuery += ageBuilder(req.body.age);
