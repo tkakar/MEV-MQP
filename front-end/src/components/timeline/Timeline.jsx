@@ -11,6 +11,7 @@ import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
 import { setSelectedDate } from '../../actions/timelineActions';
+import CustomTooltip from './components/CustomTooltip';
 import styles from './TimelineStyles';
 import './Timeline.css';
 
@@ -261,10 +262,12 @@ class Timeline extends Component {
         />
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
-          offset={50}
-          animationDuration={0}
-          labelFormatter={this.formatDate}
+          content={<CustomTooltip />}
+          offset={15}
+          cursor={{ stroke: '#424242', strokeWidth: 1 }}
           wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+          labelFormatter={this.formatDate}
+          demographic="init_fda_dt"
         />
         <Area
           type="monotone"

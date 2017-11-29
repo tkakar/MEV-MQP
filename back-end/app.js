@@ -228,7 +228,6 @@ app.post('/getreports', (req, res) => {
   query += occupationBuilder(req.body.occp_cod);
   console.log(query)
   db.query(query, (err, data) => {
-    console.log(data.rows)
     res.status(200).send(data);
   });
 });
