@@ -215,6 +215,24 @@ app.post('/getdemographicdata', (req, res) => {
   })
 });
 
+app.post('/getreports', (req, res) => {
+  console.log('got a report request with body:\n ', req.body)
+  let query =
+  'SELECT * '
++ 'FROM reports '
++ `WHERE (init_fda_dt BETWEEN ${req.body.init_fda_dt.start} AND ${req.body.init_fda_dt.end})`;
+
+  query += sexBuilder(req.body.sex);
+  query += locationBuilder(req.body.occr_country);
+  query += ageBuilder(req.body.age);
+  query += occupationBuilder(req.body.occp_cod);
+  console.log(query)
+  db.query(query, (err, data) => {
+    console.log(data.rows)
+    res.status(200).send(data);
+  });
+});
+
 app.post('/getreporttext', (req, res) => {
   console.log('got a report text request with body:\n ', req.body)
   let query =

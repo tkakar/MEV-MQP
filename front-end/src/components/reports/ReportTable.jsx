@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import Paper from 'material-ui/Paper';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import styles from '../ReportContainerStyles';
@@ -8,72 +11,77 @@ class ReportTable extends Component {
   constructor() {
     super();
     this.state = {
-      data: this.makeData(),
+      data: [],
     };
   }
 
-  asd = () => 123;
-  range = (len) => {
-    const arr = [];
-    for (let i = 0; i < len; i++) {
-      arr.push(i);
-    }
-    return arr;
-  };
+  componentDidMount() {
+    this.makeData();
+  }
 
-newPerson = () => {
-  const statusChance = Math.random();
-  return {
-    firstName: 'test',
-    lastName: 'test',
-    age: Math.floor(Math.random() * 30),
-    visits: Math.floor(Math.random() * 100),
-    progress: Math.floor(Math.random() * 100),
-    status:
-      statusChance > 0.66
-        ? 'relationship'
-        : statusChance > 0.33 ? 'complicated' : 'single',
+makeData = () => { 
+  const fetchData = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...this.props.filters,
+    }),
   };
+  console.log(fetchData);
+  fetch('http://localhost:3001/getreports', fetchData)
+    .then(response => response.json())
+    .then((reports) => {
+      console.log(reports.rows);
+      this.setState({ data: reports.rows });
+    });
 };
 
-makeData = () => {
-  const leng = 5355;
-  return (this.range(leng).map(d => ({
-    ...this.newPerson(),
-    children: this.range(10).map(this.newPerson),
-  })));
-};
 render() {
   const { data } = this.state;
   return (
     <div>
+      {console.log(this.props.filters)}
       <ReactTable
         data={data}
         columns={[
           {
-            Header: 'Name',
+            Header: 'Case Information',
             columns: [
               {
-                Header: 'First Name',
-                accessor: 'firstName',
+                Header: 'Event Date',
+                accessor: 'init_fda_dt',
               },
               {
-                Header: 'Last Name',
-                id: 'lastName',
-                accessor: d => d.lastName,
+                Header: 'Primary ID',
+                accessor: 'primaryid',
+              },
+              {
+                Header: 'Case ID',
+                accessor: 'caseid',
+              },
+              {
+                Header: 'Case Version',
+                accessor: 'caseversion',
               },
             ],
           },
           {
-            Header: 'Info',
+            Header: 'Demographics',
             columns: [
               {
                 Header: 'Age',
-                accessor: 'age',
+                accessor: 'age_year',
               },
               {
-                Header: 'Status',
-                accessor: 'status',
+                Header: 'Sex',
+                accessor: 'sex',
+              },
+              {
+                Header: 'Weight',
+                accessor: 'wt_lb',
               },
             ],
           },
@@ -81,8 +89,16 @@ render() {
             Header: 'Stats',
             columns: [
               {
-                Header: 'Visits',
-                accessor: 'visits',
+                Header: 'Drugs',
+                accessor: 'drugname',
+              },
+              {
+                Header: 'Medication Error',
+                accessor: 'me_type',
+              },
+              {
+                Header: 'Outcome',
+                accessor: 'outc_cod',
               },
             ],
           },
@@ -96,4 +112,12 @@ render() {
 }
 }
 
-export default withStyles(styles)(ReportTable);
+
+const mapStateToProps = state => ({
+  filters: state.filters,
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(withStyles(styles)(ReportTable));
