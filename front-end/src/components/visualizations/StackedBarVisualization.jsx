@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { Treemap, Tooltip } from 'recharts';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
+import Chip from 'material-ui/Chip';
+import Avatar from 'material-ui/Avatar';
+import { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter } from '../../actions/visualizationActions';
+import ClearFilterIcon from '../../resources/clearFilterIcon.svg';
 import CustomizedContent from './CustomizedContent';
 import styles from './StackedBarVisualizationStyles';
 import CustomTooltip from './CustomTooltip';
@@ -13,10 +17,16 @@ import CustomTooltip from './CustomTooltip';
  */
 class StackedBarVisualization extends Component {
   static propTypes = {
+    toggleMETypeFilter: PropTypes.func.isRequired,    
+    toggleProductFilter: PropTypes.func.isRequired,    
+    toggleStageFilter: PropTypes.func.isRequired,    
+    toggleCauseFilter: PropTypes.func.isRequired,    
     classes: PropTypes.shape({
       mainVisualization: PropTypes.string,
       treemapVisualization: PropTypes.string,
       treePaper: PropTypes.string,
+      clearFilterChip: PropTypes.string,
+      chipAvatar: PropTypes.string,
     }).isRequired,
   }
   constructor(props) {
@@ -70,11 +80,44 @@ class StackedBarVisualization extends Component {
   /**
    * Toggles the filter in Redux State for the bar clicked on in the chart
    */
+  clearFilter = type => (e) => {
+    switch (type) {
+      case 'meType':
+        this.props.toggleMETypeFilter('CLEAR');
+        break;
+      case 'product':
+        this.props.toggleProductFilter('CLEAR');
+        break;
+      case 'stage':
+        this.props.toggleStageFilter('CLEAR');
+        break;
+      case 'cause':
+        this.props.toggleCauseFilter('CLEAR');
+        break;
+      default:
+    }
+  }
+
+  /**
+   * Toggles the filter in Redux State for the bar clicked on in the chart
+   */
   handleFilterClickToggle = type => (e) => {
-    // console.log('Click on treemap', e)
-    console.log(this.getMaxSerious(type))
     if (e && e.name) {
-      // this.props.toggleFilter(e.name);
+      switch (type) {
+        case 'meType':
+          this.props.toggleMETypeFilter(e.name);
+          break;
+        case 'product':
+          this.props.toggleProductFilter(e.name);
+          break;
+        case 'stage':
+          this.props.toggleStageFilter(e.name);
+          break;
+        case 'cause':
+          this.props.toggleCauseFilter(e.name);
+          break;
+        default:
+      }
     }
   }
 
@@ -93,6 +136,12 @@ class StackedBarVisualization extends Component {
   render = () => (
     <div className={this.props.classes.mainVisualization} id="main-visualization" >
       <div className={this.props.classes.treemapVisualization} id="firstTreeMap">
+        <Chip
+          avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+          label="Clear Filter"
+          onClick={this.clearFilter('meType')}
+          className={this.props.classes.clearFilterChip}
+        />
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
@@ -103,7 +152,7 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorSevere)"
-              onClick={this.handleFilterClickToggle('ME-Type')}
+              onClick={this.handleFilterClickToggle('meType')}
               content={<CustomizedContent highestSeriousCount={this.getMaxSerious('meType')} />}
               isAnimationActive={false}
               animationDuration={0}
@@ -118,6 +167,12 @@ class StackedBarVisualization extends Component {
         </div>
       </div>
       <div className={this.props.classes.treemapVisualization}>
+        <Chip
+          avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+          label="Clear Filter"
+          onClick={this.clearFilter('product')}
+          className={this.props.classes.clearFilterChip}
+        />
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
@@ -128,7 +183,7 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorSevere)"
-              onClick={this.handleFilterClickToggle('Product')}
+              onClick={this.handleFilterClickToggle('product')}
               content={<CustomizedContent highestSeriousCount={this.getMaxSerious('product')} />}
               isAnimationActive={false}
               animationDuration={0}
@@ -143,6 +198,12 @@ class StackedBarVisualization extends Component {
         </div>
       </div>
       <div className={this.props.classes.treemapVisualization}>
+        <Chip
+          avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+          label="Clear Filter"
+          onClick={this.clearFilter('stage')}
+          className={this.props.classes.clearFilterChip}
+        />
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
@@ -153,7 +214,7 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorSevere)"
-              onClick={this.handleFilterClickToggle('Stage')}
+              onClick={this.handleFilterClickToggle('stage')}
               content={<CustomizedContent highestSeriousCount={this.getMaxSerious('stage')} />}
               isAnimationActive={false}
               animationDuration={0}
@@ -168,6 +229,12 @@ class StackedBarVisualization extends Component {
         </div>
       </div>
       <div className={this.props.classes.treemapVisualization}>
+        <Chip
+          avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+          label="Clear Filter"
+          onClick={this.clearFilter('cause')}
+          className={this.props.classes.clearFilterChip}
+        />
         <div className={this.props.classes.treePaper}>
           <Paper elevation={16}>
             <Treemap
@@ -178,7 +245,7 @@ class StackedBarVisualization extends Component {
               ratio={4 / 3}
               stroke="#ddd"
               fill="url(#colorSevere)"
-              onClick={this.handleFilterClickToggle('Cause')}
+              onClick={this.handleFilterClickToggle('cause')}
               content={<CustomizedContent highestSeriousCount={this.getMaxSerious('cause')} />}
               isAnimationActive={false}
               animationDuration={0}
@@ -211,5 +278,5 @@ const mapStateToProps = state => ({
  */
 export default connect(
   mapStateToProps,
-  null,
+  { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter },
 )(withStyles(styles)(StackedBarVisualization));

@@ -19,7 +19,7 @@ class ReportTable extends Component {
     this.makeData();
   }
 
-makeData = () => { 
+makeData = () => {
   const fetchData = {
     method: 'POST',
     mode: 'cors',

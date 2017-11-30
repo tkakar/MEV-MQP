@@ -36,12 +36,62 @@ export const getVisData = queryParams => (dispatch) => {
 };
 
 export const toggleMETypeFilter = filter => (dispatch, getState) => {
-  // if (getState().filters.sex.includes(filter)) {
-  //   dispatch({ type: 'SET_SEX', sex: getState().filters.sex.filter(item => item !== filter) });
+  if (filter === 'CLEAR') {
+    if (getState().filters.meType.length !== 0) {
+      dispatch({ type: 'SET_METYPE', meType: [] });
+      dispatch(filterData());
+    }
+  } else if (getState().filters.meType.includes(filter)) {
+    dispatch({ type: 'SET_METYPE', meType: getState().filters.meType.filter(item => item !== filter) });
+    dispatch(filterData());
+  } else {
+    dispatch({ type: 'SET_METYPE', meType: getState().filters.meType.concat(filter) });
+    dispatch(filterData());
+  }
+};
+
+export const toggleProductFilter = filter => (dispatch, getState) => {
+  // if (filter === 'CLEAR') {
+  //   if (getState().filters.product.length !== 0) {
+  //     dispatch({ type: 'SET_PRODUCT', product: [] });
+  //     dispatch(filterData());
+  //   }
+  // } else if (getState().filters.product.includes(filter)) {
+  //   dispatch({ type: 'SET_PRODUCT', product: getState().filters.product.filter(item => item !== filter) });
   //   dispatch(filterData());
   // } else {
-  //   dispatch({ type: 'SET_SEX', sex: getState().filters.sex.concat(filter) });
+  //   dispatch({ type: 'SET_PRODUCT', product: getState().filters.product.concat(filter) });
   //   dispatch(filterData());
   // }
+};
+
+export const toggleStageFilter = filter => (dispatch, getState) => {
+  if (filter === 'CLEAR') {
+    if (getState().filters.stage.length !== 0) {
+      dispatch({ type: 'SET_STAGE', stage: [] });
+      dispatch(filterData());
+    }
+  } else if (getState().filters.stage.includes(filter)) {
+    dispatch({ type: 'SET_STAGE', stage: getState().filters.stage.filter(item => item !== filter) });
+    dispatch(filterData());
+  } else {
+    dispatch({ type: 'SET_STAGE', stage: getState().filters.stage.concat(filter) });
+    dispatch(filterData());
+  }
+};
+
+export const toggleCauseFilter = filter => (dispatch, getState) => {
+  if (filter === 'CLEAR') {
+    if (getState().filters.cause.length !== 0) {
+      dispatch({ type: 'SET_CAUSE', cause: [] });
+      dispatch(filterData());
+    }
+  } else if (getState().filters.cause.includes(filter)) {
+    dispatch({ type: 'SET_CAUSE', cause: getState().filters.cause.filter(item => item !== filter) });
+    dispatch(filterData());
+  } else {
+    dispatch({ type: 'SET_CAUSE', cause: getState().filters.cause.concat(filter) });
+    dispatch(filterData());
+  }
 };
 

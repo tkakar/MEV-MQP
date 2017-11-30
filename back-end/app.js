@@ -192,7 +192,118 @@ function ageBuilder(age) {
     });
     return `${ageString}(${ageMap.join(' OR ')})`
   }
-} 
+}
+
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for ME-Type Filtering
+ * @param {Array} meType List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for ME-Type filters
+ */
+function meTypeBuilder(meType) {
+  let meTypeString = ` AND `;
+  
+  if (meType.length === 0) {
+    return '';
+  }
+
+  if (meType.length === 1) {
+    return meTypeString + `me_type = '${meType}'`
+  }
+  
+  if (meType.length > 1) {
+    const meTypeMap = meType.map(filter => {
+      if (filter === 'UNK') {
+        return `me_type IS NULL`;
+      } else {
+        return `me_type = '${filter}'`;
+      }
+    });
+    return `${meTypeString}(${meTypeMap.join(' OR ')})`
+  }
+}
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Product Filtering
+ * @param {Array} product List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Product filters
+ */
+// function productBuilder(product) {
+//   let productString = ` AND `;
+  
+//   if (product.length === 0) {
+//     return '';
+//   }
+
+//   if (product.length === 1) {
+//     return productString + `product = '${product}'`
+//   }
+  
+//   if (product.length > 1) {
+//     const productMap = product.map(filter => {
+//       if (filter === 'UNK') {
+//         return `product IS NULL`;
+//       } else {
+//         return `product = '${filter}'`;
+//       }
+//     });
+//     return `${productString}(${productMap.join(' OR ')})`
+//   }
+// }
+
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Stage Filtering
+ * @param {Array} stage List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Stage filters
+ */
+function stageBuilder(stage) {
+  let stageString = ` AND `;
+  
+  if (stage.length === 0) {
+    return '';
+  }
+
+  if (stage.length === 1) {
+    return stageString + `stage = '${stage}'`
+  }
+  
+  if (stage.length > 1) {
+    const stageMap = stage.map(filter => {
+      if (filter === 'UNK') {
+        return `stage IS NULL`;
+      } else {
+        return `stage = '${filter}'`;
+      }
+    });
+    return `${stageString}(${stageMap.join(' OR ')})`
+  }
+}
+
+/**
+ * Creates the string of a SQL WHERE statement (Starts with AND) for Cause Filtering
+ * @param {Array} cause List of things to filter for
+ * @return {String} AND statement used for SQL query to add filtering for Cause filters
+ */
+function causeBuilder(cause) {
+  let causeString = ` AND `;
+  
+  if (cause.length === 0) {
+    return '';
+  }
+
+  if (cause.length === 1) {
+    return causeString + `cause = '${cause}'`
+  }
+  
+  if (cause.length > 1) {
+    const causeMap = cause.map(filter => {
+      if (filter === 'UNK') {
+        return `cause IS NULL`;
+      } else {
+        return `cause = '${filter}'`;
+      }
+    });
+    return `${causeString}(${causeMap.join(' OR ')})`
+  }
+}
 
 /**
  * Endpoint that takes in some body with filters to query the database and return the data for the demographic visualization
@@ -208,6 +319,10 @@ app.post('/getdemographicdata', (req, res) => {
   query += locationBuilder(req.body.occr_country);
   query += ageBuilder(req.body.age);
   query += occupationBuilder(req.body.occp_cod);
+  query += meTypeBuilder(req.body.meType);
+  // query += productBuilder(req.body.product);
+  query += stageBuilder(req.body.stage);
+  query += causeBuilder(req.body.cause);
 
   console.log(query);
   db.query(query, (err, data) => {
@@ -226,6 +341,10 @@ app.post('/getreports', (req, res) => {
   query += locationBuilder(req.body.occr_country);
   query += ageBuilder(req.body.age);
   query += occupationBuilder(req.body.occp_cod);
+  query += meTypeBuilder(req.body.meType);
+  // query += productBuilder(req.body.product);
+  query += stageBuilder(req.body.stage);
+  query += causeBuilder(req.body.cause);
   console.log(query)
   db.query(query, (err, data) => {
     res.status(200).send(data);
@@ -276,7 +395,13 @@ app.post('/getvis', (req, res) => {
   meTypeQuery += locationBuilder(req.body.occr_country);
   meTypeQuery += ageBuilder(req.body.age);
   meTypeQuery += occupationBuilder(req.body.occp_cod);
+  meTypeQuery += meTypeBuilder(req.body.meType);
+  // meTypeQuery += productBuilder(req.body.product);
+  meTypeQuery += stageBuilder(req.body.stage);
+  meTypeQuery += causeBuilder(req.body.cause);
   meTypeQuery += " GROUP BY me_type";
+
+  console.log(meTypeQuery)
 
   let stageQuery = `SELECT stage as name, count(*)::INTEGER as size, `
   + `count(CASE WHEN outc_cod @> '{DE}' THEN 1 end)::INTEGER as "DE", `
@@ -293,10 +418,12 @@ app.post('/getvis', (req, res) => {
   stageQuery += locationBuilder(req.body.occr_country);
   stageQuery += ageBuilder(req.body.age);
   stageQuery += occupationBuilder(req.body.occp_cod);
+  stageQuery += meTypeBuilder(req.body.meType);
+  // stageQuery += productBuilder(req.body.product);
+  stageQuery += stageBuilder(req.body.stage);
+  stageQuery += causeBuilder(req.body.cause);
   stageQuery += " GROUP BY stage"; 
 
-  console.log(stageQuery)
-  
   let causeQuery = `SELECT cause as name, count(*)::INTEGER as size, `
   + `count(CASE WHEN outc_cod @> '{DE}' THEN 1 end)::INTEGER as "DE", `
   + `count(CASE WHEN outc_cod @> '{CA}' THEN 1 end)::INTEGER as "CA", `
@@ -312,6 +439,10 @@ app.post('/getvis', (req, res) => {
   causeQuery += locationBuilder(req.body.occr_country);
   causeQuery += ageBuilder(req.body.age);
   causeQuery += occupationBuilder(req.body.occp_cod);
+  causeQuery += meTypeBuilder(req.body.meType);
+  // causeQuery += productBuilder(req.body.product);
+  causeQuery += stageBuilder(req.body.stage);
+  causeQuery += causeBuilder(req.body.cause);
   causeQuery += " GROUP BY cause";
   
   let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
@@ -322,6 +453,10 @@ app.post('/getvis', (req, res) => {
       productQuery += locationBuilder(req.body.occr_country);
       productQuery += ageBuilder(req.body.age);
       productQuery += occupationBuilder(req.body.occp_cod);
+      productQuery += meTypeBuilder(req.body.meType);
+      // productQuery += productBuilder(req.body.product);
+      productQuery += stageBuilder(req.body.stage);
+      productQuery += causeBuilder(req.body.cause);
       productQuery += ") a "
     + "INNER JOIN (SELECT primaryid::integer as id, drugname FROM drug) b ON a.primaryid = b.id) z "
     + "GROUP BY z.drugname"; 

@@ -7,6 +7,10 @@ const initialFilterState = {
   occr_country: [],
   age: [],
   occp_cod: [],
+  meType: [],
+  product: [],
+  stage: [],
+  cause: [],
 };
 
 /**
@@ -25,6 +29,14 @@ export default (state = initialFilterState, action = {}) => {
       return Object.assign({}, state, { age: action.age });
     case 'SET_OCCUPATION':
       return Object.assign({}, state, { occp_cod: action.occp_cod });
+    case 'SET_METYPE':
+      return Object.assign({}, state, { meType: action.meType });
+    case 'SET_PRODUCT':
+      return Object.assign({}, state, { product: action.product });
+    case 'SET_STAGE':
+      return Object.assign({}, state, { stage: action.stage });
+    case 'SET_CAUSE':
+      return Object.assign({}, state, { cause: action.cause });
     default: return state;
   }
 };
