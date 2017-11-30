@@ -71,16 +71,29 @@ const counters = {
   occp_cod: countOccupation,
 };
 
+const accumlateForEachOutcome = (accumulator, row, demo) => {
+  let isSerious = false;
+  row.outc_cod.forEach((outcome) => {
+    if (outcome) {
+      isSerious = true;
+      const outcomeValue = _.get(accumulator, [demo, counters[demo](row), outcome], 0);
+      _.set(accumulator, [demo, counters[demo](row), outcome], outcomeValue + 1);
+    } else {
+      const outcomeValue = _.get(accumulator, [demo, counters[demo](row), 'UNK'], 0);
+      _.set(accumulator, [demo, counters[demo](row), 'UNK'], outcomeValue + 1);
+    }
+  });
+  if (isSerious) {
+    const seriousCountValue = _.get(accumulator, [demo, counters[demo](row), 'serious'], 0);
+    _.set(accumulator, [demo, counters[demo](row), 'serious'], seriousCountValue + 1);
+  }
+};
+
 const handleAccumulator = (accumulator, row) => {
   Object.keys(counters).forEach((demo) => {
-    const outcomeValue = _.get(accumulator, [demo, counters[demo](row), row.outc_cod], 0);
-    _.set(accumulator, [demo, counters[demo](row), row.outc_cod], outcomeValue + 1);
-    if (row.outc_cod !== 'UNK') {
-      const seriousCountValue = _.get(accumulator, [demo, counters[demo](row), 'serious'], 0);
-      _.set(accumulator, [demo, counters[demo](row), 'serious'], seriousCountValue + 1);
-    }
     const countValue = _.get(accumulator, [demo, counters[demo](row), 'count'], 0);
     _.set(accumulator, [demo, counters[demo](row), 'count'], countValue + 1);
+    accumlateForEachOutcome(accumulator, row, demo);
   });
 };
 

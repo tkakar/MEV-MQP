@@ -3,7 +3,7 @@ import { filterData } from './filterActions';
 
 /**
  * Gets the data used for the TreeMap visualization with the given filter parameters
- * @param {object} queryParams 
+ * @param {object} queryParams
  */
 export const getVisData = queryParams => (dispatch) => {
   const fetchData = {
@@ -27,7 +27,7 @@ export const getVisData = queryParams => (dispatch) => {
         stage: _.reverse(_.sortBy(allReports.stage, 'size')),
       };
 
-      console.log('visData', visData)
+      console.log('visData', visData);
       dispatch({ type: 'UPDATE_VIS', visData });
     })
     .catch((err) => {

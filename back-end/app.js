@@ -262,14 +262,14 @@ app.post('/getvis', (req, res) => {
   console.log('got a request with body:\n ', req.body)
   let returnObject = {};
   let meTypeQuery = `SELECT me_type as name, count(*)::INTEGER as size, `
-    + `count(CASE WHEN outc_cod = 'DE' THEN 1 end)::INTEGER as "DE", `
-    + `count(CASE WHEN outc_cod = 'CA' THEN 1 end)::INTEGER as "CA", `
-    + `count(CASE WHEN outc_cod = 'DS' THEN 1 end)::INTEGER as "DS", `
-    + `count(CASE WHEN outc_cod = 'HO' THEN 1 end)::INTEGER as "HO", `
-    + `count(CASE WHEN outc_cod = 'LT' THEN 1 end)::INTEGER as "LT", `
-    + `count(CASE WHEN outc_cod = 'RI' THEN 1 end)::INTEGER as "RI", `
-    + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
-    + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
+    + `count(CASE WHEN outc_cod @> '{DE}' THEN 1 end)::INTEGER as "DE", `
+    + `count(CASE WHEN outc_cod @> '{CA}' THEN 1 end)::INTEGER as "CA", `
+    + `count(CASE WHEN outc_cod @> '{DS}' THEN 1 end)::INTEGER as "DS", `
+    + `count(CASE WHEN outc_cod @> '{HO}' THEN 1 end)::INTEGER as "HO", `
+    + `count(CASE WHEN outc_cod @> '{LT}' THEN 1 end)::INTEGER as "LT", `
+    + `count(CASE WHEN outc_cod @> '{RI}' THEN 1 end)::INTEGER as "RI", `
+    + `count(CASE WHEN outc_cod @> '{OT}' THEN 1 end)::INTEGER as "OT", `
+    + `count(CASE WHEN NOT outc_cod && '{DE, CA, DS, HO, LT, RI, OT}' THEN 1 end)::INTEGER as "UNK" `
   + `FROM demo_outcome `
   + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   meTypeQuery += sexBuilder(req.body.sex);
@@ -278,17 +278,15 @@ app.post('/getvis', (req, res) => {
   meTypeQuery += occupationBuilder(req.body.occp_cod);
   meTypeQuery += " GROUP BY me_type";
 
-  console.log(meTypeQuery)
-
   let stageQuery = `SELECT stage as name, count(*)::INTEGER as size, `
-  + `count(CASE WHEN outc_cod = 'DE' THEN 1 end)::INTEGER as "DE", `
-  + `count(CASE WHEN outc_cod = 'CA' THEN 1 end)::INTEGER as "CA", `
-  + `count(CASE WHEN outc_cod = 'DS' THEN 1 end)::INTEGER as "DS", `
-  + `count(CASE WHEN outc_cod = 'HO' THEN 1 end)::INTEGER as "HO", `
-  + `count(CASE WHEN outc_cod = 'LT' THEN 1 end)::INTEGER as "LT", `
-  + `count(CASE WHEN outc_cod = 'RI' THEN 1 end)::INTEGER as "RI", `
-  + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
-  + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
+  + `count(CASE WHEN outc_cod @> '{DE}' THEN 1 end)::INTEGER as "DE", `
+  + `count(CASE WHEN outc_cod @> '{CA}' THEN 1 end)::INTEGER as "CA", `
+  + `count(CASE WHEN outc_cod @> '{DS}' THEN 1 end)::INTEGER as "DS", `
+  + `count(CASE WHEN outc_cod @> '{HO}' THEN 1 end)::INTEGER as "HO", `
+  + `count(CASE WHEN outc_cod @> '{LT}' THEN 1 end)::INTEGER as "LT", `
+  + `count(CASE WHEN outc_cod @> '{RI}' THEN 1 end)::INTEGER as "RI", `
+  + `count(CASE WHEN outc_cod @> '{OT}' THEN 1 end)::INTEGER as "OT", `
+  + `count(CASE WHEN NOT outc_cod && '{DE, CA, DS, HO, LT, RI, OT}' THEN 1 end)::INTEGER as "UNK" `
 + `FROM demo_outcome `
   + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   stageQuery += sexBuilder(req.body.sex);
@@ -296,16 +294,18 @@ app.post('/getvis', (req, res) => {
   stageQuery += ageBuilder(req.body.age);
   stageQuery += occupationBuilder(req.body.occp_cod);
   stageQuery += " GROUP BY stage"; 
+
+  console.log(stageQuery)
   
   let causeQuery = `SELECT cause as name, count(*)::INTEGER as size, `
-  + `count(CASE WHEN outc_cod = 'DE' THEN 1 end)::INTEGER as "DE", `
-  + `count(CASE WHEN outc_cod = 'CA' THEN 1 end)::INTEGER as "CA", `
-  + `count(CASE WHEN outc_cod = 'DS' THEN 1 end)::INTEGER as "DS", `
-  + `count(CASE WHEN outc_cod = 'HO' THEN 1 end)::INTEGER as "HO", `
-  + `count(CASE WHEN outc_cod = 'LT' THEN 1 end)::INTEGER as "LT", `
-  + `count(CASE WHEN outc_cod = 'RI' THEN 1 end)::INTEGER as "RI", `
-  + `count(CASE WHEN outc_cod = 'OT' THEN 1 end)::INTEGER as "OT", `
-  + `count(CASE WHEN outc_cod is null THEN 1 end)::INTEGER as "UNK" `
+  + `count(CASE WHEN outc_cod @> '{DE}' THEN 1 end)::INTEGER as "DE", `
+  + `count(CASE WHEN outc_cod @> '{CA}' THEN 1 end)::INTEGER as "CA", `
+  + `count(CASE WHEN outc_cod @> '{DS}' THEN 1 end)::INTEGER as "DS", `
+  + `count(CASE WHEN outc_cod @> '{HO}' THEN 1 end)::INTEGER as "HO", `
+  + `count(CASE WHEN outc_cod @> '{LT}' THEN 1 end)::INTEGER as "LT", `
+  + `count(CASE WHEN outc_cod @> '{RI}' THEN 1 end)::INTEGER as "RI", `
+  + `count(CASE WHEN outc_cod @> '{OT}' THEN 1 end)::INTEGER as "OT", `
+  + `count(CASE WHEN NOT outc_cod && '{DE, CA, DS, HO, LT, RI, OT}' THEN 1 end)::INTEGER as "UNK" `
 + `FROM demo_outcome `
   + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
   causeQuery += sexBuilder(req.body.sex);
@@ -317,7 +317,7 @@ app.post('/getvis', (req, res) => {
   let productQuery = "SELECT z.drugname as name, count(*)::integer as size "
   + "FROM (SELECT b.drugname " 
     + "FROM (SELECT primaryid, init_fda_dt FROM demo " 
-      + "WHERE init_fda_dt between " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
+      + "WHERE init_fda_dt BETWEEN " + req.body.init_fda_dt.start + " AND " + req.body.init_fda_dt.end
       productQuery += sexBuilder(req.body.sex);
       productQuery += locationBuilder(req.body.occr_country);
       productQuery += ageBuilder(req.body.age);

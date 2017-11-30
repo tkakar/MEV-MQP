@@ -59,6 +59,9 @@ class CustomTooltip extends Component {
     not_serious: 'Not Serious Outcomes',
   }
 
+  /**
+   * Calculates the total amount of reports for this position
+   */
   calculateTotal = payload =>
     Object.keys(payload).reduce((acc, key) => (
       (key !== this.props.demographic) ? acc + payload[key] : acc), 0)
