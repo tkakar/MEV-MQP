@@ -35,7 +35,7 @@ class TopNavigation extends Component {
 
     <div className={this.props.classes.topNavigationContainer}>
       <nav className={`${this.props.classes.topNavigationContainer} navbar navbar-default`}>
-        <div className="container">
+        <div className="container-fluid">
           <div className="pull-left">
             <div>
               <Button onClick={this.toggleDrawer('left', true)} className={this.props.classes.buttonClass}><i className="material-icons">menu</i></Button>
@@ -49,14 +49,14 @@ class TopNavigation extends Component {
                   <div className={this.props.classes.drawerHeader}>
                     <h2>Hello, welcome!</h2>
                   </div>
-                  <Divider style={{ 'background-color': 'rgb(255,255,255)' }} />
+                  <Divider style={{ backgroundColor: 'rgb(255,255,255)' }} />
                   <List>
                     <Link to="/" className={this.props.classes.listLink}>
                       <ListItem button >
                         <ListItemText
                           disableTypography
                           primary={
-                            <Typography type="line-item" style={{ 'line-item': { 'font-size': '16px' } }}>
+                            <Typography type="line-item" style={{ lineItem: { 'font-size': '16px' } }}>
                             Visualizations
                             </Typography>
                           }
@@ -68,7 +68,7 @@ class TopNavigation extends Component {
                         <ListItemText
                           disableTypography
                           primary={
-                            <Typography type="line-item" style={{ 'line-item': { 'font-size': '16px' } }}>
+                            <Typography type="line-item" style={{ lineItem: { 'font-size': '16px' } }}>
                             About
                             </Typography>
                           }
@@ -80,7 +80,7 @@ class TopNavigation extends Component {
                         <ListItemText
                           disableTypography
                           primary={
-                            <Typography type="line-item" style={{ 'line-item': { 'font-size': '16px', color: '#fff' } }}>
+                            <Typography type="line-item" style={{ lineItem: { 'font-size': '16px', color: '#fff' } }}>
                             Reports
                             </Typography>
                           }
@@ -88,7 +88,7 @@ class TopNavigation extends Component {
                       </ListItem>
                     </Link>
                   </List>
-                  <Divider style={{ 'background-color': 'rgb(255,255,255)' }} />
+                  <Divider style={{ backgroundColor: 'rgb(255,255,255)' }} />
                 </div>
               </Drawer>
             </div>

@@ -1,5 +1,6 @@
 export default {
   topNavigationContainer: {
+    margin: '0px',
     width: '100%',
     'background-color': '#DA2536',
   },
