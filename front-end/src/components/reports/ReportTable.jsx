@@ -34,7 +34,6 @@ makeData = () => {
   fetch('http://localhost:3001/getreports', fetchData)
     .then(response => response.json())
     .then((reports) => {
-      console.log(reports.rows);
       this.setState({ data: reports.rows });
     });
 };

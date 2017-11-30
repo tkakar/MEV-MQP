@@ -33,7 +33,6 @@ export default (state = initialVisualizationState, action = {}) => {
       } else {
         returnObject.cause = action.visData.cause;
       }
-      console.log('returnObject', returnObject);
       return Object.assign({}, state, returnObject);
     default: return state;
   }

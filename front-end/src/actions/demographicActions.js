@@ -124,8 +124,6 @@ export const getDemographicData = queryParams => (dispatch) => {
     .then(response => response.json())
     .then((allReports) => {
       const reducedData = reduceData(allReports.rows);
-      console.log('Updated Demographics', allReports.rows);
-      console.log('Updated Demographics', reducedData);
       const demographics = {
         sex: _.sortBy(Object.keys(reducedData.sex)
           .map(sexRange => ({ sex: sexRange, ...reducedData.sex[sexRange] })), 'sex'),

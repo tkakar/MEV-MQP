@@ -9,8 +9,6 @@ export const filterData = () => (dispatch, getState) => {
     ...getState().filters,
   };
 
-  console.log('Filtering the Data\n', postBody);
-
   // Dispatch the new Filters to the appropriate Actions to get newly filtered data.
   dispatch(getDemographicData(postBody));
   dispatch(getVisData(postBody));

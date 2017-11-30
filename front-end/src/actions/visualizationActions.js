@@ -27,7 +27,6 @@ export const getVisData = queryParams => (dispatch) => {
         stage: _.reverse(_.sortBy(allReports.stage, 'size')),
       };
 
-      console.log('visData', visData);
       dispatch({ type: 'UPDATE_VIS', visData });
     })
     .catch((err) => {
