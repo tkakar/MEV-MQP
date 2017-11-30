@@ -14,7 +14,7 @@ class ReportContainer extends Component {
 
   render = () => (
     <div className="report-container">
-      <ReportTable />
+      <ReportTable handleClick={this.props.handleClick} />
     </div>
   )
 }
