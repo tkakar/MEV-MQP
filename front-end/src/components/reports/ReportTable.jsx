@@ -6,11 +6,13 @@ import Paper from 'material-ui/Paper';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import styles from '../ReportContainerStyles';
+import { Redirect } from 'react-router';
 
 class ReportTable extends Component {
   constructor() {
     super();
     this.state = {
+      primaryid: '',
       data: [],
     };
   }
@@ -38,12 +40,24 @@ makeData = () => {
     });
 };
 
+handleClick = (ev) => {
+  console.log(ev);
+}
+
 render() {
   const { data } = this.state;
   return (
     <div>
       {console.log(this.props.filters)}
       <ReactTable
+        getTdProps={(state, rowInfo, column, instance) => ({
+          onClick: (e, handleOriginal) => {
+            this.props.handleClick(rowInfo.original.primaryid);
+            if (handleOriginal) {
+              handleOriginal();
+            }
+          },
+        })}
         data={data}
         columns={[
           {

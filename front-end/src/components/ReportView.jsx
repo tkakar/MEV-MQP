@@ -20,19 +20,26 @@ const blueTheme = createMuiTheme({
 const styles = theme => ({});
 
 class ReportView extends Component {
-  asd = () => 123;
+  constructor() {
+    super();
+    this.state = {
+      primaryid: '',
+    };
+  }
+
+  handleClick = (id) => {
+    this.setState({primaryid: id})
+  }
 
   render() {
     return (
       <MuiThemeProvider theme={blueTheme} >
         <div className="ReportView">
-          <ReportContainer />
+          <ReportContainer handleClick={this.handleClick} />
           <Link to="/"><Button raised className="cal-button" color="primary">Go Back</Button></Link>
           <br />
           <br />
-          <Link to="/pdf/133371451" target="_blank"><Button raised className="cal-button" color="primary">Example PDF View</Button></Link>
-          <Link to="/pdf/" target="_blank"><Button raised className="cal-button" color="primary">No ID Passed PDF View</Button></Link>
-          <Link to="/pdf/100" target="_blank"><Button raised className="cal-button" color="primary">Invalid ID Passed PDF View</Button></Link>
+          <Link to={`/pdf/${this.state.primaryid}`} target="_blank"><Button raised className="cal-button" color="primary">{`Go to report ${this.state.primaryid}`}</Button></Link>
         </div>
       </MuiThemeProvider>
     );
