@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { filterData } from './filterActions';
 
+// Default Objects for graphs columns with no data
 const defaultSexObject = {
   F: { count: 0, serious: 0 },
   M: { count: 0, serious: 0 },
@@ -41,6 +42,11 @@ const defaultOccupationObject = {
   UNK: { count: 0, serious: 0 },
 };
 
+
+/**
+ * Removes the NULL values from the data
+ * @param {object} row a single row from the database
+ */
 const cleanRow = (row) => {
   if (row.age === null) row.age = 'UNK';
   if (!row.sex) row.sex = 'UNK';
@@ -49,6 +55,10 @@ const cleanRow = (row) => {
   if (!row.outc_cod) row.outc_cod = 'UNK';
 };
 
+/**
+ * returns the correct attribute from the row
+ * @param {object} row a single row from the database
+ */
 const countCountry = row => row.occr_country;
 const countOccupation = row => row.occp_cod;
 const countSex = row => row.sex;
@@ -58,12 +68,14 @@ const countAge = (row) => {
     return 'UNK';
   }
 
+  // Groups the ages into ranges and returns the correct age range for a given row
   let index = Math.min(Math.floor(row.age / 10) + 1, 11);
   if (index === 1 && (row.age / 10) <= 0.5) index = 0;
   if (index < 0) return 'UNK';
   return ageRange[index];
 };
 
+// Used to see which demographic we are currently accumulating
 const counters = {
   sex: countSex,
   age: countAge,
@@ -71,6 +83,13 @@ const counters = {
   occp_cod: countOccupation,
 };
 
+/**
+ * Gets a total count as well as a count for each outcome code
+ * for a specific given demographic
+ * @param {object} accumulator object that stores all of the totals so far
+ * @param {object} row a single row from the database
+ * @param {string} demo current demographic we are looking for
+ */
 const accumlateForEachOutcome = (accumulator, row, demo) => {
   let isSerious = false;
   row.outc_cod.forEach((outcome) => {
@@ -89,6 +108,11 @@ const accumlateForEachOutcome = (accumulator, row, demo) => {
   }
 };
 
+/**
+ * Gets a total count as well as a count for each outcome code
+ * @param {object} accumulator object that stores all of the totals
+ * @param {object} row a single row from the database
+ */
 const handleAccumulator = (accumulator, row) => {
   Object.keys(counters).forEach((demo) => {
     const countValue = _.get(accumulator, [demo, counters[demo](row), 'count'], 0);
@@ -97,6 +121,11 @@ const handleAccumulator = (accumulator, row) => {
   });
 };
 
+/**
+ * Takes all of the data from the database then
+ * aggregates, sorts and counts the data
+ * @param {array} rows a single row from the database
+ */
 const reduceData = rows => rows.reduce((accumulator, row) => {
   cleanRow(row);
   handleAccumulator(accumulator, row);
@@ -108,6 +137,10 @@ const reduceData = rows => rows.reduce((accumulator, row) => {
   occp_cod: JSON.parse(JSON.stringify(defaultOccupationObject)),
 });
 
+/**
+ * Query the database for demographic data with the given parameters
+ * @param {object} queryParams paramerters to filter the database query by
+ */
 export const getDemographicData = queryParams => (dispatch) => {
   const fetchData = {
     method: 'POST',
@@ -142,6 +175,10 @@ export const getDemographicData = queryParams => (dispatch) => {
     });
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleSexFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.sex.length !== 0) {
@@ -157,6 +194,10 @@ export const toggleSexFilter = filter => (dispatch, getState) => {
   }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleAgeFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.age.length !== 0) {
@@ -172,6 +213,10 @@ export const toggleAgeFilter = filter => (dispatch, getState) => {
   }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleLocationFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.occr_country.length !== 0) {
@@ -187,6 +232,10 @@ export const toggleLocationFilter = filter => (dispatch, getState) => {
   }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleOccupationFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.occp_cod.length !== 0) {

@@ -34,6 +34,10 @@ export const getVisData = queryParams => (dispatch) => {
     });
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleMETypeFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.meType.length !== 0) {
@@ -49,6 +53,10 @@ export const toggleMETypeFilter = filter => (dispatch, getState) => {
   }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleProductFilter = filter => (dispatch, getState) => {
   // if (filter === 'CLEAR') {
   //   if (getState().filters.product.length !== 0) {
@@ -64,6 +72,10 @@ export const toggleProductFilter = filter => (dispatch, getState) => {
   // }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleStageFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.stage.length !== 0) {
@@ -79,6 +91,10 @@ export const toggleStageFilter = filter => (dispatch, getState) => {
   }
 };
 
+/**
+ * Toggles the given filter item inside of the Redux State
+ * @param {string} filter the item to add/remove from the filters
+ */
 export const toggleCauseFilter = filter => (dispatch, getState) => {
   if (filter === 'CLEAR') {
     if (getState().filters.cause.length !== 0) {

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Bar, ResponsiveContainer, ReferenceArea } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Bar, ResponsiveContainer, ReferenceArea } from 'recharts';
 import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import CustomTooltip from './CustomTooltip';
+import BarChartImpl from './BarChartImpl';
 import ClearFilterIcon from '../../../resources/clearFilterIcon.svg';
 
 const styles = {
@@ -97,7 +98,10 @@ class Age extends Component {
   /**
    * Toggles the filter in Redux State for the bar clicked on in the chart
    */
-  handleFilterClickToggle = (e) => {
+  handleFilterClickToggle = (e, asd) => {
+    // this.getCursorRectangle();
+    console.log(e)
+    console.log(asd)
     if (e && e.activeLabel) {
       this.props.toggleFilter(e.activeLabel);
     }
@@ -131,7 +135,7 @@ class Age extends Component {
           </Typography>
         </div>
         <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight}>
-          <BarChart
+          <BarChartImpl
             data={this.props.age}
             onClick={this.handleFilterClickToggle}
           >
@@ -149,14 +153,14 @@ class Age extends Component {
             <Bar dataKey="UNK" stroke="#424242" stackId="a" fill="url(#colorNotSerious)" />
             {/* <ReferenceArea
               x1="0-5"
-              x2="20-29"
+              x2="0-5"
               stroke="red"
               strokeOpacity={0.3}
               xAxisId={0}
             />
             <ReferenceArea
-              style={{
-                width: '40px',
+              viewBox={{
+                width: 40,
               }}
               x1="40-49"
               x2="50-59"
@@ -164,7 +168,7 @@ class Age extends Component {
               strokeOpacity={0.3}
               xAxisId={0}
             /> */}
-          </BarChart>
+          </BarChartImpl>
         </ResponsiveContainer>
       </div>
     );

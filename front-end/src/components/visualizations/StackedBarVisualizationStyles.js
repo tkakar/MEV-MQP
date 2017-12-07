@@ -20,7 +20,7 @@ export default {
     transform: 'translateY(5px) translateX(-15px)',
     'box-shadow': '2px 5px 5px 0 rgba(0,0,0,0.3)',
     position: 'absolute',
-    'z-index': 1000,
+    'z-index': 100,
   },
   chipAvatar: {
     height: '11pt',
