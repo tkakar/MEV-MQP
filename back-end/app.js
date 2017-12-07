@@ -73,10 +73,10 @@ function sexBuilder(sex) {
 
   if (sex.length === 1) {
     if (sex[0] === 'UNK') {
-        return sexString + `(sex = '${sex}' OR sex IS NULL)`;
-      } else {
-        return sexString + `sex = '${sex}'`;
-      }
+      return sexString + `(sex = '${sex}' OR sex IS NULL)`;
+    } else {
+      return sexString + `sex = '${sex}'`;
+    }
   }
   
   if (sex.length > 1) {
@@ -132,7 +132,11 @@ function occupationBuilder(occupation) {
   }
 
   if (occupation.length === 1) {
-    return occupationString + `occp_cod = '${occupation}'`
+    if (occupation[0] === 'UNK') {
+      return occupationString + `(occp_cod = '${occupation}' OR occp_cod IS NULL)`;
+    } else {
+      return occupationString + `occp_cod = '${occupation}'`;
+    }
   }
   
   if (occupation.length > 1) {
@@ -513,15 +517,13 @@ app.post('/gettimelinedata', (req, res) => {
     } else {
       console.log('Going to Database')
         let query = 
-          "SELECT a.init_fda_dt, count(CASE WHEN a.outc_cod is not null then 1 end)::INTEGER as serious, count(CASE WHEN a.outc_cod is null then 1 end)::INTEGER as not_serious "
-          + "FROM (SELECT d.init_fda_dt, o.outc_cod " 
-          +       "FROM (SELECT primaryid, init_fda_dt "
-          +             "FROM demo) d "
-          +       "FULL OUTER JOIN (SELECT primaryid, outc_cod "
-          +             "FROM outc) o "
-          +       "ON d.primaryid = o.primaryid) a "
-          + "GROUP BY a.init_fda_dt "
-          + "ORDER BY a.init_fda_dt"
+          "SELECT init_fda_dt, "
+          + "count(CASE WHEN outc_cod && '{DE, CA, DS, HO, LT, RI, OT}' then 1 end)::INTEGER as serious, "
+          + "count(CASE WHEN NOT outc_cod && '{DE, CA, DS, HO, LT, RI, OT}' then 1 end)::INTEGER as not_serious "
+          + "FROM demo_outcome "
+          + "GROUP BY init_fda_dt "
+          + "ORDER BY init_fda_dt"
+        console.log(query)
       db.query(query, (err, data) => {
         // console.log(data.rows)
         console.log('got timeline data from db');

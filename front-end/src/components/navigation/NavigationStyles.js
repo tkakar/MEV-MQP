@@ -30,4 +30,10 @@ export default {
   drawerHeader: {
     padding: '15px',
   },
+  SelectedFilters: {
+    transform: 'translateY(1px)',
+    marginLeft: '100px',
+    marginRight: '100px',
+    // height: '35px',
+  },
 };

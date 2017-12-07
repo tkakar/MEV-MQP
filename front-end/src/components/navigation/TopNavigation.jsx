@@ -12,6 +12,7 @@ import List, {
   ListItemText,
 } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import CurrentlySelectedFilters from './CurrentlySelectedFilters';
 import styles from './NavigationStyles';
 
 class TopNavigation extends Component {
@@ -36,6 +37,7 @@ class TopNavigation extends Component {
       [side]: open,
     });
   };
+
   render = () => (
     <div className={this.props.classes.topNavigationContainer}>
       <nav className={`${this.props.classes.topNavigationContainer} navbar navbar-default`}>
@@ -129,6 +131,9 @@ class TopNavigation extends Component {
             <a className={`${this.props.classes.logo} navbar-brand`} href="/">
               MEV
             </a>
+          </div>
+          <div className={this.props.classes.SelectedFilters} >
+            <CurrentlySelectedFilters />
           </div>
         </div>
       </nav>

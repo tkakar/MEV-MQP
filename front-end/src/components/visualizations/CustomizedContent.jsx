@@ -94,15 +94,15 @@ class CustomizedContent extends Component {
           }}
         />
         {
-          (this.props.depth === 1 && false) ?
+          (this.props.depth === 1) ?
             <text
               x={this.props.x + this.props.width / 2}
               y={this.props.y + this.props.height / 2 + 7}
               textAnchor="middle"
-              style={{ fill: '#fff' }}
+              style={{ fill: '#FFF', strokeWidth: '0px' }}
               fontFamily="Roboto"
               fontWeight="lighter"
-              fontSize={14}
+              fontSize={16}
             >
               {this.props.name}
             </text>

@@ -45,6 +45,10 @@ class Timeline extends Component {
       selectedEndX: 0,
       previewStartX: 0,
       previewEndX: 0,
+      currentlyFilteredStartDate: 0,
+      currentlyFilteredEndDate: 0,
+      currentlyFilteredDateRange: '03/16/2017 - 03/31/2017',
+      currentlyHighlightedDateRange: '03/16/2017 - 03/31/2017',
 
       currentlySelecting: false,
       mouseMovePosition: 0,
@@ -65,7 +69,7 @@ class Timeline extends Component {
       document.getElementById('setDateBtn').classList.add(this.props.classes.nonSetDateButton);
 
       const dateRange = this.formatDateRange(this.state.selectedStartX, this.state.selectedStartX);
-      document.getElementById('dateRangePicker').value = dateRange;
+      this.updateDateRangePickerTextBox(dateRange);
 
       // Clear  the Other end to start a new selection TODO
       this.setState({
@@ -89,13 +93,12 @@ class Timeline extends Component {
 
       if (this.state.selectedEndX > this.state.selectedStartX) {
         dateRange = this.formatDateRange(this.state.selectedStartX, this.state.selectedEndX);
-        document.getElementById('dateRangePicker').value = dateRange;
+        this.updateDateRangePickerTextBox(dateRange);
       } else {
         dateRange = this.formatDateRange(this.state.selectedEndX, this.state.selectedStartX);
-        document.getElementById('dateRangePicker').value = dateRange;
+        this.updateDateRangePickerTextBox(dateRange);
       }
-      const event = new Event('keyup');
-      document.getElementById('dateRangePicker').dispatchEvent(event);
+      document.getElementById('dateRangePicker').dispatchEvent(new Event('keyup'));
     }, false);
 
     // Add listener for when the user clicks and drags to select a time range for filtering.
@@ -107,13 +110,13 @@ class Timeline extends Component {
         }
         if (this.state.previewEndX > this.state.selectedStartX) {
           dateRange = this.formatDateRange(this.state.selectedStartX, this.state.previewEndX);
-          document.getElementById('dateRangePicker').value = dateRange;
+          this.updateDateRangePickerTextBox(dateRange);
         } else if (this.state.previewEndX === this.state.selectedStartX) {
           dateRange = this.formatDateRange(this.state.selectedStartX, this.state.previewEndX);
-          document.getElementById('dateRangePicker').value = dateRange;
+          this.updateDateRangePickerTextBox(dateRange);
         } else {
           dateRange = this.formatDateRange(this.state.previewEndX, this.state.selectedStartX);
-          document.getElementById('dateRangePicker').value = dateRange;
+          this.updateDateRangePickerTextBox(dateRange);
         }
       }
     }, true);
@@ -143,6 +146,17 @@ class Timeline extends Component {
     };
   }
 
+  updateDateRangePickerTextBox = (dateRange) => {
+    const datePicker = document.getElementById('dateRangePicker');
+    if (datePicker.value !== dateRange) {
+      datePicker.value = dateRange;
+      document.getElementById('dateRangePicker').dispatchEvent(new Event('keyup'));
+      this.setState({
+        currentlyHighlightedDateRange: dateRange,
+      });
+    }
+  }
+
   /**
    * Sets the currently selected date from the text box into the Redux State
    */
@@ -154,10 +168,14 @@ class Timeline extends Component {
     this.setState({
       previewStartX: dates.startDate,
       previewEndX: dates.endDate,
+
+      currentlyFilteredStartDate: dates.startDate,
+      currentlyFilteredEndDate: dates.endDate,
+      currentlyFilteredDateRange: dateRange,
     });
 
     // Remove the class that makes the Set Date Button Orange
-    document.getElementById('setDateBtn').classList.remove(this.props.classes.nonSetDateButton);
+    // document.getElementById('setDateBtn').classList.remove(this.props.classes.nonSetDateButton);
 
     this.props.setSelectedDate({
       ...dates,
@@ -313,7 +331,9 @@ class Timeline extends Component {
     <Grid container spacing={8} className={this.props.classes.gridContainer}>
       <Grid item sm={3} md={2}>
         <Paper elevation={4} className={this.props.classes.calendartWrapper} >
-          <Button raised color="primary" onClick={this.updateSelectedDate} id="setDateBtn" >Set Date!</Button>
+          {(this.state.currentlyFilteredDateRange !== this.state.currentlyHighlightedDateRange)
+            ? <Button raised color="primary" onClick={this.updateSelectedDate} id="setDateBtn" className={this.props.classes.nonSetDateButton} >Set Date!</Button>
+            : <Button raised color="primary" onClick={this.updateSelectedDate} id="setDateBtn" >Set Date!</Button>}
           <Link to="/report"><Button raised className="cal-button" color="primary">Reports</Button></Link>
           <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/16/2017 - 03/31/2017" id="dateRangePicker" />
         </Paper>
