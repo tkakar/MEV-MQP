@@ -389,7 +389,7 @@ app.put('/savereporttext', (req, res) => {
   tags = JSON.stringify(req.body.tags) === '{}' ? 'null' : '\'' + JSON.stringify(req.body.tags) + '\'';
   let query =
   'UPDATE demo '
-+ 'SET report_text = $$' +  + '$$, tags = (' + tags + ') '
++ 'SET report_text = $$' + req.body.text + '$$, tags = (' + tags + ') '
 + 'WHERE primaryid = ' + req.body.primaryid;
   db.query(query, (err, data) => {
     res.status(200).send();
