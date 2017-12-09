@@ -190,7 +190,7 @@ class CurrentlySelectedFilters extends Component {
                   <b>{this.filterTitles[this.state.mouseOverKey]}</b>
                 </p>
                 <p className={this.props.classes.toolTipParagraph} >
-                  {this.props.filters[this.state.mouseOverKey].join(', ')}
+                  {this.props.filters[this.state.mouseOverKey].sort().join(', ')}
                 </p>
               </div>
             )
