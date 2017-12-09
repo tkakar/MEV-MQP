@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import { blue, green, red } from 'material-ui/colors';
-import { setUserInfo } from '../actions/userActions';
+import { setUserInfo } from '../../actions/userActions';
 
 
 const blueTheme = createMuiTheme({

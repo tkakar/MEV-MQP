@@ -5,15 +5,15 @@ import { withStyles } from 'material-ui/styles';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
-import CustomTooltip from './CustomTooltip';
-import ClearFilterIcon from '../../../resources/clearFilterIcon.svg';
+import CustomTooltip from './components/CustomTooltip';
+import ClearFilterIcon from '../../../../../resources/clearFilterIcon.svg';
 
 const styles = {
   labelFont: {
     'text-align': 'center',
     'font-size': '20pt',
     'pointer-events': 'none',
-    transform: 'translateX(45px)',
+    'padding-left': '45px',
   },
   responsiveContainer: {
     'margin-left': '-15px',
@@ -36,24 +36,14 @@ const styles = {
     width: '11pt',
     transform: 'translateX(3px)',
   },
-  '@media (max-width: 1450px)': {
-    labelFont: {
-      transform: 'translateX(20px)',
-    },
-  },
-  '@media (max-width: 1100px)': {
-    labelFont: {
-      transform: 'translateX(0px)',
-    },
-  },
 };
 
 /**
- * This is the component that displays the Sex Demographic visualization
+ * This is the component that displays the Location Demographic visualization
  */
-class ReportedBy extends Component {
+class Location extends Component {
   static propTypes = {
-    occp_cod: PropTypes.arrayOf(PropTypes.object).isRequired,
+    location: PropTypes.arrayOf(PropTypes.object).isRequired,
     toggleFilter: PropTypes.func.isRequired,
     classes: PropTypes.shape({
       labelFont: PropTypes.string,
@@ -112,9 +102,9 @@ class ReportedBy extends Component {
    * Calculates the best size for the visualization for better scalability
    */
   resizeGraph = () => {
-    const container = document.getElementById('occupation-container');
+    const container = document.getElementById('location-container');
     const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
-    const graphTitle = document.getElementById('occupation-graph-title');
+    const graphTitle = document.getElementById('location-graph-title');
     const graphTitleHeight = window.getComputedStyle(graphTitle, null).getPropertyValue('height');
     this.setState({
       graphHeight: (parseInt(containerHeight, 10) - parseInt(graphTitleHeight, 10)) + 10,
@@ -123,24 +113,24 @@ class ReportedBy extends Component {
 
   render() {
     return (
-      <div id="occupation-container" className={this.props.classes.maxHeight} >
-        <div id="occupation-header" className={this.props.classes.noOverflow} >
+      <div id="location-container" className={this.props.classes.maxHeight} >
+        <div id="location-header" className={this.props.classes.noOverflow} >
           <Chip
             avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
             label="Clear Filter"
             onClick={this.clearFilter}
             className={this.props.classes.clearFilterChip}
           />
-          <Typography id="occupation-graph-title" className={this.props.classes.labelFont} type="title" component="h1">
-            Occupation
+          <Typography id="location-graph-title" className={this.props.classes.labelFont} type="title" component="h1">
+            Location
           </Typography>
         </div>
-        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight} >
+        <ResponsiveContainer className={this.props.classes.responsiveContainer} width="100%" height={this.state.graphHeight}>
           <BarChart
-            data={this.props.occp_cod}
+            data={this.props.location}
             onClick={this.handleFilterClickToggle}
           >
-            <XAxis dataKey="occp_cod" />
+            <XAxis dataKey="country" />
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip
@@ -148,7 +138,7 @@ class ReportedBy extends Component {
               offset={15}
               cursor={{ stroke: '#424242', strokeWidth: 1 }}
               wrapperStyle={{ padding: '4px', zIndex: 1000 }}
-              demographic="occp_cod"
+              demographic="country"
             />
             <Bar dataKey="serious" stroke="#1A237E" stackId="a" fill="url(#colorSevere)" />
             <Bar dataKey="UNK" stroke="#424242" stackId="a" fill="url(#colorNotSerious)" />
@@ -159,4 +149,4 @@ class ReportedBy extends Component {
   }
 }
 
-export default withStyles(styles)(ReportedBy);
+export default withStyles(styles)(Location);

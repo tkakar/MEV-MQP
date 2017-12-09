@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import { toggleSexFilter, toggleAgeFilter, toggleLocationFilter, toggleOccupationFilter } from '../../actions/demographicActions';
-import Sex from './demographics/Sex';
-import Age from './demographics/Age';
-import Location from './demographics/Location';
-import ReportedBy from './demographics/ReportedBy';
+import { toggleSexFilter, toggleAgeFilter, toggleLocationFilter, toggleOccupationFilter } from '../../../../actions/demographicActions';
+import Sex from './components/Sex';
+import Age from './components/Age';
+import Location from './components/Location';
+import ReportedBy from './components/ReportedBy';
 import styles from './DemographicsStyles';
 
 /**

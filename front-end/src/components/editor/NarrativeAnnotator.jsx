@@ -12,9 +12,9 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
-import styles from './PDFAppStyles';
+import styles from './NarrativeAnnotatorStyles';
 
-class PDFApp extends Component {
+class NarrativeAnnotator extends Component {
   static propTypes = {
     classes: PropTypes.shape({
       pdfView: PropTypes.string,
@@ -222,5 +222,5 @@ class PDFApp extends Component {
   }
 }
 
-export default withStyles(styles)(PDFApp);
+export default withStyles(styles)(NarrativeAnnotator);
 

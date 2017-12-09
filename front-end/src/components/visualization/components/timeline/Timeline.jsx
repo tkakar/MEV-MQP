@@ -10,7 +10,7 @@ import Button from 'material-ui/Button';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
-import { setSelectedDate } from '../../actions/timelineActions';
+import { setSelectedDate } from '../../../../actions/timelineActions';
 import CustomTooltip from './components/CustomTooltip';
 import styles from './TimelineStyles';
 import './Timeline.css';

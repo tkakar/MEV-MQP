@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import { blue, green, red } from 'material-ui/colors';
-import VisualizationContainer from './VisualizationContainer';
-import SideBarContainer from './SideBarContainer';
-import TimelineContainer from './TimelineContainer';
+import TreeMap from './components/treeMap/TreeMap';
+import Demographics from './components/demographics/Demographics';
+import Timeline from './components/timeline/Timeline';
 
 
 const blueTheme = createMuiTheme({
@@ -35,9 +35,9 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={blueTheme} >
         <div className="App">
-          <SideBarContainer />
-          <VisualizationContainer />
-          <TimelineContainer />
+          <Demographics />
+          <TreeMap />
+          <Timeline />
         </div>
       </MuiThemeProvider>
     );

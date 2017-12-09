@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -11,10 +11,9 @@ import {
   TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import { withStyles } from 'material-ui/styles';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
-import styles from '../ReportContainerStyles';
 import Button from 'material-ui/Button';
+
+const styles = {};
 
 class ReportTable extends React.PureComponent {
   constructor(props) {

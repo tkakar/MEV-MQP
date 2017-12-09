@@ -6,16 +6,16 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
-import { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter } from '../../actions/visualizationActions';
-import ClearFilterIcon from '../../resources/clearFilterIcon.svg';
-import CustomizedContent from './CustomizedContent';
-import styles from './StackedBarVisualizationStyles';
-import CustomTooltip from './CustomTooltip';
+import { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter } from '../../../../actions/visualizationActions';
+import ClearFilterIcon from '../../../../resources/clearFilterIcon.svg';
+import CustomizedContent from './components/CustomizedContent';
+import styles from './TreeMapStyles';
+import CustomTooltip from './components/CustomTooltip';
 
 /**
  * This is the component for the TreeMap visualization
  */
-class StackedBarVisualization extends Component {
+class TreeMap extends Component {
   static propTypes = {
     toggleMETypeFilter: PropTypes.func.isRequired,    
     toggleProductFilter: PropTypes.func.isRequired,    
@@ -279,4 +279,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter },
-)(withStyles(styles)(StackedBarVisualization));
+)(withStyles(styles)(TreeMap));

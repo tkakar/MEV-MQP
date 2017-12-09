@@ -13,12 +13,12 @@ import thunk from 'redux-thunk';
 import storage from 'redux-persist/lib/storage/session';
 
 import reducers from './reducers/index';
-import App from './components/App';
-import Login from './components/Login';
-import About from './components/About';
-import ReportView from './components/ReportView';
-import PDFApp from './components/PDFApp';
-import TopNavigation from './components/navigation/TopNavigation';
+import App from './components/visualization/App';
+import Login from './components/portal/Login';
+import About from './components/portal/About';
+import ReportList from './components/reports/ReportList';
+import NarrativeAnnotator from './components/editor/NarrativeAnnotator';
+import TopNavigation from './components/TopNavigation';
 
 import './index.css';
 
@@ -53,10 +53,10 @@ ReactDOM.render(
         <div>
           <TopNavigation />
           <Route exact path="/" component={App} />
-          <Route path="/report" component={ReportView} />
+          <Route path="/report" component={ReportList} />
           <Route path="/login" component={Login} />
           <Route path="/about" component={About} />
-          <Route path="/pdf/:id?" component={PDFApp} />
+          <Route path="/pdf/:id?" component={NarrativeAnnotator} />
         </div>
       </ConnectedRouter>
     </Provider>

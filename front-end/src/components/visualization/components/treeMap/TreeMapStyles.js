@@ -1,6 +1,6 @@
 export default {
   mainVisualization: {
-    height: '100%',
+    height: 'calc(65vh - 52px)',
     margin: 'auto',
     padding: '10px 10px 0px 10px',
   },

@@ -5,14 +5,14 @@ import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles
 import Drawer from 'material-ui/Drawer';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
-import { setUserInfo } from '../../actions/userActions';
 import Button from 'material-ui/Button';
 import List, {
   ListItem,
   ListItemText,
 } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import CurrentlySelectedFilters from './CurrentlySelectedFilters';
+import { setUserInfo } from '../actions/userActions';
+import CurrentlySelectedFilters from './components/CurrentlySelectedFilters';
 import styles from './NavigationStyles';
 
 class TopNavigation extends Component {
