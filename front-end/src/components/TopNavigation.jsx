@@ -13,7 +13,7 @@ import List, {
 import Divider from 'material-ui/Divider';
 import { setUserInfo } from '../actions/userActions';
 import CurrentlySelectedFilters from './components/CurrentlySelectedFilters';
-import styles from './NavigationStyles';
+import styles from './TopNavigationStyles';
 
 class TopNavigation extends Component {
   static propTypes = {

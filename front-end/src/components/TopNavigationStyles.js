@@ -3,6 +3,7 @@ export default {
     margin: '0px',
     width: '100%',
     'background-color': '#DA2536',
+    zIndex: 100,
   },
   drawerClass: {
     'background-color': '#AB1D2A',

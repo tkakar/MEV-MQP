@@ -121,8 +121,17 @@ class CurrentlySelectedFilters extends Component {
     }, false);
   }
 
-  componentWillUnmount() {
-
+  /**
+   * Parses an unformatted date into a formatted date
+   * @param {string} date Unformatted date as yyyymmddd
+   * @return {string} Formatted date as dd/mm/yyyy
+   */
+  formatDate = (date) => {
+    const dateString = `${date}`;
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+    return `${month}/${day}/${year}`;
   }
 
   filterTitles = {
@@ -191,10 +200,10 @@ class CurrentlySelectedFilters extends Component {
                   <b>{this.filterTitles[this.state.mouseOverKey]}</b>
                 </Typography>
                 <Typography type="subheading" className={this.props.classes.toolTipParagraph} >
-                  Start Date: {this.props.filters[this.state.mouseOverKey].start}
+                  Start Date: {this.formatDate(this.props.filters[this.state.mouseOverKey].start)}
                 </Typography>
                 <Typography type="subheading" className={this.props.classes.toolTipParagraph} >
-                  End Date: {this.props.filters[this.state.mouseOverKey].end}
+                  End Date: {this.formatDate(this.props.filters[this.state.mouseOverKey].end)}
                 </Typography>
               </div>
             )
