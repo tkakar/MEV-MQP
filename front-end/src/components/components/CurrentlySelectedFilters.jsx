@@ -38,6 +38,7 @@ const styles = {
   toolTipStyle: {
     'font-size': '10pt',
     padding: '5px',
+    minWidth: '75px',
     'background-color': 'rgba(75,75,75,0.85)',
     overflow: 'hidden',
     color: 'rgba(255,255,255,1)',
@@ -182,7 +183,7 @@ class CurrentlySelectedFilters extends Component {
   renderTooltip = () => {
     return (this.state.mouseOverKey !== '')
       ? (
-        <div id={'SelectedFilter-Tooltip'} className={this.props.classes.toolTipStyle} style={{ left: `${this.state.mouseX - 120}px`, top: `${this.state.mouseY - 115}px` }} >
+        <div id="SelectedFilter-Tooltip" className={this.props.classes.toolTipStyle} style={{ left: `${this.state.mouseX - 120}px`, top: `${this.state.mouseY - 115}px` }} >
           {(this.state.mouseOverKey !== 'init_fda_dt')
             ? (
               <div>

@@ -10,7 +10,7 @@ import Button from 'material-ui/Button';
 import { Area, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
 import AreaChartImpl from './components/AreaChartImpl';
 import BrushImpl from './components/BrushImpl';
-import { setSelectedDate } from '../../../../actions/timelineActions';
+import { getEntireTimeline, setSelectedDate } from '../../../../actions/timelineActions';
 import CustomTooltip from './components/CustomTooltip';
 import styles from './TimelineStyles';
 import './Timeline.css';
@@ -20,6 +20,7 @@ import './Timeline.css';
  */
 class Timeline extends Component {
   static propTypes = {
+    getEntireTimeline: PropTypes.func.isRequired,
     setSelectedDate: PropTypes.func.isRequired,
     entireTimelineData: PropTypes.arrayOf(
       PropTypes.shape({
@@ -57,6 +58,8 @@ class Timeline extends Component {
   }
 
   componentDidMount() {
+    // Loads the Timeline Data into redux state to be used in the Timeline component
+    this.props.getEntireTimeline();
     // Add listener for when the user clicks and drags to select a time range for filtering.
     document.getElementById('timeline-chart').addEventListener('mousedown', (e) => {
       this.setState({
@@ -361,5 +364,5 @@ const mapStateToProps = state => ({
  */
 export default connect(
   mapStateToProps,
-  { setSelectedDate },
+  { getEntireTimeline, setSelectedDate },
 )(withStyles(styles)(Timeline));
