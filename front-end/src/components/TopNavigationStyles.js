@@ -4,6 +4,7 @@ export default {
     width: '100%',
     'background-color': '#DA2536',
     zIndex: 100,
+    border: 'none',
   },
   drawerClass: {
     'background-color': '#AB1D2A',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
@@ -21,17 +21,17 @@ class TopNavigation extends Component {
     classes: PropTypes.shape({
     }).isRequired,
   }
+
   constructor(props) {
     super(props);
-    this.state = { open: false };
+    this.state = { open: false, left: false };
   }
-  state = {
-    left: false,
-  };
+
   logout = (event) => {
     event.preventDefault();
     this.props.setUserInfo(false, -1, '');
   }
+
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
