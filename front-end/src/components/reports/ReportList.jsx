@@ -5,15 +5,18 @@ import Button from 'material-ui/Button';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import { blue, green, red } from 'material-ui/colors';
 import ReportTable from './components/ReportTable';
+import MEVColors from '../../theme';
 
-
-const blueTheme = createMuiTheme({
+const defaultTheme = createMuiTheme({
   palette: {
-    primary: blue,
+    primary: {
+      ...blue,
+      500: MEVColors.buttonLight,
+    },
     secondary: {
       ...green,
-      A400: '#00e677',
     },
+    ...MEVColors,
     error: red,
   },
 });
@@ -32,13 +35,14 @@ class ReportList extends Component {
   handleNormalClick = () => {
     this.setState({ bin: '' });
   }
+  
   handleTrashClick = () => {
     this.setState({ bin: 'trash' });
   }
 
   render() {
     return (
-      <MuiThemeProvider theme={blueTheme} >
+      <MuiThemeProvider theme={defaultTheme} >
         <div className="ReportList">
           <h1> {`Currently inside bin: ${this.state.bin}`} </h1>
           <ReportTable bin={this.state.bin} />
