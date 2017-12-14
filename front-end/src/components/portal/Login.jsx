@@ -11,6 +11,7 @@ const defaultTheme = createMuiTheme({
     primary: {
       ...blue,
       500: MEVColors.buttonLight,
+      700: MEVColors.buttonHover,
     },
     secondary: {
       ...green,

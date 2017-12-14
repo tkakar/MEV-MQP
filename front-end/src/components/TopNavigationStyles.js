@@ -4,12 +4,12 @@ export default {
   topNavigationContainer: {
     margin: '0px',
     width: '100%',
-    'background-color': MEVColors.severeLight,
+    'background-color': MEVColors.navBar,
     zIndex: 100,
     border: 'none',
   },
   drawerClass: {
-    'background-color': MEVColors.severeDark,
+    'background-color': MEVColors.navBarSlide,
     color: '#fff',
   },
   logo: {

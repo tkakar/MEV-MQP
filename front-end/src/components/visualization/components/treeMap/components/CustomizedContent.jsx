@@ -15,7 +15,7 @@ class CustomizedContent extends Component {
     colors: null,
     rank: null,
     name: null,
-    highestSeriousCount: 1,
+    highestSeriousCount: 0,
     size: 0,
     UNK: 0,
   }
@@ -23,7 +23,7 @@ class CustomizedContent extends Component {
   getFillColor = () => {
     // const numberSerious = this.props.size - this.props.UNK;
     // const percent = Math.min(numberSerious / this.props.highestSeriousCount, 1);
-    const percent = Math.min(1 - (this.props.UNK / (this.props.size + 1)), 1);
+    const percent = Math.min(1 - (this.props.UNK / Math.max(this.props.size, 1)), 1);
     return this.getColorAtPercent(percent);
   }
 
@@ -32,26 +32,26 @@ class CustomizedContent extends Component {
     // const yellow = 'D8B400';
     // const blue = '283593';
 
-    // const red = 'DA2536';
-    // const purple = '6824EA';
-    // const blue = '123266';
+    const severe = MEVColors.severeLight.slice(1);
+    const mid = MEVColors.middleOfGradient.slice(1);
+    const notSevere = MEVColors.notSevereLight.slice(1);
+    let color1;
+    let color2;
 
-    const red = MEVColors.severeLight;
-    const blue = MEVColors.notSevereLight;
-    let color1 = red.slice(1);
-    let color2 = blue.slice(1);
-    // let color1;
-    // let color2;
-
-    // if (percent <= 0.5) {
-    //   color1 = yellow;
-    //   color2 = orange;
-    //   percent *= 2;
-    // } else {
-    //   color1 = blue;
-    //   color2 = yellow;
-    //   percent = (percent - 0.5) * 2;
-    // }
+    if (mid !== '') {
+      if (percent <= 0.5) {
+        color1 = severe;
+        color2 = mid;
+        percent = (1 - (percent * 2));
+      } else {
+        color1 = mid;
+        color2 = notSevere;
+        percent = (1 - (percent - 0.5) * 2);
+      }
+    } else {
+      color1 = severe;
+      color2 = notSevere;
+    }
 
     const r = Math.ceil(parseInt(color1.substring(0, 2), 16) * percent + parseInt(color2.substring(0, 2), 16) * (1-percent));
     const g = Math.ceil(parseInt(color1.substring(2, 4), 16) * percent + parseInt(color2.substring(2, 4), 16) * (1-percent));
