@@ -94,7 +94,7 @@ class CustomizedContent extends Component {
           }}
         />
         {
-          (this.props.depth === 1) ?
+          (this.props.depth === 1 && this.props.name.length < 50) ?
             <text
               x={this.props.x + this.props.width / 2}
               y={this.props.y + this.props.height / 2 + 7}

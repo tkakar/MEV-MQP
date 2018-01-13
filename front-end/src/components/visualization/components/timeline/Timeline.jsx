@@ -276,6 +276,13 @@ class Timeline extends Component {
             <stop offset="99%" stopColor={MEVColors.severeLight} stopOpacity={0.8} />
           </linearGradient>
         </defs>
+        <ReferenceArea
+          x1={this.state.previewStartX}
+          x2={this.state.previewEndX}
+          stroke="red"
+          strokeOpacity={0.3}
+          xAxisId={0}
+        />
         <XAxis
           dataKey="init_fda_dt"
           tickFormatter={this.formatDate}
@@ -319,13 +326,6 @@ class Timeline extends Component {
           endIndex={this.props.entireTimelineData.length - 1}
           getmouseZoomLocation={this.getmouseZoomLocation}
           getUnformattedDateFromFormattedRange={this.getUnformattedDateFromFormattedRange}
-        />
-        <ReferenceArea
-          x1={this.state.previewStartX}
-          x2={this.state.previewEndX}
-          stroke="red"
-          strokeOpacity={0.3}
-          xAxisId={0}
         />
       </AreaChartImpl>
     </ResponsiveContainer>

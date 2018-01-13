@@ -2,12 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  RowDetailState, SortingState, LocalSorting,
+  RowDetailState, SortingState, IntegratedSorting, IntegratedSelection, SelectionState,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  VirtualTableView,
+  VirtualTable,
   TableHeaderRow,
+  DragDropProvider,
+  TableColumnReordering,
+  Toolbar,
+  TableSelection,
   TableRowDetail,
 } from '@devexpress/dx-react-grid-material-ui';
 import { withStyles } from 'material-ui/styles';
@@ -139,14 +143,25 @@ render() {
       <Grid
         rows={this.state.data}
         columns={this.columns}
+        getRowId={this.getRowId}
       >
         <RowDetailState />
-        <SortingState />
-        <LocalSorting />
-        <VirtualTableView />
-        <TableHeaderRow allowSorting />
+        <DragDropProvider />
+        <SortingState
+          defaultSorting={[
+            { columnName: 'Event Date', direction: 'asc' },
+          ]}
+        />
+        <IntegratedSorting />
+        <VirtualTable />
+        <TableHeaderRow showSortingControls />
+        <SelectionState />
+        <IntegratedSelection />
+        <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
+        <TableSelection showSelectAll />
+        <Toolbar />
         <TableRowDetail
-          template={this.detailRowContent}
+          contentComponent={this.detailRowContent}
         />
       </Grid>
     </div>

@@ -22,7 +22,7 @@ let cache = {
 // Connect to the REDIS cache if we are on MacOS or Liux
 if (os.platform() === 'linux' || os.platform() === 'darwin') {
   console.log('on linux or mac, using local cache');
-  cache = redis.createClient();  
+  // cache = redis.createClient();  
 }
 
 // We cannot use REDIS if on Windows
@@ -32,14 +32,13 @@ if (os.platform() === 'win32') {
 
 // Connect to the Database on AWS
 const db = new Client({
-  user: 'MEVUser',
-  host: 'test-mevdb.ccrdelq8psso.us-east-1.rds.amazonaws.com',
-  database: 'faers',
-  password: '2UdS1KQo',
-  port: '5432'
-});
+  host: 'localhost',
+    database: 'faers',
+    port: 5432,
+  });
 
 db.connect()
+.catch(err => console.log(err))
 
 const allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
