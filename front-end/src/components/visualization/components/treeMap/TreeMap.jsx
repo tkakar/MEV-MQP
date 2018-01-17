@@ -163,6 +163,18 @@ class TreeMap extends Component {
                 wrapperStyle={{ padding: '4px', zIndex: 1000 }}
               />
             </Treemap>
+            {
+              this.props.meType.map(((meType) => {
+                console.log(meType);
+                return (
+                  <div key={meType.name} className="TESTDIV" style={{ width: '200px', height: '50px', transform: 'translateY(-100px)' }} >
+                    <p style={{ width: '200px', lineHeight: '1.2em', height: '3.6em', overflow: 'hidden', textAlign: 'center' }} >
+                      {meType.name}
+                    </p>
+                  </div>
+                );
+              }))
+            }
           </Paper>
         </div>
       </div>

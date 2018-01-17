@@ -22,7 +22,7 @@ let cache = {
 // Connect to the REDIS cache if we are on MacOS or Liux
 if (os.platform() === 'linux' || os.platform() === 'darwin') {
   console.log('on linux or mac, using local cache');
-  // cache = redis.createClient();  
+  cache = redis.createClient();  
 }
 
 // We cannot use REDIS if on Windows
@@ -595,6 +595,22 @@ app.post('/gettimelinedata', (req, res) => {
         res.status(200).send(data.rows);
       })
     }
+  })
+});
+
+app.get('/update-data', (req, res) => {
+  console.log('updating the meType, Stage and Cause columns')
+  let query = "SELECT primaryid FROM demo limit 10"
+  console.log(query)
+  db.query(query, (err, data) => {
+    let query = "UPDATE demo SET me_type='hi', stage='ho', cause='ih' WHERE primaryid=123199731"
+    console.log(query)
+    data.rows.forEach((row) => {
+      console.log(row.primaryid)
+    })
+    console.log('updated the database!');
+    json = JSON.stringify(data.rows);
+    res.status(200).send(data.rows);
   })
 });
 

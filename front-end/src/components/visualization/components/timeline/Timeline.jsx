@@ -296,6 +296,7 @@ class Timeline extends Component {
           wrapperStyle={{ padding: '4px', zIndex: 1000 }}
           labelFormatter={this.formatDate}
           demographic="init_fda_dt"
+          isAnimationActive={false}
         />
         <Area
           type="monotone"
