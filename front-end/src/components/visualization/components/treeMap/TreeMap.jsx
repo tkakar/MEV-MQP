@@ -44,9 +44,15 @@ class TreeMap extends Component {
   componentDidMount() {
     // Once the screen has loaded, optimize the size of the TreeMap
     this.resizeGraph();
+
+    // Resize the treemaps when the main-visualization size is changed
+    document.getElementById('main-visualization').addEventListener('transitionend', () => {
+      this.resizeGraph();
+    });
   }
 
   componentWillUnmount() {
+    // Remove the event listener when unmounting
     window.removeEventListener('resize', this.resizeTimer);
   }
 
@@ -74,7 +80,7 @@ class TreeMap extends Component {
    */
   resizeTimer = () => {
     clearTimeout(this.state.stillResizingTimer);
-    this.state.stillResizingTimer = setTimeout(this.resizeGraph, 250);
+    this.setState({ stillResizingTimer: setTimeout(this.resizeGraph, 250) });
   }
 
   /**
@@ -153,7 +159,7 @@ class TreeMap extends Component {
               stroke="#ddd"
               fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('meType')}
-              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('meType')} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('meType')} treeMap="meType" />}
               isAnimationActive={false}
               animationDuration={0}
             >
@@ -163,18 +169,6 @@ class TreeMap extends Component {
                 wrapperStyle={{ padding: '4px', zIndex: 1000 }}
               />
             </Treemap>
-            {
-              this.props.meType.map(((meType) => {
-                console.log(meType);
-                return (
-                  <div key={meType.name} className="TESTDIV" style={{ width: '200px', height: '50px', transform: 'translateY(-100px)' }} >
-                    <p style={{ width: '200px', lineHeight: '1.2em', height: '3.6em', overflow: 'hidden', textAlign: 'center' }} >
-                      {meType.name}
-                    </p>
-                  </div>
-                );
-              }))
-            }
           </Paper>
         </div>
       </div>
@@ -196,7 +190,7 @@ class TreeMap extends Component {
               stroke="#ddd"
               fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('product')}
-              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('product')} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('product')} treeMap="product" />}
               isAnimationActive={false}
               animationDuration={0}
             >
@@ -227,7 +221,7 @@ class TreeMap extends Component {
               stroke="#ddd"
               fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('stage')}
-              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('stage')} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('stage')} treeMap="stage" />}
               isAnimationActive={false}
               animationDuration={0}
             >
@@ -258,7 +252,7 @@ class TreeMap extends Component {
               stroke="#ddd"
               fill="url(#colorSevere)"
               onClick={this.handleFilterClickToggle('cause')}
-              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('cause')} />}
+              content={<CustomizedContent highestSeriousCount={this.getMaxSerious('cause')} treeMap="cause" />}
               isAnimationActive={false}
               animationDuration={0}
             >
