@@ -33,10 +33,12 @@ if (os.platform() === 'win32') {
 
 // Connect to the Database on Localhost
 const db = new Client({
-  host: 'localhost',
-    database: 'faers',
-    port: 5432,
-  });
+  user: 'mevuser',
+  host: 'mev.wpi.edu',
+  database: 'faers',
+  password: 'mevmqp',
+  port: '5432'
+});
 
 // Connect to the Database on WPI Server
 // const db = new Client({
@@ -346,7 +348,7 @@ app.post('/getdemographicdata', (req, res) => {
 app.post('/getreports', (req, res) => {
   console.log('got a report request with body:\n ', req.body);
   let query = '';
-  if (req.body.bin === '') {
+  if (req.body.bin === 'all reports') {
     query =
     'WITH bin_pids '
   + 'AS (SELECT get_pid_from_bin as pids '
@@ -393,21 +395,62 @@ app.post('/getreports', (req, res) => {
 
 app.post('/binreport', (req, res) => {
   console.log('got a bin request to move report with body:\n', req.body);
-  let query =
-  'UPDATE bins '
-+ 'SET primaryid = '
-  if (req.body.bin !== '') {
-    query += `bins.primaryid || ${req.body.primaryid} WHERE `;
-    query += `bins.user_id = ${req.body.userID} AND bins.name = '${req.body.bin}'`;    
-  } else {
-    query += `array_remove(bins.primaryid, ${req.body.primaryid}) WHERE `;
-    query += `bins.user_id = ${req.body.userID} AND bins.name = 'trash'`;    
+  toQuery = 'UPDATE bins '
+  + `SET primaryid = bins.primaryid || ${req.body.primaryid} `
+  + `WHERE bins.user_id = ${req.body.userID} AND bins.name = '${req.body.toBin}' `
+  + `AND (bins.primaryid ISNULL OR not (${req.body.primaryid} = any(bins.primaryid)))`;
+    fromQuery = 'UPDATE bins '
+  + `SET primaryid = array_remove(bins.primaryid, ${req.body.primaryid}) `
+  + `WHERE bins.user_id = ${req.body.userID} AND bins.name = '${req.body.fromBin}' `
+
+  if (req.body.toBin === 'trash') {
+    fromQuery = 'UPDATE bins '
+    + `SET primaryid = array_remove(bins.primaryid, ${req.body.primaryid}) `
+    + `WHERE bins.user_id = ${req.body.userID} AND NOT bins.name = '${req.body.toBin}' `
   }
+
+  if ((req.body.toBin === 'trash' || req.body.fromBin !== 'all reports') && req.body.toBin !== 'all reports') {
+    console.log(toQuery, fromQuery);
+    db.query(toQuery, (err, toData) => {
+      db.query(fromQuery, (err, fromData) => {
+        res.status(200).send();
+      });
+    });
+  } else if (req.body.fromBin === 'all reports' && req.body.toBin !== 'all reports') {
+    console.log(toQuery);
+    db.query(toQuery, (err, toData) => {
+        res.status(200).send();
+    });
+  } else if (req.body.fromBin !== 'all reports' && req.body.toBin === 'all reports') {
+    console.log(fromQuery);
+    db.query(fromQuery, (err, fromData) => {
+        res.status(200).send();
+    });
+  }
+});
+
+app.post('/getuserbins', (req, res) => {
+  console.log('got a request to get bins with body:\n', req.body);
+  let query =
+  'SELECT name '
++ 'FROM bins '
++ `WHERE user_id = ${req.body.userID}`;
+  console.log(query);
+  db.query(query, (err, data) => {
+    res.status(200).send(data);
+  });
+})
+
+app.post('/createuserbin', (req, res) => {
+  console.log('got a request to create new bin with body:\n', req.body);
+  let query =
+  'INSERT INTO bins '
++ `VALUES (${req.body.userID}, '${req.body.binName}', null)`;
   console.log(query);
   db.query(query, (err, data) => {
     res.status(200).send();
   });
-});
+})
 
 app.post('/getuserbins', (req, res) => {
   console.log('got a request to get bins with body:\n', req.body);
