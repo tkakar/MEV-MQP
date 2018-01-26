@@ -77,17 +77,22 @@ class Age extends Component {
       graphHeight: '85%',
       stillResizingTimer: '',
     };
-
-    // Listen for window resize, but wait till they have stopped to do the size calculations.
-    window.addEventListener('resize', this.resizeTimer);
   }
 
   componentDidMount() {
     this.resizeGraph();
+
+    // Listen for window resize, but wait till they have stopped to do the size calculations.
+    window.addEventListener('resize', this.resizeTimer);
+
+    // Resize the treemaps when the main-visualization size is changed
+    document.getElementById('DemographicsGrid').addEventListener('transitionend', this.resizeGraph);
   }
 
   componentWillUnmount() {
+    // Remove the event listeners when unmounting
     window.removeEventListener('resize', this.resizeTimer);
+    document.getElementById('DemographicsGrid').removeEventListener('transitionend', this.resizeGraph);
   }
 
   /**
@@ -119,22 +124,30 @@ class Age extends Component {
    * Calculates the best size for the visualization for better scalability
    */
   resizeGraph = () => {
-    const container = document.getElementById('age-container');
-    const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
-    const graphTitle = document.getElementById('age-graph-title');
-    let graphTitleHeight;
-    if (graphTitle) {
-      graphTitleHeight = window.getComputedStyle(graphTitle, null).getPropertyValue('height');
+    if (!this.props.minimized) {
+      const container = document.getElementById('age-container');
+      const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
+      const graphTitle = document.getElementById('age-graph-title');
+      let graphTitleHeight;
+      if (graphTitle) {
+        graphTitleHeight = window.getComputedStyle(graphTitle, null).getPropertyValue('height');
+      }
+      this.setState({
+        graphHeight: (parseInt(containerHeight, 10) - parseInt(graphTitleHeight || 31, 10)) + 15,
+      });
+    } else {
+      const container = document.getElementById('age-container');
+      const containerHeight = window.getComputedStyle(container, null).getPropertyValue('height');
+      this.setState({
+        graphHeight: (parseInt(containerHeight, 10) + 4),
+      });
     }
-    this.setState({
-      graphHeight: (parseInt(containerHeight, 10) - parseInt(graphTitleHeight, 10)) + 10,
-    });
   }
 
   renderMinimized = () => {
     return (
       <div id="age-container" className={this.props.classes.maxHeight} >
-        <ResponsiveContainer className={this.props.classes.responsiveContainerMinimized} width="100%" height={50} >
+        <ResponsiveContainer className={this.props.classes.responsiveContainerMinimized} width="100%" height={this.state.graphHeight} >
           <BarChart
             data={this.props.age}
           >

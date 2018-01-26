@@ -33,12 +33,10 @@ if (os.platform() === 'win32') {
 
 // Connect to the Database on Localhost
 const db = new Client({
-  user: 'mevuser',
-  host: 'mev.wpi.edu',
-  database: 'faers',
-  password: 'mevmqp',
-  port: '5432'
-});
+  host: 'localhost',
+   database: 'faers',
+   port: 5432,
+ });
 
 // Connect to the Database on WPI Server
 // const db = new Client({
@@ -712,9 +710,6 @@ app.get('/update-data', (req, res) => {
             console.log('updating the meType, Stage and Cause columns')
 
             const drugReactions = {};
-            // db.tx((t) => {
-
-            // })
 
             let query = `SELECT primaryid FROM demo limit 100000`
             // console.log(query)
@@ -759,11 +754,11 @@ app.get('/update-data', (req, res) => {
                     if (drugRow.drug_seq > numberOfDrugsForPID) {
                       updateDrugRowQuery =
                         `DELETE FROM drug WHERE primaryid=${pidRow.primaryid} AND drug_seq='${drugRow.drug_seq}';\n`;
-                      // wstream.write(updateDrugRowQuery);
+                      wstream.write(updateDrugRowQuery);
                       // console.log(updateDrugRowQuery);
-                      db.query(updateDrugRowQuery, (err, updatedDrugRows) => {
-                        // console.log('UPDATED Drug')
-                      })
+                      // db.query(updateDrugRowQuery, (err, updatedDrugRows) => {
+                      //   // console.log('UPDATED Drug')
+                      // })
                     } else if (rowIndex < numberOfDrugsForPID){
                       updateDrugRowQuery =
                         `UPDATE drug SET `
@@ -772,10 +767,10 @@ app.get('/update-data', (req, res) => {
                         + `AND drug_seq='${drugRow.drug_seq}';\n`;
                       // console.log(updateDrugRowQuery);
 
-                      // wstream.write(updateDrugRowQuery);
-                      db.query(updateDrugRowQuery, (err, updatedDrugRows) => {
-                        // console.log('UPDATED Drug')
-                      })
+                      wstream.write(updateDrugRowQuery);
+                      // db.query(updateDrugRowQuery, (err, updatedDrugRows) => {
+                      //   // console.log('UPDATED Drug')
+                      // })
 
                       // Generate 1-5 random Reactions for this drug if we haven't already
                       if (!drugReactions[randomDrug]) {
@@ -790,7 +785,7 @@ app.get('/update-data', (req, res) => {
                       // Update the Reactions for this drug and PrimaryID
                       const deleteReactionsForThisPID =
                         `DELETE FROM reac WHERE primaryid=${pidRow.primaryid};\n`;
-                      // wstream.write(deleteReactionsForThisPID);
+                      wstream.write(deleteReactionsForThisPID);
                       // console.log(deleteReactionsForThisPID)
                       db.query(deleteReactionsForThisPID, (err, deleteRows) => {
                         let insertReaction = `INSERT INTO reac (primaryid, caseid, pt, drug_rec_act) VALUES `
@@ -801,10 +796,10 @@ app.get('/update-data', (req, res) => {
                         insertReaction = insertReaction.slice(0, insertReaction.length - 2);
                         insertReaction += `;\n`;
                         // console.log(insertReaction)
-                        // wstream.write(insertReaction)
-                        db.query(insertReaction, (err, insertRows) => {
-                          console.log('INSERTED')
-                        })
+                        wstream.write(insertReaction)
+                        // db.query(insertReaction, (err, insertRows) => {
+                        //   console.log('INSERTED')
+                        // })
                       })
                     }
                   })

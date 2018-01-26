@@ -36,24 +36,23 @@ class TreeMap extends Component {
       treeMapHeight: 155,
       stillResizingTimer: '',
     };
-
-    // Listen for window resize, but wait till they have stopped to do the size calculations.
-    window.addEventListener('resize', this.resizeTimer);
   }
 
   componentDidMount() {
     // Once the screen has loaded, optimize the size of the TreeMap
     this.resizeGraph();
 
+    // Listen for window resize, but wait till they have stopped to do the size calculations.
+    window.addEventListener('resize', this.resizeTimer);
+
     // Resize the treemaps when the main-visualization size is changed
-    document.getElementById('main-visualization').addEventListener('transitionend', () => {
-      this.resizeGraph();
-    });
+    document.getElementById('main-visualization').addEventListener('transitionend', this.resizeGraph);
   }
 
   componentWillUnmount() {
-    // Remove the event listener when unmounting
+    // Remove the event listeners when unmounting
     window.removeEventListener('resize', this.resizeTimer);
+    document.getElementById('main-visualization').removeEventListener('transitionend', this.resizeGraph);
   }
 
   /**

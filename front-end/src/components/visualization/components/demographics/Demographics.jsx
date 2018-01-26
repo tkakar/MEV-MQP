@@ -52,7 +52,9 @@ class Demographics extends Component {
    */
   toggleOverflow = () => {
     if (!this.props.minimized) {
-      document.getElementById('DemographicsGrid').setAttribute('style', 'overflow: visible');
+      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 20vh; overflow: visible;');
+    } else {
+      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 5vh; overflow: visible;');
     }
   }
 
@@ -62,12 +64,11 @@ class Demographics extends Component {
   toggleSize = () => {
     if (!this.props.minimized) {
       this.props.toggleMinimized(true);
-      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 5vh;');
+      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 5vh; overflow: hidden;');
       document.getElementById('MinimizeButton').setAttribute('style', 'top: calc(5% + 25px);');
     } else {
       this.props.toggleMinimized(false);
-      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 20vh;');
-      document.getElementById('DemographicsGrid').setAttribute('style', 'overflow: hidden');
+      document.getElementById('DemographicsGrid').setAttribute('style', 'height: 20vh; overflow: hidden;');
       document.getElementById('MinimizeButton').setAttribute('style', 'top: calc(20% + 25px);');
     }
   }
