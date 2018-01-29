@@ -5,7 +5,7 @@ export default {
     margin: '0px',
     width: '100%',
     'background-color': MEVColors.navBar,
-    zIndex: 100,
+    zIndex: 500,
     border: 'none',
   },
   drawerClass: {
@@ -38,6 +38,12 @@ export default {
     transform: 'translateY(1px)',
     marginLeft: '100px',
     marginRight: '100px',
-    // height: '35px',
+  },
+  TotalCountBox: {
+    padding: '0px',
+    display: 'inline-block',
+    width: '100px',
+    height: '37px',
+    margin: '4px',
   },
 };
