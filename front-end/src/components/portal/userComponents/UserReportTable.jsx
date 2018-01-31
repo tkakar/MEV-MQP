@@ -28,7 +28,7 @@ const styles = {};
 /**
  * This is the component for the Report Table
  */
-class ReportTable extends React.PureComponent {
+class UserReportTable extends React.PureComponent {
   static propTypes = {
     getCaseReports: PropTypes.func.isRequired,
     moveReport: PropTypes.func.isRequired,
@@ -99,26 +99,6 @@ class ReportTable extends React.PureComponent {
       name: 'primaryid',
     },
     {
-      title: 'Case ID',
-      name: 'caseid',
-    },
-    {
-      title: 'Case Version',
-      name: 'caseversion',
-    },
-    {
-      title: 'Age',
-      name: 'age_year',
-    },
-    {
-      title: 'Sex',
-      name: 'sex',
-    },
-    {
-      title: 'Weight',
-      name: 'wt_lb',
-    },
-    {
       title: 'Drugs',
       name: 'drugname',
     },
@@ -140,9 +120,6 @@ class ReportTable extends React.PureComponent {
     primaryid: 80,
     caseid: 80,
     caseversion: 50,
-    age_year: 50,
-    sex: 50,
-    wt_lb: 50,
     drugname: 100,
     me_type: 100,
     outc_cod: 75,
@@ -275,4 +252,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   { moveReport, getCaseReports },
-)(withStyles(styles)(ReportTable));
+)(withStyles(styles)(UserReportTable));
