@@ -14,13 +14,20 @@ import {
   TableRowDetail,
   TableColumnResizing,
 } from '@devexpress/dx-react-grid-material-ui';
+import ExpansionPanel, {
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+} from 'material-ui/ExpansionPanel';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import _ from 'lodash';
 import { moveReport, getCaseReports } from '../../../actions/reportActions';
+import ClearFilterIcon from './RemoveFromCaseIcon';
 import CaseIcon from './CaseIcon';
+import TrashIcon from './TrashIcon';
 import styles from './ReportTableStyles';
 import './ReportTable.css';
 
@@ -76,6 +83,22 @@ class ReportTable extends React.PureComponent {
         me_type: 180,
         outc_cod: 85,
       },
+
+      /**
+       * Custom Sorting Functions
+       */
+      customSorting: [
+        { columnName: 'init_fda_dt', compare: this.sortNumbers },
+        { columnName: 'primaryid', compare: this.sortNumbers },
+        { columnName: 'caseid', compare: this.sortNumbers },
+        { columnName: 'caseversion', compare: this.sortNumbers },
+        { columnName: 'age_year', compare: this.sortNumbers },
+        { columnName: 'sex', compare: this.sortText },
+        { columnName: 'wt_lb', compare: this.sortNumbers },
+        { columnName: 'drugname', compare: this.sortText },
+        { columnName: 'me_type', compare: this.sortText },
+        { columnName: 'outc_cod', compare: this.sortText },
+      ],
     };
   }
 
@@ -176,12 +199,22 @@ class ReportTable extends React.PureComponent {
   };
 
   /**
-   * After 250ms of not resizing, we will then resize the graph (this improves performance)
+   * After 100ms of not resizing, we will then resize the graph (this improves performance)
    */
   resizeTimer = () => {
     clearTimeout(this.state.stillResizingTimer);
     this.setState({ stillResizingTimer: setTimeout(this.resizeTable, 100) });
   }
+
+  /**
+   * Compare functions for strings sorting
+   */
+  sortText = (a, b) => ((a < b) ? -1 : 1)
+
+  /**
+   * Compare functions for number sorting
+   */
+  sortNumbers = (a, b) => ((Number(a) < Number(b)) ? -1 : 1)
 
 
   /**
@@ -212,15 +245,47 @@ class ReportTable extends React.PureComponent {
     });
   }
 
+  renderMoveToIcon = (binName) => {
+    switch (binName) {
+      case 'Trash':
+        return (
+          <div>
+            <TrashIcon />
+            <Typography style={{ display: 'block' }} type="subheading">
+              {binName}
+            </Typography>
+          </div>
+        );
+      case 'All Reports':
+        return (
+          <div>
+            <ClearFilterIcon />
+            <Typography style={{ display: 'block' }} type="subheading">
+              Remove From Case
+            </Typography>
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <CaseIcon width={45} height={45} />
+            <Typography style={{ display: 'block' }} type="subheading">
+              {binName}
+            </Typography>
+          </div>
+        );
+    }
+  }
+
   /**
    * Defines the html content inside each expandable dropdown area for each row
    * of the table
    */
-  detailRowContent = row => (
+  renderDetailRowContent = row => (
     <div>
-      <Paper elevation={6} style={{ backgroundColor: '#fefefe', width: 'fit-content', display: 'inline-block', transform: 'translateY(-20%)' }} >
+      <Paper elevation={6} style={{ width: 'fit-content', display: 'inline-block', transform: 'translateY(-20%)' }} >
         <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
-          <Button raised style={{ margin: 4 }} className="cal-button" color="primary">Go to report text</Button>
+          <Button raised className="cal-button" color="primary">Go to report text</Button>
         </Link>
       </Paper>
       <div className={this.props.classes.sendToCaseContainer}>
@@ -229,23 +294,34 @@ class ReportTable extends React.PureComponent {
         </Typography>
         <Paper elevation={6} className={this.props.classes.moveToCaseDetailsContainer} >
           {this.props.bins.map((binName, index) => (
-            <Button
-              flat="true"
-              key={binName}
-              className={this.props.classes.caseGridList}
-              onClick={() => {
-                this.handleMoveReport(row.row.primaryid, this.props.bins[index].toLowerCase());
-              }}
-            >
-              <div>
-                <CaseIcon width={45} height={45} />
-                <Typography style={{ display: 'block' }} type="subheading">
-                  {binName}
-                </Typography>
-              </div>
-            </Button>
+            (this.props.bin.toLowerCase() !== binName.toLowerCase())
+              ? (
+                <Button
+                  flat="true"
+                  key={binName}
+                  className={this.props.classes.caseGridList}
+                  onClick={() => {
+                    this.handleMoveReport(row.row.primaryid, this.props.bins[index].toLowerCase());
+                  }}
+                >
+                  {this.renderMoveToIcon(binName)}
+                </Button>
+              )
+            : null
           ))}
         </Paper>
+      </div>
+      <div style={{ marginTop: '10px' }}>
+        <ExpansionPanel elevation={6}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography type="subheading">Quickly Annotate Narrative</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <Typography>
+              Put Quill here!
+            </Typography>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
       </div>
     </div>
   )
@@ -270,7 +346,9 @@ class ReportTable extends React.PureComponent {
                   { columnName: 'Event Date', direction: 'asc' },
                 ]}
               />
-              <IntegratedSorting />
+              <IntegratedSorting
+                columnExtensions={this.state.customSorting}
+              />
               <VirtualTable height={this.state.tableHeight} />
               <TableColumnResizing
                 columnWidths={this.state.widths}
@@ -279,7 +357,7 @@ class ReportTable extends React.PureComponent {
               <TableHeaderRow showSortingControls />
               <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
               <TableRowDetail
-                contentComponent={this.detailRowContent}
+                contentComponent={this.renderDetailRowContent}
               />
             </Grid>
             )
