@@ -13,6 +13,7 @@ import _ from 'lodash';
 import Button from 'material-ui/Button';
 import { getReportNarrativeFromID } from '../../actions/reportActions';
 import styles from './NarrativeAnnotatorStyles';
+import legendImage from './images/legend.png';
 import './NarrativeAnnotator.css';
 
 class NarrativeAnnotator extends Component {
@@ -199,7 +200,9 @@ class NarrativeAnnotator extends Component {
 
   render() {
     return (
-      <div className={this.props.classes.pdfView}>
+      <div className={`${this.props.classes.pdfView} container`}>
+      <div className="row">
+      <div className="col-sm-8">
         <h1>PDF View</h1>
 
         {/* ====== Quil editor for Annotating the Report Text ====== */}
@@ -232,6 +235,14 @@ class NarrativeAnnotator extends Component {
               size={24}
               className={this.props.classes.buttonProgress}
             />}
+        </div>
+        </div>
+        <div className="col-sm-4">
+        <h1>Legend</h1>
+        <Paper elevation={4} className={`${this.props.classes.legend}`}>
+          <img src={legendImage} className="img-responsive" />
+        </Paper>
+        </div>
         </div>
 
         {/* ====== Snackbar for Notificaitons to the User ====== */}
