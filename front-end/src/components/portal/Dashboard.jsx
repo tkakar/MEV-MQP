@@ -84,12 +84,13 @@ class Dashboard extends Component {
         const active = {};
         bins.forEach((bin, i) => active[bin.name] = bin.active);
         const userBins = bins.map(bin => this.toTitleCase(bin.name)).sort();
+        const defaultCase = (bins[0]) ? bins[0].name : '';
         console.log(active);
         this.setState({
           userBins,
           binDescs: descs,
           binActives: active,
-          case: bins[0].name,
+          case: defaultCase,
         });
       });
   }
