@@ -94,18 +94,18 @@ export default {
   // severeDark: '#04569E',
   // severeStroke: '#034885',
 
-  // Brown and Light Brown
-  navBar: '#7A4B00',
-  navBarSlide: '#AB7B46',
-  buttonLight: '#7A4B00',
-  buttonHover: '#AB7B46',
-  notSevereLight: '#C9A961',
-  notSevereDark: '#C4A55F',
-  notSevereStroke: '#B59858',
-  middleOfGradient: '',
-  severeLight: '#7A4B00',
-  severeDark: '#704500',
-  severeStroke: '#633D00',
+  // // Brown and Light Brown
+  // navBar: '#7A4B00',
+  // navBarSlide: '#AB7B46',
+  // buttonLight: '#7A4B00',
+  // buttonHover: '#AB7B46',
+  // notSevereLight: '#C9A961',
+  // notSevereDark: '#C4A55F',
+  // notSevereStroke: '#B59858',
+  // middleOfGradient: '',
+  // severeLight: '#7A4B00',
+  // severeDark: '#704500',
+  // severeStroke: '#633D00',
 
   // Blue and Brown
   // navBar: '#0458A1',
@@ -119,4 +119,17 @@ export default {
   // severeLight: '#915900',
   // severeDark: '#7F4E00',
   // severeStroke: '#543400',
+
+  // GOOD THEME
+  navBar: '#e4521B',
+  navBarSlide: '#e4521B',
+  buttonLight: '#e4521B',
+  buttonHover: '#feeb65',
+  notSevereLight: '#feeb65',
+  notSevereDark: '#f67d28',
+  notSevereStroke: '#ed5f1f',
+  middleOfGradient: '',
+  severeLight: '#e4521B',
+  severeDark: '#4d342f',
+  severeStroke: '#4a332f',
 };
