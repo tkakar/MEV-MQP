@@ -154,7 +154,7 @@ export default {
   notSevereLight: '#fdb89d',
   notSevereDark: '#fb9b95',
   notSevereStroke: '#f6768c',
-  middleOfGradient: '',
+  middleOfGradient: '#e34d85',
   severeLight: '#621895',
   severeDark: '#4a117a',
   severeStroke: '#340b59',
