@@ -50,9 +50,13 @@ class Timeline extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // Loads the Timeline Data into redux state to be used in the Timeline component
     this.props.getEntireTimeline();
+  }
+
+  componentDidMount() {
+    this.updateSelectedDate()('');
   }
 
   /**
