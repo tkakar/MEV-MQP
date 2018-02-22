@@ -53,16 +53,16 @@
 | |____reducers  
 
 ## Working on the Visualization page
-Assets for the visualization page exist within the visualization folder src/components/visualization.
+Assets for the visualization page exist within the visualization folder src/components/visualization.  
 visualization/App.js uses the components for the treemaps, demographics, and timeline which assets are each in their respective folder inside visualization/components.
 
 ## Working on the Reports Listing page
-Assets for the reports listing page exist within the reports folder src/components/reports.
+Assets for the reports listing page exist within the reports folder src/components/reports.  
 reports/ReportsList.jsx uses the components for the report listing grid which assets are all contained in teh folder reports/components.
 
 ## Working on the Narrative Editor page
-All assets for the narrative editor page exist within the editor folder src/components/editor
+All assets for the narrative editor page exist within the editor folder src/components/editor   
 
 ## Working on the Login page, About page, or Dashboard page
-All assets for these pages exist within the portal folder src/components/portal
+All assets for these pages exist within the portal folder src/components/portal   
 Assets for the dashboard page exist inside the portal/userComponents folder.
