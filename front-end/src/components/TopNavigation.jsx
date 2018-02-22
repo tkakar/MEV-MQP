@@ -58,8 +58,56 @@ class TopNavigation extends Component {
                   </div>
                   <Divider style={{ backgroundColor: 'rgb(255,255,255)' }} />
                   <List>
+                    <Link to="/dashboard" className={this.props.classes.listLink}>
+                      <ListItem button >
+                        <ListItemText
+                          disableTypography
+                          primary={
+                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
+                            Dashboard
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    </Link>
+                    <Link to="/visualization" className={this.props.classes.listLink}>
+                      <ListItem button >
+                        <ListItemText
+                          disableTypography
+                          primary={
+                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
+                            Visualizations
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    </Link>
+                    <Link to="/report" className={this.props.classes.listLink}>
+                      <ListItem button >
+                        <ListItemText
+                          disableTypography
+                          primary={
+                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
+                            Reports
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    </Link>
+                    <Link to="/about" className={this.props.classes.listLink}>
+                      <ListItem button >
+                        <ListItemText
+                          disableTypography
+                          primary={
+                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
+                            About
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    </Link>
                     {!this.props.isLoggedIn ? (
-                      <Link to="/login" className={this.props.classes.listLink}>
+                      <Link to="/" className={this.props.classes.listLink}>
                         <ListItem button >
                           <ListItemText
                             disableTypography
@@ -86,54 +134,6 @@ class TopNavigation extends Component {
                       </Link>
                     )
                     }
-                    <Link to="/dashboard" className={this.props.classes.listLink}>
-                      <ListItem button >
-                        <ListItemText
-                          disableTypography
-                          primary={
-                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
-                            Dashboard
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </Link>
-                    <Link to="/" className={this.props.classes.listLink}>
-                      <ListItem button >
-                        <ListItemText
-                          disableTypography
-                          primary={
-                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
-                            Visualizations
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </Link>
-                    <Link to="/about" className={this.props.classes.listLink}>
-                      <ListItem button >
-                        <ListItemText
-                          disableTypography
-                          primary={
-                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
-                            About
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </Link>
-                    <Link to="/report" className={this.props.classes.listLink}>
-                      <ListItem button >
-                        <ListItemText
-                          disableTypography
-                          primary={
-                            <Typography style={{ fontSize: '16px', color: '#fff' } }>
-                            Reports
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </Link>
                   </List>
                   <Divider style={{ backgroundColor: 'rgb(255,255,255)' }} />
                 </div>

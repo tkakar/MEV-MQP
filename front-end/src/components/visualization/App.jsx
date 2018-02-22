@@ -34,15 +34,22 @@ class App extends Component {
     setCurrentlySelecting: PropTypes.func.isRequired,
     timelineMinimized: PropTypes.bool.isRequired,
     demographicsMinimized: PropTypes.bool.isRequired,
+    isLoggedIn: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
     }).isRequired,
   }
 
+  componentWillMount() {
+    if (!this.props.isLoggedIn) {
+      window.location = '/';
+    }
+  }
+  
   componentDidMount() {
     window.addEventListener('keydown', this.setSelectingBool);
     window.addEventListener('keyup', this.removeSelectingBool);
   }
-
+  
   componentWillUnmount() {
     window.removeEventListener('keydown', this.setSelectingBool);
     window.removeEventListener('keyup', this.removeSelectingBool);
@@ -111,6 +118,7 @@ class App extends Component {
 const mapStateToProps = state => ({
   timelineMinimized: state.timeline.timelineMinimized,
   demographicsMinimized: state.demographic.demographicsMinimized,
+  isLoggedIn: state.user.isLoggedIn,
 });
 
 /**
