@@ -23,34 +23,34 @@
 8. Naviate to outermost folder
 9. Run ```npm start``` to start the application
 
-## Project Layout
-|-back-end
-|-front-end
-|---public
-|____src
-| |____resources
-| |____components
-| | |____visualization
-| | | |____components
-| | | | |____demographics
-| | | | | |____components
-| | | | | | |____components
-| | | | |____timeline
-| | | | | |____components
-| | | | | | |____components
-| | | | |____treeMap
-| | | | | |____components
-| | |____portal
-| | | |____images
-| | | |____userComponents
-| | |____cases
-| | |____components
-| | |____editor
-| | | |____images
-| | |____reports
-| | | |____components
-| |____actions
-| |____reducers
+## Project Layout  
+|-back-end  
+|-front-end  
+|---public  
+|____src  
+| |____resources  
+| |____components  
+| | |____visualization  
+| | | |____components  
+| | | | |____demographics  
+| | | | | |____components  
+| | | | | | |____components  
+| | | | |____timeline  
+| | | | | |____components  
+| | | | | | |____components  
+| | | | |____treeMap  
+| | | | | |____components  
+| | |____portal  
+| | | |____images  
+| | | |____userComponents  
+| | |____cases  
+| | |____components  
+| | |____editor  
+| | | |____images  
+| | |____reports  
+| | | |____components  
+| |____actions  
+| |____reducers  
 
 ## Working on the Visualization page
 Assets for the visualization page exist within the visualization folder src/components/visualization.
