@@ -25,6 +25,7 @@ class Timeline extends Component {
         not_serious: PropTypes.number.isRequired,
       }),
     ).isRequired,
+    demographicSexData: PropTypes.array.isRequired,
     classes: PropTypes.shape({
       minimizeButton: PropTypes.string,
       timelineContainer: PropTypes.string,
@@ -56,7 +57,12 @@ class Timeline extends Component {
   }
 
   componentDidMount() {
-    this.updateSelectedDate()('');
+    console.log(this.props.demographicSexData)
+    if (this.props.demographicSexData.length === 0) {
+      console.log('has no sex DATA!!!');
+      this.updateDateRangePickerTextBox('03/16/2017 - 03/31/2017');
+      this.updateSelectedDate()('');
+    }
   }
 
   /**
@@ -213,6 +219,7 @@ class Timeline extends Component {
 
 const mapStateToProps = state => ({
   entireTimelineData: state.timeline.entireTimelineData,
+  demographicSexData: state.demographic.sex,
 });
 
 /**

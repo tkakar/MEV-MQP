@@ -8,4 +8,11 @@ import timeline from './timelineReducer';
 /**
  * Redux Reducer that combines all of the other reducers to build the Redux State
  */
-export default { demographic, filters, multiSelectFilters, mainVisualization, timeline, user };
+export default {
+  demographic,
+  filters,
+  multiSelectFilters,
+  mainVisualization,
+  timeline,
+  user,
+};
