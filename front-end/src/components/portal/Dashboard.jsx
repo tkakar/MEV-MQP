@@ -143,7 +143,7 @@ class Dashboard extends Component {
     this.props.getUserActiveCasesCount(this.props.userID)
       .then((bins) => {
         console.log('active bins', bins);
-        this.setState({ activeBinNumbers: (bins - 1) });
+        this.setState({ activeBinNumbers: (bins - 2) });
       });
   }
   getTrashValue() {

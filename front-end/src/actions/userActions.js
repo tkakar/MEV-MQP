@@ -66,6 +66,18 @@ export const makeUserTrash = userID => () => {
   fetch('http://localhost:3001/makeusertrash', fetchData);
 };
 
+export const makeUserRead = userID => () => {
+  const fetchData = {
+    method: 'PUT',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userID }),
+  };
+  fetch('http://localhost:3001/makeuserread', fetchData);
+};
+
 export const getUserInactiveCasesCount = userID => () => {
   const fetchData = {
     method: 'POST',
