@@ -143,14 +143,14 @@ class QuillEditor extends Component {
   }
 
   handleChange = (value) => {
-    const greenRe = `background-color: ${annotationColors.drug};`;
-    const blueRe = `background-color: ${annotationColors.reaction};`;
-    const orangeRe = `background-color: ${annotationColors.dosage};`;
-    const yellowRe = `background-color: ${annotationColors.age};`;
-    const pinkRe = `background-color: ${annotationColors.sex};`;
-    const purpleRe = `background-color: ${annotationColors.weight};`;
-    const silverRe = `background-color: ${annotationColors.indication};`;
-    const cyanRe = `background-color: ${annotationColors.interesting};`;
+    const drugRE = `background-color: ${annotationColors.drug};`;
+    const reactionRE = `background-color: ${annotationColors.reaction};`;
+    const dosageRE = `background-color: ${annotationColors.dosage};`;
+    const ageRE = `background-color: ${annotationColors.age};`;
+    const sexRE = `background-color: ${annotationColors.sex};`;
+    const weightRE = `background-color: ${annotationColors.weight};`;
+    const indicationRE = `background-color: ${annotationColors.indication};`;
+    const interestingRE = `background-color: ${annotationColors.interesting};`;
     const newTags = {};
 
     const spans = document.getElementById('react-quill')
@@ -159,42 +159,42 @@ class QuillEditor extends Component {
 
     for (let i = 0; i < spans.length; i += 1) {
       switch (spans[i].getAttribute('style')) {
-        case greenRe:
+        case drugRE:
           newTags.drug = (newTags.drug)
             ? newTags.drug.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case blueRe:
+        case reactionRE:
           newTags.reaction = (newTags.reaction)
             ? newTags.reaction.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case orangeRe:
+        case dosageRE:
           newTags.dosage = (newTags.dosage)
             ? newTags.dosage.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case yellowRe:
+        case ageRE:
           newTags.age = (newTags.age)
             ? newTags.age.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case pinkRe:
+        case sexRE:
           newTags.sex = (newTags.sex)
             ? newTags.sex.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case purpleRe:
+        case weightRE:
           newTags.weight = (newTags.weight)
             ? newTags.weight.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case silverRe:
+        case indicationRE:
           newTags.indication = (newTags.indication)
             ? newTags.indication.concat(spans[i].innerText)
             : [spans[i].innerText];
           break;
-        case cyanRe:
+        case interestingRE:
           newTags.interesting = (newTags.interesting)
             ? newTags.interesting.concat(spans[i].innerText)
             : [spans[i].innerText];

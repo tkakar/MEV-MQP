@@ -241,19 +241,19 @@ class ReportTable extends React.PureComponent {
 
   updateHighlightedRows = () => {
     this.props.getReportsInCases(this.props.userID)
-      .then(primaryids => {
+      .then((primaryids) => {
         this.setState({
-        currentlyInCase: primaryids.reduce((acc, row) => {
-          const caseNames = (acc[row.primaryid])
-            ? acc[row.primaryid].concat(row.name)
-            : [row.name];
-          return ({
-            ...acc,
-            [row.primaryid]: caseNames,
-          });
-        }, {}),
+          currentlyInCase: primaryids.reduce((acc, row) => {
+            const caseNames = (acc[row.primaryid])
+              ? acc[row.primaryid].concat(row.name)
+              : [row.name];
+            return ({
+              ...acc,
+              [row.primaryid]: caseNames,
+            });
+          }, {}),
+        });
       });
-    });
   }
 
   /**
@@ -285,7 +285,7 @@ class ReportTable extends React.PureComponent {
    * Sends a backend request to move a report from one bin to another
    */
   handleMoveReport = (primaryid, toBin, type) => {
-    this.props.moveReport(primaryid, this.props.bin, toBin, this.props.userID, type ? "primary" : "support")
+    this.props.moveReport(primaryid, this.props.bin, toBin, this.props.userID, type ? 'primary' : 'supportive')
       .then(() =>
         this.props.getCaseReports(this.props.bin, this.props.userID)
           .then(reports => this.setState({ data: reports }))
@@ -321,7 +321,7 @@ class ReportTable extends React.PureComponent {
    * if the report is in any case for the current user
    */
   TableRow = ({ row, ...props }) => {
-    let incase = this.state.currentlyInCase[props.tableRow.rowId];
+    const incase = this.state.currentlyInCase[props.tableRow.rowId];
     const backgroundColor =
       (incase && this.props.bin === 'all reports')
         ? (incase.includes('read') && incase.length) === 1 ? 'RGBA(211,211,211, 0.2)' : 'RGBA(131, 255, 168, 0.2)'
@@ -335,6 +335,10 @@ class ReportTable extends React.PureComponent {
       />
     );
   };
+
+  handleToggleChange = primaryid => (event) => {
+    this.setState({ [primaryid]: event.target.checked });
+  }
 
   renderMoveToIcon = (binName, greyOutCaseIcon) => {
     switch (binName) {
@@ -370,36 +374,38 @@ class ReportTable extends React.PureComponent {
     }
   }
 
-  handleToggleChange = (primaryid) => event => {
-    this.setState({ [primaryid]: event.target.checked });
-  }
-
   /**
    * Defines the html content inside each expandable dropdown area for each row
    * of the table
    */
   renderDetailRowContent = row => (
     <div className={(this.props.summaryOpen) ? this.props.classes.smallDetailRow : this.props.classes.largeDetailRow} >
-    <div className="col-sm-3" style={{ marginBottom: '15px',}}>
-    <Paper elevation={6} style={{ padding: '5px', }} >
-    <div class="col-sm-12">
-    { this.props.bin === 'all reports' ? 
-          <FormControlLabel style={{  }}
-            control={
-              <Switch 
-                checked={this.state[row.row.primaryid]} 
-                onChange={this.handleToggleChange(row.row.primaryid)} 
-                color="primary" />}
-            label="Primary Evidence" />
-        : null}
-        </div>
-        <div class="col-sm-12">
-        <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
-          <Button raised className="cal-button" color="primary">Go to report text</Button>
-        </Link>
-        </div>
-        <div style={{ clear: 'both', float: 'none' }}>&nbsp;</div>
-      </Paper>
+      <div className="col-sm-3" style={{ marginBottom: '15px' }}>
+        <Paper elevation={6} style={{ padding: '5px' }} >
+          <div className="col-sm-12">
+            { 
+              (this.props.bin === 'all reports')
+              ? (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      // checked={this.state[row.row.primaryid]}
+                      onChange={this.handleToggleChange(row.row.primaryid)}
+                      color="primary"
+                    />
+                  }
+                  label="Primary Evidence"
+                />)
+              : null
+            }
+          </div>
+          <div className="col-sm-12">
+            <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
+              <Button raised className="cal-button" color="primary">Go to report text</Button>
+            </Link>
+          </div>
+          <div style={{ clear: 'both', float: 'none' }}>&nbsp;</div>
+        </Paper>
       </div>
       <div className={`${this.props.classes.sendToCaseContainer} col-sm-9`}>
         <Typography style={{ position: 'absolute', fontSize: '14px', transform: 'translateX(3px) translateY(3px)' }} type="button">
@@ -417,7 +423,7 @@ class ReportTable extends React.PureComponent {
                     this.handleMoveReport(
                       row.row.primaryid,
                       this.props.bins[index].name.toLowerCase(),
-                      this.state[row.row.primaryid]
+                      this.state[row.row.primaryid],
                     );
                   }}
                 >
@@ -431,7 +437,7 @@ class ReportTable extends React.PureComponent {
           ))}
         </Paper>
       </div>
-      <div style={{ marginTop: '10px' }} className={`col-sm-12`}>
+      <div style={{ marginTop: '10px' }} className="col-sm-12">
         <ExpansionPanel elevation={6}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography type="subheading">Preview Narrative</Typography>

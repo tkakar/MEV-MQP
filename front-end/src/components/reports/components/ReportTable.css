@@ -1,7 +1,5 @@
 /* This sets the background of the Expanded Details Row */
 td[class*='TableDetailCell-'] {
   background: repeating-linear-gradient( -55deg, #fafafa 0px, #fafafa 30px, #f1f1f1 30px, #f1f1f1 50px);
-}
-.ReportTable-largeDetailRow-200 {
-  padding: 0px !important;
+  padding: 12px 24px;
 }

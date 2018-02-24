@@ -74,7 +74,7 @@ class TopNavigation extends Component {
                   onKeyDown={this.toggleDrawer('left', false)}
                 >
                   <div className={this.props.classes.drawerHeader}>
-                    <h2>Hello, welcome!</h2>
+                    <h2>Navigation Panel</h2>
                   </div>
                   <Divider style={{ backgroundColor: 'rgb(255,255,255)' }} />
                   <List>

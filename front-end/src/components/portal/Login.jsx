@@ -47,6 +47,12 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.isLoggedIn) {
+      window.location = '/visualization';
+    }
+  }
+
   saveUser = () => {
     const fetchData = {
       method: 'PUT',
@@ -103,7 +109,6 @@ class Login extends Component {
               } else {
                 this.props.makeUserTrash(user.rows[0].user_id);
               }
-              console.log('yo whatup')
               this.props.checkUserRead(user.rows[0].user_id)
                 .then((readFound) => {
                   if (readFound) {
@@ -125,12 +130,6 @@ class Login extends Component {
           console.log('userid', this.props.userID);
         }
       });
-  }
-
-  componentDidMount() {
-    if (this.props.isLoggedIn) {
-      window.location = '/visualization';
-    }
   }
 
   render() {
