@@ -162,7 +162,6 @@ class ReportList extends Component {
     const binName = document.getElementById('newCaseName').value.toLowerCase().trim();
     const binDesc = document.getElementById('newCaseDesc').value.trim();
     if (binName !== '' && !(this.state.userBins.filter(bin => bin.name.toLowerCase() === binName).length)) {
-      console.log('inside')
       this.props.createUserBin(this.props.userID, binName, binDesc)
         .then((newCaseID) => {
           this.setState({

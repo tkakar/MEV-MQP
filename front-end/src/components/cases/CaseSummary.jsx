@@ -49,8 +49,8 @@ class CaseSummary extends Component {
     this.props.getTagsinCase(this.props.caseID)
       .then((tags) => {
         const combinedTags = tags.reduce((acc, row) => {
-          Object.keys(row.tags).forEach((key) => {
-            acc[key] = (acc[key]) ? acc[key].concat(row.tags[key]) : row.tags[key];
+          Object.keys(JSON.parse(row.tags)).forEach((key) => {
+            acc[key] = (acc[key]) ? acc[key].concat(JSON.parse(row.tags)[key]) : JSON.parse(row.tags)[key];
           });
           return acc;
         }, {});

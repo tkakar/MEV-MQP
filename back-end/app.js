@@ -654,10 +654,10 @@ app.put('/archivecase', (req, res) => {
 
 app.put('/savereporttext', (req, res) => {
   console.log('got a save report text request');
-  tags = JSON.stringify(req.body.tags) === '{}' ? 'null' : '\'' + JSON.stringify(req.body.tags) + '\'';
+  tags = JSON.stringify(req.body.tags) === '{}' ? 'null' : JSON.stringify(req.body.tags);
   let query =
   'UPDATE reports '
-+ 'SET report_text = $$' + req.body.text + '$$, tags = (' + tags + ') '
++ 'SET report_text = $$' + req.body.text + '$$, tags = $$' + tags + '$$ '
 + 'WHERE primaryid = ' + req.body.primaryid;
   console.log(query)
   db.query(query, (err, data) => {
