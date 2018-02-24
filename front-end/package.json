@@ -42,10 +42,14 @@
     "webpack": "3.7.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "startLocal": "npm run env:devLocal && react-scripts start",
+    "start": "npm run env:devRemote && react-scripts start",
+    "build": "npm run env:deploy && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .js --ext .jsx src test"
+    "lint": "eslint --ext .js --ext .jsx src test",
+    "env:devLocal": "cp environments/devLocal.env .env",
+    "env:devRemote": "cp environments/devRemote.env .env",
+    "env:deploy": "cp environments/deploy.env .env"
   }
 }

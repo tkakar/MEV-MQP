@@ -62,7 +62,7 @@ class Login extends Component {
       },
       body: JSON.stringify({ email: this.state.email }),
     };
-    fetch('http://localhost:3001/saveuser', fetchData)
+    fetch(`${process.env.REACT_APP_NODE_SERVER}/saveuser`, fetchData)
       .then(() => {
         this.setState({
           type: 'success',
@@ -97,7 +97,7 @@ class Login extends Component {
       },
       body: JSON.stringify({ email: this.state.email }),
     };
-    fetch('http://localhost:3001/getuser', fetchData)
+    fetch(`${process.env.REACT_APP_NODE_SERVER}/getuser`, fetchData)
       .then(response => response.json())
       .then((user) => {
         if (user.rows.length > 0) {

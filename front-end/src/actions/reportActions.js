@@ -12,7 +12,7 @@ export const getUserCases = userID => () => {
       userID,
     }),
   };
-  return fetch('http://localhost:3001/getusercases', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getusercases`, fetchData)
     .then(response => response.json())
     .then(bins => (bins.rows || []))
     .catch((err) => {
@@ -37,7 +37,7 @@ export const createUserBin = (userID, binName, binDesc) => () => {
       binDesc,
     }),
   };
-  return fetch('http://localhost:3001/createuserbin', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/createuserbin`, fetchData)
     .then(response => response.json())
     .then((bins) => {
       if (bins.rows[0]) {
@@ -66,7 +66,7 @@ export const moveReport = (primaryid, fromBin, toBin, userID, type) => () => {
       type,
     }),
   };
-  return fetch('http://localhost:3001/binreport', fetchData);
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/binreport`, fetchData);
 };
 
 /**
@@ -85,7 +85,7 @@ export const getCaseNameByID = caseID => () => {
     }),
   };
 
-  return fetch('http://localhost:3001/getcasename', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getcasename`, fetchData)
     .then(response => response.json())
     .then(reports => (reports.rows ? reports.rows : []));
 };
@@ -124,7 +124,7 @@ export const getCaseReports = (bin, userID, filters) => (dispatch, getState) => 
     }),
   };
 
-  return fetch('http://localhost:3001/getreports', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getreports`, fetchData)
     .then(response => response.json())
     .then(reports => (reports.rows ? reports.rows : []));
 };
@@ -143,7 +143,7 @@ export const getReportNarrativeFromID = primaryid => () => {
     body: JSON.stringify({ primaryid }),
   };
 
-  return fetch('http://localhost:3001/getreporttext', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getreporttext`, fetchData)
     .then(response => response.json())
     .then(report => report.rows)
     .catch(err => console.log('Failed to retrieve report text', err));
@@ -167,7 +167,7 @@ export const getReportsInCases = (userID, caseName) => () => {
     }),
   };
 
-  return fetch('http://localhost:3001/getreportsincases', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getreportsincases`, fetchData)
     .then(response => response.json())
     .then(response => (response.rows ? response.rows : []))
     .catch(err => console.log('Failed to retrieve reports in Cases', err));
@@ -189,7 +189,7 @@ export const getTagsinCase = caseID => () => {
     }),
   };
 
-  return fetch('http://localhost:3001/getcasetags', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getcasetags`, fetchData)
     .then(response => response.json())
     .then(response => (response.rows ? response.rows : []))
     .catch(err => console.log('Failed to retrieve tags in that case', err));
@@ -209,5 +209,5 @@ export const archiveCase = (name, active, userID) => () => {
     }),
   };
 
-  return fetch('http://localhost:3001/archivecase', fetchData);
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/archivecase`, fetchData);
 };

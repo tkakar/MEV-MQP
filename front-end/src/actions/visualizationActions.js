@@ -17,7 +17,7 @@ export const getVisData = queryParams => (dispatch) => {
     }),
   };
 
-  fetch('http://localhost:3001/getvis', fetchData)
+  fetch(`${process.env.REACT_APP_NODE_SERVER}/getvis`, fetchData)
     .then(response => response.json())
     .then((allReports) => {
       const visData = {

@@ -153,7 +153,8 @@ export const getDemographicData = queryParams => (dispatch) => {
     }),
   };
 
-  fetch('http://localhost:3001/getdemographicdata', fetchData)
+
+  fetch(`${process.env.REACT_APP_NODE_SERVER}/getdemographicdata`, fetchData)
     .then(response => response.json())
     .then((allReports) => {
       const reducedData = reduceData(allReports.rows);

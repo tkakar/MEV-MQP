@@ -130,7 +130,7 @@ class QuillEditor extends Component {
         }),
       };
 
-      fetch('http://localhost:3001/savereporttext', fetchData)
+      fetch(`${process.env.REACT_APP_NODE_SERVER}/savereporttext`, fetchData)
         .then(() => {
           this.setState({
             saved: this.state.current,

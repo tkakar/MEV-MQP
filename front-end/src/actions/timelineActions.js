@@ -11,8 +11,8 @@ export const getEntireTimeline = () => (dispatch) => {
       'Content-Type': 'application/json',
     },
   };
-
-  fetch('http://localhost:3001/gettimelinedata', fetchData)
+  
+  fetch(`${process.env.REACT_APP_NODE_SERVER}/gettimelinedata`, fetchData)
     .then(response => response.json())
     .then((allReports) => {
       console.log('Got timeline');

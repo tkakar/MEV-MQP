@@ -35,8 +35,10 @@ if (os.platform() === 'win32') {
 // Connect to the Database on Localhost
 // const db = new Client({
 //   host: 'localhost',
-//    database: 'faers',
-//    port: 5432,
+//   user: 'mevuser',
+//   database: 'faers',
+//   password: 'mevmqp',
+//   port: 5432,
 //  });
 
 //Connect to the Database on WPI Server
@@ -64,9 +66,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  console.log('got a request')
-  res.status(200).send({});
+app.use(express.static('build/'));
+
+const options = {
+  root: __dirname + '/',
+}
+
+app.get('*', (req, res) => {
+  res.sendFile('build/index.html', options, (err) => {
+    if (err) {
+      console.log(err)
+    }
+  });
 })
 
 /**

@@ -16,7 +16,7 @@ export const checkUserTrash = userID => () => {
     body: JSON.stringify({ userID }),
   };
 
-  return fetch('http://localhost:3001/getusertrash', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getusertrash`, fetchData)
     .then(response => response.json())
     .then((bins) => {
       console.log('Checking for user', bins);
@@ -40,7 +40,7 @@ export const checkUserRead = userID => () => {
     body: JSON.stringify({ userID }),
   };
 
-  return fetch('http://localhost:3001/getuserread', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getuserread`, fetchData)
     .then(response => response.json())
     .then((bins) => {
       console.log('Checking for user', bins);
@@ -63,7 +63,7 @@ export const makeUserTrash = userID => () => {
     },
     body: JSON.stringify({ userID }),
   };
-  fetch('http://localhost:3001/makeusertrash', fetchData);
+  fetch(`${process.env.REACT_APP_NODE_SERVER}/makeusertrash`, fetchData);
 };
 
 export const makeUserRead = userID => () => {
@@ -75,7 +75,7 @@ export const makeUserRead = userID => () => {
     },
     body: JSON.stringify({ userID }),
   };
-  fetch('http://localhost:3001/makeuserread', fetchData);
+  fetch(`${process.env.REACT_APP_NODE_SERVER}/makeuserread`, fetchData);
 };
 
 export const getUserInactiveCasesCount = userID => () => {
@@ -88,7 +88,7 @@ export const getUserInactiveCasesCount = userID => () => {
     body: JSON.stringify({ userID }),
   };
 
-  return fetch('http://localhost:3001/getinactivecases', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getinactivecases`, fetchData)
     .then(response => response.json())
     .then((bins) => {
       if (bins.rows[0]) {
@@ -106,7 +106,7 @@ export const getUserActiveCasesCount = userID => () => {
     },
     body: JSON.stringify({ userID }),
   };
-  return fetch('http://localhost:3001/getactivecases', fetchData)
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/getactivecases`, fetchData)
     .then(response => response.json())
     .then((bins) => {
       if (bins.rows[0]) {
