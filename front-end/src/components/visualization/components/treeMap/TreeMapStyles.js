@@ -1,12 +1,17 @@
 export default {
   mainVisualization: {
-    height: 'calc(65vh - 52px)',
+    height: 'calc(66vh - 52px)',
     margin: 'auto',
-    padding: '10px 10px 0px 10px',
+    padding: '10px 10px 10px 10px',
     transition: 'height 200ms ease-in-out',
   },
+  treemapLabel: {
+    margin: '10px 0px 0px 0px',
+    fontWeight: 'bold',
+  },
   treemapVisualization: {
-    height: '25%',
+    marginBottom: '15',
+    height: 'calc(25% - 30px)',
     overflow: 'visible',
     display: 'block',
   },

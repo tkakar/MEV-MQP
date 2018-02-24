@@ -48,6 +48,29 @@ export default {
     marginLeft: '100px',
     marginRight: '100px',
   },
+  filterPaper: {
+    padding: '0px',
+    display: 'inline-block',
+    width: '100px',
+    height: '100%',
+    margin: '4px',
+    transform: 'translateY(5px)',
+  },
+  clearFilterChip: {
+    'font-size': '9pt',
+    height: '14pt',
+    position: 'absolute',
+  },
+  chipAvatar: {
+    height: '13pt',
+    width: '13pt',
+    transform: 'translateX(1px)',
+    'box-shadow': '0px 1px 2px 1px rgba(0,0,0,0.3)',
+  },
+  chipLabel: {
+    paddingLeft: '6px',
+    paddingRight: '0px',
+  },
   TotalCountBox: {
     padding: '0px',
     display: 'inline-block',

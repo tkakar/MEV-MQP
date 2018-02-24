@@ -6,6 +6,8 @@ import Drawer from 'material-ui/Drawer';
 import Paper from 'material-ui/Paper';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
+import Chip from 'material-ui/Chip';
+import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -16,6 +18,7 @@ import styles from './TopNavigationStyles';
 import { toggleSexFilter, toggleAgeFilter, toggleLocationFilter, toggleOccupationFilter } from '../actions/demographicActions';
 import { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter } from '../actions/visualizationActions';
 import { setSelectedDate } from '../../src/actions/timelineActions';
+import ClearFilterIcon from '../resources/clearFilterIcon.svg';
 
 class TopNavigation extends Component {
   static propTypes = {
@@ -148,13 +151,19 @@ class TopNavigation extends Component {
                 <div className={`${this.props.classes.wpiLogoContainer}`} >
                   <img src={wpiLogo} className={`${this.props.classes.wpiLogoClass} img-responsive`} />
                   <Link to="/about" className={this.props.classes.listLink}>
-                    <Typography style={{ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block' }}>
+                    <Typography style={{
+ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block',
+}}
+                    >
                       About&nbsp;
                     </Typography>
                   </Link>
-                  <Typography style={{ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block' }}>
+                  <Typography style={{
+ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block',
+}}
+                  >
                       | &copy; 2018
-                    </Typography>
+                  </Typography>
                 </div>
               </Drawer>
             </div>
@@ -173,12 +182,19 @@ class TopNavigation extends Component {
                 {this.formatNumberWithCommas(this.props.totalCount)}
               </Typography>
             </Paper>
-            <Paper className={this.props.classes.TotalCountBox} style={{ transform: 'translateY(-9px)'}} elevation={4} >
-              <Button style={{ fontSize: '11px', padding: '2px', height: '100%', width: '100%', backgroundColor: '#FFE6D2', border: 'solid 1px #F42D1F' }} onClick={this.handleClearFilters} >
-                Clear All Filters
-              </Button>
-            </Paper>
             <CurrentlySelectedFilters />
+            <Paper className={`${this.props.classes.filterPaper} pull-right`} elevation={4}>
+              <Chip
+                avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+                onClick={this.handleClearFilters}
+                className={this.props.classes.clearFilterChip}
+                style={{ transform: `translateY(-5px) translateX(${100 - 13}px)` }}
+                classes={{ label: this.props.classes.chipLabel }}
+              />
+              <Typography type="subheading" align="center" style={{ lineHeight: '2.3rem' }} >
+                Clear Filters
+              </Typography>
+            </Paper>
           </div>
         </div>
       </nav>
