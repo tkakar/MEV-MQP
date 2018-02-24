@@ -159,37 +159,48 @@ class UserReportTable extends React.PureComponent {
    */
   detailRowContent = row => (
     <div className={(this.props.summaryOpen) ? this.props.classes.smallDetailRow : this.props.classes.largeDetailRow} >
-    <div className="col-sm-4" style={{ marginBottom: '15px',}}>
-    <Paper elevation={6} style={{ padding: '5px', }} >
-    <div class="col-sm-12">
-    { this.props.bin === 'all reports' ? 
-          <FormControlLabel style={{  }}
-            control={
-              <Switch 
-                checked={this.state[row.row.primaryid]} 
-                onChange={this.handleToggleChange(row.row.primaryid)} 
-                color="primary" />}
-            label="Primary Evidence" />
-        : null}
+      {/* <div className="col-sm-4" style={{ marginBottom: '15px' }}>
+        <Paper elevation={6} style={{ padding: '5px' }} >
+          <div className="col-sm-12">
+            {
+              (this.props.bin === 'all reports')
+              ? (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      onChange={this.handleToggleChange(row.row.primaryid)}
+                      color="primary"
+                    />
+                  }
+                  label="Primary Evidence"
+                />)
+              : null
+            }
+          </div>
+          <div className="col-sm-12">
+            <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
+              <Button raised className="cal-button" color="primary">report text</Button>
+            </Link>
+          </div>
+          <div style={{ clear: 'both', float: 'none' }}>&nbsp;</div>
+        </Paper>
+      </div> */}
+      <div className="col-sm-12" style={{ marginBottom: '15px' }}>
+        <div style={{ marginTop: '10px' }}>
+          <ExpansionPanel elevation={6}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography type="subheading">Preview Narrative</Typography>
+            </ExpansionPanelSummary>
+            <Divider light />
+            <ExpansionPanelDetails style={{ display: 'block' }}>
+              <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
+                <Button raised color="primary">Go to Report Text</Button>
+              </Link>
+              <br />
+              <div style={{ marginTop: '10px', fontSize: '14px', overflowWrap: 'break-word' }} dangerouslySetInnerHTML={{ __html: row.row.report_text }} />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         </div>
-        <div class="col-sm-12">
-        <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
-          <Button raised className="cal-button" color="primary">Go to report text</Button>
-        </Link>
-        </div>
-        <div style={{ clear: 'both', float: 'none' }}>&nbsp;</div>
-      </Paper>
-      </div>
-      <div style={{ marginTop: '10px' }}>
-        <ExpansionPanel elevation={6}>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography type="subheading">Preview Narrative</Typography>
-          </ExpansionPanelSummary>
-          <Divider light />
-          <ExpansionPanelDetails>
-            <div style={{ fontSize: '14px' }} dangerouslySetInnerHTML={{ __html: row.row.report_text }} />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
       </div>
     </div>
   )

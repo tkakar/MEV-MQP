@@ -383,13 +383,12 @@ class ReportTable extends React.PureComponent {
       <div className="col-sm-3" style={{ marginBottom: '15px' }}>
         <Paper elevation={6} style={{ padding: '5px' }} >
           <div className="col-sm-12">
-            { 
+            {
               (this.props.bin === 'all reports')
               ? (
                 <FormControlLabel
                   control={
                     <Switch
-                      // checked={this.state[row.row.primaryid]}
                       onChange={this.handleToggleChange(row.row.primaryid)}
                       color="primary"
                     />

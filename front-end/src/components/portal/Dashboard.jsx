@@ -186,12 +186,12 @@ class Dashboard extends Component {
     console.log(this.props.getUserInactiveCasesCount(this.props.userID));
     return (
       <MuiThemeProvider theme={defaultTheme} >
-        <div className="About container">
+        <div style={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
           <div className="row">
             <div className="col-sm-12">
               <h2>Dashboard</h2>
             </div>
-            <div className="col-sm-8">
+            <div className="col-sm-9">
               <Paper elevation={2} className={`${this.props.classes.paper}`} >
                 <div className={`${this.props.classes.root}`}>
                   <AppBar position="static" color="default">
@@ -270,7 +270,7 @@ class Dashboard extends Component {
                 </div>
               </Paper>
             </div>
-            <div className="col-sm-4">
+            <div className="col-sm-3">
               <Paper elevation={2} className={`${this.props.classes.paper}`} >
                 <div className="col-sm-7">
                   <p>Hello {this.props.userEmail != '' ? (this.props.userEmail) : ('undefined')}!</p>
@@ -283,7 +283,7 @@ class Dashboard extends Component {
               </Paper>
             </div>
             <p>&nbsp;</p>
-            <div className="col-sm-4">
+            <div className="col-sm-3">
               <Paper elevation={2} className={`${this.props.classes.paper}`} >
                 <div className="col-sm-12">
                   <p><strong>Number of active cases:</strong> {this.state.activeBinNumbers}</p>
