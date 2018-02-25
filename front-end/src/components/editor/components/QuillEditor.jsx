@@ -213,8 +213,17 @@ class QuillEditor extends Component {
     this.quill.formatText(index, length, 'background', color);
   }
 
+  setHeaderStyle(header) {
+    this.quill.format('header', header);
+  }
+
   customToolbar = () => (
     <div id={`react-quill-${this.props.primaryid}`} style={{ padding: '4px' }}>
+      <select defaultValue="false" className="ql-header" style={{ height: '36px', margin: '4px' }}>
+        <option value="1" />
+        <option value="2" />
+        <option value="false" />
+      </select>
       <Button className="ql-colorBackground" value={annotationColors.drug} style={{ padding: '0px', margin: '4px', background: annotationColors.drug }}>
         Drug
       </Button>
@@ -250,6 +259,7 @@ class QuillEditor extends Component {
       container: `#react-quill-${this.props.primaryid}`,
       handlers: {
         colorBackground: this.colorBackground,
+        header: this.setHeaderStyle,
       },
     },
     history: {
@@ -273,6 +283,7 @@ class QuillEditor extends Component {
                 onChange={this.handleChange}
                 modules={this.modules}
                 theme="snow"
+                readOnly
               />
               : null
           }

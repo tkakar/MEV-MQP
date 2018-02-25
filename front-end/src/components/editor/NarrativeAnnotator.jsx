@@ -42,7 +42,7 @@ class NarrativeAnnotator extends Component {
       <div className={`${this.props.classes.pdfView} container`}>
         <div className="row">
           <div className="col-sm-12">
-            <h1>PDF View</h1>
+            <h1>Report Narrative</h1>
             <QuillEditor match={this.props.match} />
           </div>
         </div>

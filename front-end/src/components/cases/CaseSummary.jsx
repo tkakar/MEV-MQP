@@ -128,8 +128,8 @@ class CaseSummary extends Component {
   toTitleCase = str => str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 
   COLORS = {
-    supportive: '#0088FE',
-    primary: '#FFBB28',
+    supportive: '#0CC8E8',
+    primary: '#0CE88E',
   };
 
   renderBarChart = () => ((this.state.barChartData.length > 0)
