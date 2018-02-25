@@ -16,6 +16,7 @@ import './NarrativeAnnotator.css';
 class QuillEditor extends Component {
   static propTypes = {
     getReportNarrativeFromID: PropTypes.func.isRequired,
+    incrementSummary: PropTypes.func,
     classes: PropTypes.shape({
       pdfView: PropTypes.string,
       editorWindow: PropTypes.string,
@@ -36,6 +37,7 @@ class QuillEditor extends Component {
   static defaultProps = {
     match: {},
     primaryid: null,
+    incrementSummary: () => {},
   };
 
   constructor(props) {
@@ -132,6 +134,7 @@ class QuillEditor extends Component {
 
       fetch(`${process.env.REACT_APP_NODE_SERVER}/savereporttext`, fetchData)
         .then(() => {
+          this.props.incrementSummary();
           this.setState({
             saved: this.state.current,
             success: true,
@@ -153,7 +156,7 @@ class QuillEditor extends Component {
     const interestingRE = `background-color: ${annotationColors.interesting};`;
     const newTags = {};
 
-    const spans = document.getElementById('react-quill')
+    const spans = document.getElementById(`${this.props.primaryid}` || 'react-quill')
       .getElementsByClassName('ql-editor')[0]
       .getElementsByTagName('span');
 
@@ -211,7 +214,7 @@ class QuillEditor extends Component {
   }
 
   customToolbar = () => (
-    <div id="quill-toolbar" style={{ padding: '4px' }}>
+    <div id={`react-quill-${this.props.primaryid}`} style={{ padding: '4px' }}>
       <Button className="ql-colorBackground" value={annotationColors.drug} style={{ padding: '0px', margin: '4px', background: annotationColors.drug }}>
         Drug
       </Button>
@@ -244,7 +247,7 @@ class QuillEditor extends Component {
 
   modules = {
     toolbar: {
-      container: '#quill-toolbar',
+      container: `#react-quill-${this.props.primaryid}`,
       handlers: {
         colorBackground: this.colorBackground,
       },
@@ -265,7 +268,7 @@ class QuillEditor extends Component {
           {
             (!this.state.loading)
               ? <ReactQuill
-                id={'react-quill'}
+                id={`${this.props.primaryid}` || 'react-quill'}
                 value={this.state.current.reportText}
                 onChange={this.handleChange}
                 modules={this.modules}

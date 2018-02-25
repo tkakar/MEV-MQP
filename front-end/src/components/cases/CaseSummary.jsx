@@ -15,6 +15,7 @@ class CaseSummary extends Component {
     getTagsinCase: PropTypes.func.isRequired,
     getReportsInCases: PropTypes.func.isRequired,
     getCaseNameByID: PropTypes.func.isRequired,
+    summaryCounter: PropTypes.number,
     caseID: PropTypes.number,
     userID: PropTypes.number.isRequired,
     match: PropTypes.shape({
@@ -26,6 +27,7 @@ class CaseSummary extends Component {
 
   static defaultProps = {
     caseID: null,
+    summaryCounter: 0,
     match: {
       params: {
         id: null,
@@ -46,33 +48,23 @@ class CaseSummary extends Component {
   }
 
   componentWillMount() {
-    this.props.getTagsinCase(this.props.caseID)
-      .then((tags) => {
-        const combinedTags = tags.reduce((acc, row) => {
-          Object.keys(JSON.parse(row.tags)).forEach((key) => {
-            acc[key] = (acc[key]) ? acc[key].concat(JSON.parse(row.tags)[key]) : JSON.parse(row.tags)[key];
-          });
-          return acc;
-        }, {});
-
-        this.setState({
-          tags: { ...combinedTags },
-        });
-      });
-
     this.props.getCaseNameByID(this.props.caseID)
       .then(rows => this.setState({
         caseName: (rows[0] ? rows[0].name : ''),
         caseDescription: (rows[0] ? rows[0].description : ''),
       }, () => {
-        this.props.getReportsInCases(this.props.userID, this.state.caseName)
-          .then(reports => this.setState({
-            reportsInCase: reports,
-          }, () => {
-            this.getReportTypeData();
-            this.getTagData();
-          }));
+        this.updateSummary();
       }));
+  }
+
+  componentWillReceiveProps(incomingProps) {
+    if (this.state.summaryCounter !== incomingProps.summaryCounter) {
+      this.updateSummary();
+
+      this.setState({
+        summaryCounter: incomingProps.summaryCounter,
+      });
+    }
   }
 
   getReportTypeData = () => {
@@ -98,6 +90,35 @@ class CaseSummary extends Component {
     this.setState({
       barChartData,
     });
+  }
+
+  updateSummary = () => {
+    this.props.getTagsinCase(this.props.caseID)
+      .then((tags) => {
+        const combinedTags = tags.reduce((acc, row) => {
+          Object.keys(JSON.parse(row.tags)).forEach((key) => {
+            acc[key] = (acc[key])
+              ? acc[key].concat(JSON.parse(row.tags)[key])
+              : JSON.parse(row.tags)[key];
+          });
+          return acc;
+        }, {});
+        this.setState({
+          tags: { ...combinedTags },
+        }, () => {
+          this.updateGraphs();
+        });
+      });
+  }
+
+  updateGraphs = () => {
+    this.props.getReportsInCases(this.props.userID, this.state.caseName)
+      .then(reports => this.setState({
+        reportsInCase: reports,
+      }, () => {
+        this.getReportTypeData();
+        this.getTagData();
+      }));
   }
 
   /**

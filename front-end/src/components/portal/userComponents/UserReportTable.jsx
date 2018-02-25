@@ -158,33 +158,7 @@ class UserReportTable extends React.PureComponent {
    * of the table
    */
   detailRowContent = row => (
-    <div className={(this.props.summaryOpen) ? this.props.classes.smallDetailRow : this.props.classes.largeDetailRow} >
-      {/* <div className="col-sm-4" style={{ marginBottom: '15px' }}>
-        <Paper elevation={6} style={{ padding: '5px' }} >
-          <div className="col-sm-12">
-            {
-              (this.props.bin === 'all reports')
-              ? (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      onChange={this.handleToggleChange(row.row.primaryid)}
-                      color="primary"
-                    />
-                  }
-                  label="Primary Evidence"
-                />)
-              : null
-            }
-          </div>
-          <div className="col-sm-12">
-            <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
-              <Button raised className="cal-button" color="primary">report text</Button>
-            </Link>
-          </div>
-          <div style={{ clear: 'both', float: 'none' }}>&nbsp;</div>
-        </Paper>
-      </div> */}
+    <div>
       <div className="col-sm-12" style={{ marginBottom: '15px' }}>
         <div style={{ marginTop: '10px' }}>
           <ExpansionPanel elevation={6}>

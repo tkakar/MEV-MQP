@@ -26,13 +26,7 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Switch from 'material-ui/Switch';
 import Typography from 'material-ui/Typography';
-import {
-  FormLabel,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  FormHelperText,
-} from 'material-ui/Form';
+import { FormControlLabel } from 'material-ui/Form';
 import _ from 'lodash';
 import { moveReport, getCaseReports, getReportNarrativeFromID, getReportsInCases } from '../../../actions/reportActions';
 import QuillEditor from '../../editor/components/QuillEditor';
@@ -52,6 +46,7 @@ class ReportTable extends React.PureComponent {
     getReportNarrativeFromID: PropTypes.func.isRequired,
     getReportsInCases: PropTypes.func.isRequired,
     toTitleCase: PropTypes.func.isRequired,
+    incrementSummary: PropTypes.func.isRequired,
     summaryOpen: PropTypes.bool.isRequired,
     bins: PropTypes.arrayOf(PropTypes.object).isRequired,
     filters: PropTypes.shape({
@@ -256,6 +251,10 @@ class ReportTable extends React.PureComponent {
       });
   }
 
+  updateSummary = () => {
+    this.props.incrementSummary();
+  }
+
   /**
    * After 100ms of not resizing, we will then resize the graph (this improves performance)
    */
@@ -290,6 +289,7 @@ class ReportTable extends React.PureComponent {
         this.props.getCaseReports(this.props.bin, this.props.userID)
           .then(reports => this.setState({ data: reports }))
           .then(() => {
+            this.updateSummary();
             this.updateHighlightedRows();
             this.setState({
               snackbarOpen: true,
@@ -443,7 +443,7 @@ class ReportTable extends React.PureComponent {
           </ExpansionPanelSummary>
           <Divider light />
           <ExpansionPanelDetails>
-            <QuillEditor primaryid={Number(row.row.primaryid, 10)} />
+            <QuillEditor primaryid={Number(row.row.primaryid, 10)} incrementSummary={this.props.incrementSummary} />
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>

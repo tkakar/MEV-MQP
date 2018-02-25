@@ -74,6 +74,7 @@ class ReportList extends Component {
       snackbarMessage: '',
       currentTab: 0,
       summaryOpen: false,
+      summaryCounter: 0,
     };
   }
 
@@ -180,6 +181,10 @@ class ReportList extends Component {
     }
   }
 
+  updateSummary = () => {
+    this.setState({ summaryCounter: this.state.summaryCounter + 1 });
+  }
+
   render() {
     return (
       <MuiThemeProvider theme={defaultTheme} >
@@ -220,6 +225,7 @@ class ReportList extends Component {
               summaryOpen={this.state.summaryOpen}
               toTitleCase={this.toTitleCase}
               tableClass={this.state.summaryOpen}
+              incrementSummary={this.updateSummary}
             />
           </div>
 
@@ -229,6 +235,7 @@ class ReportList extends Component {
               bins={this.state.userBins}
               userID={this.props.userID}
               summaryOpen={this.state.summaryOpen}
+              summaryCounter={this.state.summaryCounter}
             />
           </div>
 

@@ -654,7 +654,8 @@ app.put('/archivecase', (req, res) => {
 
 app.put('/savereporttext', (req, res) => {
   console.log('got a save report text request');
-  tags = JSON.stringify(req.body.tags) === '{}' ? 'null' : JSON.stringify(req.body.tags);
+  tags = JSON.stringify(req.body.tags);
+  console.log(req.body)
   let query =
   'UPDATE reports '
 + 'SET report_text = $$' + req.body.text + '$$, tags = $$' + tags + '$$ '

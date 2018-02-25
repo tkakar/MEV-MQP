@@ -21,6 +21,7 @@ import styles from './CaseSummaryListingStyles';
 class CaseSummaryListing extends React.PureComponent {
   static propTypes = {
     bins: PropTypes.arrayOf(PropTypes.object).isRequired,
+    summaryCounter: PropTypes.number.isRequired,
     userID: PropTypes.number.isRequired,
     classes: PropTypes.shape({
       summaryContainer: PropTypes.string,
@@ -57,7 +58,11 @@ class CaseSummaryListing extends React.PureComponent {
               </ExpansionPanelSummary>
               <Divider light />
               <ExpansionPanelDetails>
-                <CaseSummary caseID={bin.case_id} userID={this.props.userID} />
+                <CaseSummary
+                  caseID={bin.case_id}
+                  userID={this.props.userID}
+                  summaryCounter={this.props.summaryCounter}
+                />
               </ExpansionPanelDetails>
             </ExpansionPanel>
           </div>

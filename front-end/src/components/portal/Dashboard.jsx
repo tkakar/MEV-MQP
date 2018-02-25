@@ -59,11 +59,19 @@ const defaultTheme = createMuiTheme({
 class Dashboard extends Component {
   static propTypes = {
     getUserCases: PropTypes.func.isRequired,
+    archiveCase: PropTypes.func.isRequired,
     getUserInactiveCasesCount: PropTypes.func.isRequired,
     getUserActiveCasesCount: PropTypes.func.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     userID: PropTypes.number.isRequired,
     classes: PropTypes.shape({
+      paper: PropTypes.string,
+      root: PropTypes.string,
+      paperNoPadding: PropTypes.string,
+      clearfix: PropTypes.string,
+      userimage: PropTypes.string,
+      reportsWrapper: PropTypes.string,
+      tooltipStyle: PropTypes.string,
     }).isRequired,
   }
 
@@ -102,7 +110,6 @@ class Dashboard extends Component {
         bins.forEach((bin, i) => active[bin.name] = bin.active);
         const userBins = bins.map(bin => this.toTitleCase(bin.name)).sort();
         const defaultCase = (bins[0]) ? bins[0].name : '';
-        console.log(active);
         this.setState({
           userBins,
           binDescs: descs,
@@ -110,6 +117,40 @@ class Dashboard extends Component {
           case: defaultCase,
         });
       });
+  }
+
+  getInactiveCases() {
+    this.props.getUserInactiveCasesCount(this.props.userID)
+      .then((bins) => {
+        this.setState({ inactiveBinNumbers: bins });
+      });
+  }
+
+  getActiveCases() {
+    this.props.getUserActiveCasesCount(this.props.userID)
+      .then((bins) => {
+        this.setState({ activeBinNumbers: (bins - 2) });
+      });
+  }
+
+  getTrashValue() {
+    let trashValue = -1;
+    this.state.userBins.forEach((option, index) => {
+      if (option === 'Trash') {
+        trashValue = index;
+      }
+    });
+    return trashValue;
+  }
+
+  getReadValue() {
+    let readValue = -1;
+    this.state.userBins.forEach((option, index) => {
+      if (option === 'Read') {
+        readValue = index;
+      }
+    });
+    return readValue;
   }
 
   /**
@@ -131,39 +172,6 @@ class Dashboard extends Component {
     this.setState({ value });
   };
 
-  getInactiveCases() {
-    this.props.getUserInactiveCasesCount(this.props.userID)
-      .then((bins) => {
-        console.log('inactive bins', bins);
-        this.setState({ inactiveBinNumbers: bins });
-      });
-  }
-
-  getActiveCases() {
-    this.props.getUserActiveCasesCount(this.props.userID)
-      .then((bins) => {
-        console.log('active bins', bins);
-        this.setState({ activeBinNumbers: (bins - 2) });
-      });
-  }
-  getTrashValue() {
-    let trashValue = -1;
-    this.state.userBins.forEach((option, index) => {
-      if (option === 'Trash') {
-        trashValue = index;
-      }
-    });
-    return trashValue;
-  }
-  getReadValue() {
-    let readValue = -1;
-    this.state.userBins.forEach((option, index) => {
-      if (option === 'Read') {
-        readValue = index;
-      }
-    });
-    return readValue;
-  }
   handleActiveChange = name => (event, checked) => {
     const newActives = Object.assign({}, this.state.binActives);
     newActives[name] = checked;
@@ -183,7 +191,6 @@ class Dashboard extends Component {
 
   render() {
     const { value } = this.state;
-    console.log(this.props.getUserInactiveCasesCount(this.props.userID));
     return (
       <MuiThemeProvider theme={defaultTheme} >
         <div style={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
@@ -209,64 +216,65 @@ class Dashboard extends Component {
                     </Tabs>
                   </AppBar>
                   {this.state.userBins.map((option, index) => {
-               if (value === index) {
-                 return (
-                   <TabContainer key={index}>
-                     {
-                    (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
-                      null
-                    :
-                      <div className="col-sm-12">
-                        <h3>Case Description:</h3>
-                        <div className={`${this.props.classes.paper}`}>
-                          <p>{this.state.binDescs[this.state.case]}</p>
-                        </div>
-                      </div>
-                    }
-                     <div className="col-sm-4">
-                       <h3>Case Name:</h3>
-                       <div className={`${this.props.classes.paper}`}>
-                         {option}
-                       </div>
-                     </div>
-                     {
-                      (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
-                        <div className="col-sm-8">
-                          <h3>Report Count:</h3>
-                          <div className={`${this.props.classes.paper}`}>
-                            <p># of reports in bin</p>
-                          </div>
-                        </div>
-                      :
-                        <div>
+                    if (value === index) {
+                      return (
+                        <TabContainer key={index}>
+                          {
+                          (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
+                            null
+                          :
+                            <div className="col-sm-12">
+                              <h3>Case Description:</h3>
+                              <div className={`${this.props.classes.paper}`}>
+                                <p>{this.state.binDescs[this.state.case]}</p>
+                              </div>
+                            </div>
+                          }
                           <div className="col-sm-4">
-                            <h3>Report Count:</h3>
+                            <h3>Case Name:</h3>
                             <div className={`${this.props.classes.paper}`}>
-                              <p># of reports in bin</p>
+                              {option}
                             </div>
                           </div>
-                          <div className="col-sm-4">
-                            <h3>Active:</h3>
-                            <Switch
-                              checked={this.state.binActives[this.state.case]}
-                              onChange={this.handleActiveChange(this.state.case)}
-                              aria-label="checked"
-                            />
-                          </div>
-                        </div>
-                      }
+                          {
+                            (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
+                              <div className="col-sm-8">
+                                <h3>Report Count:</h3>
+                                <div className={`${this.props.classes.paper}`}>
+                                  <p># of reports in bin</p>
+                                </div>
+                              </div>
+                            :
+                              <div>
+                                <div className="col-sm-4">
+                                  <h3>Report Count:</h3>
+                                  <div className={`${this.props.classes.paper}`}>
+                                    <p># of reports in bin</p>
+                                  </div>
+                                </div>
+                                <div className="col-sm-4">
+                                  <h3>Active:</h3>
+                                  <Switch
+                                    checked={this.state.binActives[this.state.case]}
+                                    onChange={this.handleActiveChange(this.state.case)}
+                                    aria-label="checked"
+                                  />
+                                </div>
+                              </div>
+                            }
 
-                     <div className={`${this.props.classes.reportsWrapper} col-sm-12`}>
-                       <h3 style={{ marginTop: '10px' }}>Reports:</h3>
-                       <div className={`${this.props.classes.paperNoPadding}`}>
-                         <UserReportTable bin={this.state.case} bins={this.state.userBins} />
-                       </div>
-                     </div>
-                     <div className={`${this.props.classes.clearfix}`} />
-                   </TabContainer>
-                );
-              }
-            })}
+                          <div className={`${this.props.classes.reportsWrapper} col-sm-12`}>
+                            <h3 style={{ marginTop: '10px' }}>Reports:</h3>
+                            <div className={`${this.props.classes.paperNoPadding}`}>
+                              <UserReportTable bin={this.state.case} bins={this.state.userBins} />
+                            </div>
+                          </div>
+                          <div className={`${this.props.classes.clearfix}`} />
+                        </TabContainer>
+                      );
+                    }
+                    return null;
+                  })}
                 </div>
               </Paper>
             </div>
@@ -277,7 +285,7 @@ class Dashboard extends Component {
                   <p>Number of cases: {this.state.userBins.length}</p>
                 </div>
                 <div className="col-sm-5">
-                  <img src={placeholderUserImage} className={`${this.props.classes.userimage} img-responsive`} />
+                  <img src={placeholderUserImage} className={`${this.props.classes.userimage} img-responsive`} alt="User Placeholder" />
                 </div>
                 <div className={`${this.props.classes.clearfix}`} />
               </Paper>
@@ -294,10 +302,10 @@ class Dashboard extends Component {
             </div>
           </div>
         </div>
-        {/* ====== Floating Action Button for Going back to Main Visualization ====== */}
+        {/* ====== Floating Action Button for Going to the Main Visualization ====== */}
         <div style={{ position: 'fixed', left: '20px', bottom: '20px' }} >
           <MaterialTooltip
-            title="Go Back To Visualization"
+            title="Go To Visualization"
             placement="top"
             enterDelay={50}
             classes={{
@@ -307,15 +315,15 @@ class Dashboard extends Component {
           >
             <Link href="/visualization" to="/visualization" >
               <Button fab style={{ margin: 12 }} color="primary">
-                <img src={GoToVisualizationIcon} className={this.props.classes.goToVisualizationSVG} width="35px" height="35px" alt="Go Back To Visualization" />
+                <img src={GoToVisualizationIcon} width="35px" height="35px" alt="Go To Visualization" />
               </Button>
             </Link>
           </MaterialTooltip>
         </div>
-        {/* ====== Floating Action Button for Going back to Main Visualization ====== */}
+        {/* ====== Floating Action Button for Going to the Reports Listing ====== */}
         <div style={{ position: 'fixed', right: '20px', bottom: '20px' }} >
           <MaterialTooltip
-            title="Go to reports"
+            title="Go To Reports Listing"
             placement="top"
             enterDelay={50}
             classes={{
@@ -325,7 +333,7 @@ class Dashboard extends Component {
           >
             <Link href="/report" to="/report" >
               <Button fab style={{ margin: 12 }} color="primary">
-                <img src={GoToReportsIcon} className={this.props.classes.goToVisualizationSVG} width="35px" height="35px" alt="Go Back To Visualization" />
+                <img src={GoToReportsIcon} width="35px" height="35px" alt="Go To Reports Listing" />
               </Button>
             </Link>
           </MaterialTooltip>
