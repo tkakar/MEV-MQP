@@ -439,11 +439,14 @@ class ReportTable extends React.PureComponent {
       <div style={{ marginTop: '10px' }} className="col-sm-12">
         <ExpansionPanel elevation={6}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography type="subheading">Preview Narrative</Typography>
+            <Typography type="subheading">Annotate Narrative</Typography>
           </ExpansionPanelSummary>
           <Divider light />
           <ExpansionPanelDetails>
-            <QuillEditor primaryid={Number(row.row.primaryid, 10)} incrementSummary={this.props.incrementSummary} />
+            <QuillEditor
+              primaryid={Number(row.row.primaryid, 10)}
+              incrementSummary={this.props.incrementSummary}
+            />
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import { blue, green, red } from 'material-ui/colors';
+import Paper from 'material-ui/Paper';
 import { setUserInfo, makeUserTrash, makeUserRead, checkUserTrash, checkUserRead } from '../../actions/userActions';
 import MEVColors from '../../theme';
 
@@ -156,28 +157,30 @@ class Login extends Component {
           <div className="About container">
             <div className="row">
               <div className="col-sm-12">
-                <h2>Login Page</h2>
-                <p><strong>Welcome to the MEV.</strong></p>
-                <p>We are going to ask that you login to get started. If you have an email that you have already used to login you may continue to login as before.</p>
-                <p><strong>New Users</strong></p>
-                <p>If you are new, you may enter in an email to begin analyzing with a new account in our system. You will then be directed to the user dashboard where you can see/edit your user details.</p>
-                <div className="col-sm-8 col-sm-offset-2">
-                  <form className="form-horizontal" action="" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                      <label htmlFor="inputEmail3" className="col-sm-1 control-label">Email</label>
-                      <div className="col-sm-8">
-                        <input type="email" className="form-control" id="inputEmail3" value={this.state.value} onChange={this.handleChange} placeholder="Email" />
-                      </div>
-                      <div className="col-sm-2">
-                        <button type="submit" className="btn btn-default">Sign in</button>
-                      </div>
+                <Paper elevation={2} >
+                  <h2>Login Page</h2>
+                  <p><strong>Welcome to MEV</strong></p>
+                  <p>We are going to ask that you login to get started. If you have an email that you have already used to login you may continue to login as before.</p>
+                  <p><strong>New Users</strong></p>
+                  <p>If you are new, you may enter in an email to begin analyzing with a new account in our system. You will then be directed to the user dashboard where you can see/edit your user details.</p>
+                  <div className="col-sm-8 col-sm-offset-2">
+                    <form className="form-horizontal" action="" onSubmit={this.handleSubmit}>
+                      <div className="form-group">
+                        <label htmlFor="inputEmail3" className="col-sm-1 control-label">Email</label>
+                        <div className="col-sm-8">
+                          <input type="email" className="form-control" id="inputEmail3" value={this.state.value} onChange={this.handleChange} placeholder="Email" />
+                        </div>
+                        <div className="col-sm-2">
+                          <button type="submit" className="btn btn-default">Sign in</button>
+                        </div>
 
-                    </div>
-                  </form>
-                </div>
-                <div id="status" className={`alert alert-${this.state.type}`}>
-                  {this.state.message}
-                </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div id="status" className={`alert alert-${this.state.type}`}>
+                    {this.state.message}
+                  </div>
+                </Paper>
               </div>
             </div>
 

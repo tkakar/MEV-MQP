@@ -6,7 +6,6 @@ import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 import CustomTooltip from './components/CustomTooltip';
-// import BarChartImpl from './components/BarChartImpl';
 import ClearFilterIcon from '../../../../../resources/clearFilterIcon.svg';
 import MEVColors from '../../../../../theme';
 
