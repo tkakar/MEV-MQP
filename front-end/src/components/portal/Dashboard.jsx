@@ -8,16 +8,19 @@ import Paper from 'material-ui/Paper';
 import MaterialTooltip from 'material-ui/Tooltip';
 import Button from 'material-ui/Button';
 import AppBar from 'material-ui/AppBar';
+import TextField from 'material-ui/TextField';
+import { FormControlLabel } from 'material-ui/Form';
 import Switch from 'material-ui/Switch';
+import Modal from 'material-ui/Modal';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import Typography from 'material-ui/Typography';
+import Snackbar from 'material-ui/Snackbar';
 import GoToVisualizationIcon from '../../resources/goToVisualizationIcon.svg';
 import GoToReportsIcon from '../../resources/goToReportsIcon.svg';
 import MEVColors from '../../theme';
-import placeholderUserImage from './images/user_img.png';
 import UserReportTable from './userComponents/UserReportTable';
 import { getUserCases, archiveCase } from '../../actions/reportActions';
-import { getUserInactiveCasesCount, getUserActiveCasesCount } from '../../actions/userActions';
+import { getUserInactiveCasesCount, getUserActiveCasesCount, editUserBin } from '../../actions/userActions';
 import styles from './DashboardStyles';
 
 function TabContainer(props) {
@@ -62,6 +65,7 @@ class Dashboard extends Component {
     archiveCase: PropTypes.func.isRequired,
     getUserInactiveCasesCount: PropTypes.func.isRequired,
     getUserActiveCasesCount: PropTypes.func.isRequired,
+    editUserBin: PropTypes.func.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     userID: PropTypes.number.isRequired,
     classes: PropTypes.shape({
@@ -72,6 +76,7 @@ class Dashboard extends Component {
       userimage: PropTypes.string,
       reportsWrapper: PropTypes.string,
       tooltipStyle: PropTypes.string,
+      newCaseModal: PropTypes.string,
     }).isRequired,
   }
 
@@ -85,6 +90,9 @@ class Dashboard extends Component {
       binActives: {},
       activeBinNumbers: 0,
       inactiveBinNumbers: 0,
+      editCaseModalOpen: false,
+      snackbarOpen: false,
+      snackbarMessage: '',
     };
   }
 
@@ -92,9 +100,9 @@ class Dashboard extends Component {
     if (!this.props.isLoggedIn) {
       window.location = '/';
     }
-    this.getBins();
     this.getActiveCases();
     this.getInactiveCases();
+    this.getBins();
   }
 
   /**
@@ -108,15 +116,22 @@ class Dashboard extends Component {
         bins.forEach((bin, i) => descs[bin.name] = bin.description);
         const active = {};
         bins.forEach((bin, i) => active[bin.name] = bin.active);
-        const userBins = bins.map(bin => this.toTitleCase(bin.name)).sort();
-        const defaultCase = (bins[0]) ? bins[0].name : '';
+        const userBins = this.sortUserBins(bins);
+        const defaultCase = (userBins[this.state.value]) ? userBins[this.state.value].toLowerCase() : '';
         this.setState({
           userBins,
           binDescs: descs,
           binActives: active,
           case: defaultCase,
+          reportCount: 0,
         });
       });
+  }
+
+  setReportCount = (reportCount) => {
+    this.setState({
+      reportCount,
+    });
   }
 
   getInactiveCases() {
@@ -153,11 +168,23 @@ class Dashboard extends Component {
     return readValue;
   }
 
+  handleCloseSnackbar = () => {
+    this.setState({ snackbarOpen: false });
+  };
+
+  sortUserBins = (bins) => {
+    const filteredBins = bins.filter(bin => (bin.name !== 'trash' && bin.name !== 'read'));
+    const sortedBinNames = filteredBins.map(bin => this.toTitleCase(bin.name)).sort();
+    sortedBinNames.push('Read');
+    sortedBinNames.push('Trash');
+    return sortedBinNames;
+  }
+
   /**
    * Changes the first letter of any word in a string to be capital
    * BEING REUSED IN ReportListing.jsx NEED TO DEAL WITH THIS LATER ! DUPLICATE METHODS
    */
-  toTitleCase = str => str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  toTitleCase = str => ((str) ? str.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()) : '');
 
   /**
    * Handler for drop down menu item click
@@ -183,6 +210,32 @@ class Dashboard extends Component {
     this.setState({ binActives: newActives });
   };
 
+  handleEditCaseOpen = () => {
+    this.setState({ editCaseModalOpen: true });
+  };
+
+  handleEditCaseClose = () => {
+    this.setState({ editCaseModalOpen: false });
+  };
+
+  handleEditCaseClick = () => {
+    const binName = document.getElementById('newCaseName').value.toLowerCase().trim();
+    const binDesc = document.getElementById('newCaseDesc').value.trim();
+    if ((binName !== '' && !(this.state.userBins.filter(bin => bin.toLowerCase() === binName).length)) || binName === this.state.case) {
+      this.props.editUserBin(this.props.userID, this.state.case, binName, binDesc)
+        .then(() => {
+          document.getElementById('newCaseName').value = '';
+          document.getElementById('newCaseDesc').value = '';
+
+          this.handleEditCaseClose();
+          this.getBins();
+        });
+      this.setState({ snackbarOpen: true, snackbarMessage: 'Edited Case!' });
+    } else {
+      this.setState({ snackbarOpen: true, snackbarMessage: 'Error! Invalid Case Name' });
+    }
+  }
+
   TabContainer = props => (
     <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
@@ -193,112 +246,155 @@ class Dashboard extends Component {
     const { value } = this.state;
     return (
       <MuiThemeProvider theme={defaultTheme} >
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={this.state.snackbarOpen}
+          onClose={this.handleCloseSnackbar}
+          transitionDuration={1000}
+          SnackbarContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">{this.state.snackbarMessage}</span>}
+        />
         <div style={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open={this.state.editCaseModalOpen}
+            onClose={this.handleEditCaseClose}
+          >
+            <Paper elevation={8} className={this.props.classes.newCaseModal} >
+              <Typography type="title" id="modal-title">
+                Edit Case
+              </Typography>
+              <hr />
+              <TextField
+                label="Case Name"
+                placeholder=""
+                defaultValue={this.toTitleCase(this.state.case)}
+                id="newCaseName"
+                style={{ margin: 12, width: '100%' }}
+              />
+              <TextField
+                multiline
+                rowsMax="4"
+                label="Case Description"
+                placeholder=""
+                defaultValue={this.state.binDescs[this.state.case]}
+                id="newCaseDesc"
+                style={{ margin: 12, width: '100%' }}
+              />
+              <hr />
+              <Button raised onClick={this.handleEditCaseClick} style={{ margin: 12 }} color="primary">Save</Button>
+            </Paper>
+          </Modal>
           <div className="row">
             <div className="col-sm-12">
-              <h2>Dashboard</h2>
+              <h2>User Dashboard</h2>
             </div>
-            <div className="col-sm-9">
+            <div className="col-sm-12">
               <Paper elevation={2} className={`${this.props.classes.paper}`} >
-                <div className={`${this.props.classes.root}`}>
-                  <AppBar position="static" color="default">
-                    <Tabs
-                      value={value}
-                      onChange={this.handleChange}
-                      indicatorColor="primary"
-                      textColor="primary"
-                      scrollable
-                      scrollButtons="auto"
-                    >
-                      {this.state.userBins.map((option, index) => (
-                        <Tab label={option} value={index} key={index} onClick={event => this.handleCaseClick(event, index)} />
-                      ))}
-                    </Tabs>
-                  </AppBar>
-                  {this.state.userBins.map((option, index) => {
-                    if (value === index) {
-                      return (
-                        <TabContainer key={index}>
-                          {
-                          (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
-                            null
-                          :
-                            <div className="col-sm-12">
-                              <h3>Case Description:</h3>
-                              <div className={`${this.props.classes.paper}`}>
-                                <p>{this.state.binDescs[this.state.case]}</p>
-                              </div>
-                            </div>
-                          }
-                          <div className="col-sm-4">
-                            <h3>Case Name:</h3>
-                            <div className={`${this.props.classes.paper}`}>
-                              {option}
-                            </div>
-                          </div>
-                          {
-                            (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue()) ?
-                              <div className="col-sm-8">
-                                <h3>Report Count:</h3>
-                                <div className={`${this.props.classes.paper}`}>
-                                  <p># of reports in bin</p>
-                                </div>
-                              </div>
-                            :
-                              <div>
-                                <div className="col-sm-4">
-                                  <h3>Report Count:</h3>
-                                  <div className={`${this.props.classes.paper}`}>
-                                    <p># of reports in bin</p>
-                                  </div>
-                                </div>
-                                <div className="col-sm-4">
-                                  <h3>Active:</h3>
+                <div className="col-sm-4">
+                  <p><strong>Logged In User:</strong> {this.props.userEmail != '' ? (this.props.userEmail) : ('Unkown')}</p>
+                </div>
+                <div className="col-sm-4">
+                  <p><strong>Number of Active Cases:</strong> {this.state.activeBinNumbers}</p>
+                </div>
+                <div className="col-sm-4">
+                  <p><strong>Number of Inactive Cases:</strong> {this.state.inactiveBinNumbers}</p>
+                </div>
+                <div className={`${this.props.classes.clearfix}`} />
+              </Paper>
+            </div>
+            <div className="col-sm-12">
+              <div className={`${this.props.classes.root}`}>
+                <AppBar position="static" color="default">
+                  <Tabs
+                    value={value}
+                    onChange={this.handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    scrollable
+                    scrollButtons="auto"
+                  >
+                    {this.state.userBins.map((option, index) => (
+                      <Tab label={option} value={index} key={index} onClick={event => this.handleCaseClick(event, index)} />
+                    ))}
+                  </Tabs>
+                </AppBar>
+                {this.state.userBins.map((option, index) => {
+                  if (value === index) {
+                    return (
+                      <TabContainer key={index}>
+                        <div className="col-sm-12">
+                          <Typography type="title" style={{ fontSize: '30px', color: '#333' }}>
+                            {option}
+                            {(!(this.state.value === this.getTrashValue()) && !(this.state.value === this.getReadValue()))
+                              ? <FormControlLabel
+                                control={
                                   <Switch
                                     checked={this.state.binActives[this.state.case]}
                                     onChange={this.handleActiveChange(this.state.case)}
                                     aria-label="checked"
                                   />
+                                }
+                                label={(this.state.binActives[this.state.case]) ? 'Active' : 'Inactive'}
+                                style={{ marginLeft: '10px' }}
+                              />
+                            : <FormControlLabel
+                              control={
+                                <Switch
+                                  checked={this.state.binActives[this.state.case]}
+                                  onChange={this.handleActiveChange(this.state.case)}
+                                  aria-label="checked"
+                                />
+                              }
+                              label={(this.state.binActives[this.state.case]) ? 'Active' : 'Inactive'}
+                              style={{ marginLeft: '10px', visibility: 'hidden' }}
+                            />
+                          }
+                            {(!(this.state.value === this.getTrashValue()) && !(this.state.value === this.getReadValue()))
+                              ? <Button raised className="pull-right" onClick={this.handleEditCaseOpen}> Edit Case </Button>
+                              : null}
+                          </Typography>
+                          <Typography type="subheading" style={{ fontSize: '16px', color: '#333' }}>
+                            <i>{this.state.binDescs[this.state.case] || <p>No Description</p> }</i>
+                          </Typography>
+                          <br />
+                          {
+                            (this.state.value === this.getTrashValue() || this.state.value === this.getReadValue())
+                            ? (
+                              <Typography type="subheading" style={{ fontSize: '16px', color: '#333' }}>
+                                <strong>Number of Reports:</strong> {this.state.reportCount}
+                              </Typography>
+                            )
+                            : (
+                              <div>
+                                <div className="col-sm-12" style={{ padding: '0px' }}>
+                                  <Typography type="subheading" style={{ fontSize: '16px', color: '#333' }}>
+                                    <strong>Number of Reports:</strong> {this.state.reportCount}
+                                  </Typography>
                                 </div>
                               </div>
-                            }
+                            )
+                          }
+                        </div>
 
-                          <div className={`${this.props.classes.reportsWrapper} col-sm-12`}>
-                            <h3 style={{ marginTop: '10px' }}>Reports:</h3>
-                            <div className={`${this.props.classes.paperNoPadding}`}>
-                              <UserReportTable bin={this.state.case} bins={this.state.userBins} />
-                            </div>
+                        <div className={`${this.props.classes.reportsWrapper} col-sm-12`}>
+                          <div className={`${this.props.classes.paperNoPadding}`}>
+                            <UserReportTable bin={this.state.case} bins={this.state.userBins} setReportCount={this.setReportCount} />
                           </div>
-                          <div className={`${this.props.classes.clearfix}`} />
-                        </TabContainer>
-                      );
-                    }
-                    return null;
-                  })}
-                </div>
-              </Paper>
-            </div>
-            <div className="col-sm-3">
-              <Paper elevation={2} className={`${this.props.classes.paper}`} >
-                <div className="col-sm-7">
-                  <p>Hello {this.props.userEmail != '' ? (this.props.userEmail) : ('undefined')}!</p>
-                  <p>Number of cases: {this.state.userBins.length}</p>
-                </div>
-                <div className="col-sm-5">
-                  <img src={placeholderUserImage} className={`${this.props.classes.userimage} img-responsive`} alt="User Placeholder" />
-                </div>
-                <div className={`${this.props.classes.clearfix}`} />
-              </Paper>
-            </div>
-            <p>&nbsp;</p>
-            <div className="col-sm-3">
-              <Paper elevation={2} className={`${this.props.classes.paper}`} >
-                <div className="col-sm-12">
-                  <p><strong>Number of active cases:</strong> {this.state.activeBinNumbers}</p>
-                  <p><strong>Number of inactive cases:</strong> {this.state.inactiveBinNumbers}</p>
-                </div>
-                <div className={`${this.props.classes.clearfix}`} />
-              </Paper>
+                        </div>
+                        <div className={`${this.props.classes.clearfix}`} />
+                      </TabContainer>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -350,6 +446,6 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {
-    getUserCases, archiveCase, getUserInactiveCasesCount, getUserActiveCasesCount,
+    editUserBin, getUserCases, archiveCase, getUserInactiveCasesCount, getUserActiveCasesCount,
   },
 )(withStyles(styles)(Dashboard));

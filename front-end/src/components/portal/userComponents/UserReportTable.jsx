@@ -79,9 +79,10 @@ class UserReportTable extends React.PureComponent {
    */
   componentDidMount() {
     this.props.getCaseReports(this.props.bin, this.props.userID, {})
-      .then(bins => this.setState({
-        data: bins,
-      }));
+      .then(bins => {
+        this.props.setReportCount(bins.length)
+        this.setState({ data: bins });
+      });
   }
 
   /**
@@ -93,6 +94,7 @@ class UserReportTable extends React.PureComponent {
       this.props.getCaseReports(this.props.bin, this.props.userID, {})
         .then((bins) => {
           this.setState({ data: bins });
+          this.props.setReportCount(bins.length)
           this.changeExpandedDetails([]);
         });
     }
@@ -122,6 +124,10 @@ class UserReportTable extends React.PureComponent {
       title: 'Outcome',
       name: 'outc_cod',
     },
+    {
+      title: 'Narrative',
+      name: 'report_text',
+    },
   ];
 
   /**
@@ -135,6 +141,7 @@ class UserReportTable extends React.PureComponent {
     drugname: 100,
     me_type: 100,
     outc_cod: 75,
+    report_text: 200,
   };
 
   /**

@@ -69,7 +69,7 @@ class TopNavigation extends Component {
           <div className="pull-left">
             <div>
               <Button onClick={this.toggleDrawer('left', true)} className={this.props.classes.buttonClass}><i className="material-icons">menu</i></Button>
-              <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)} SlideProps={{ className: this.props.classes.drawerClass }}>
+              <Drawer open={this.state.left} onClose={this.toggleDrawer('left', false)} classes={{ modal: this.props.classes.drawerToggleContainer }}SlideProps={{ className: this.props.classes.drawerClass }}>
                 <div
                   tabIndex={0}
                   role="button"
@@ -173,6 +173,7 @@ class TopNavigation extends Component {
               MEV
             </a>
           </div>
+          {this.props.showFilters ? 
           <div className={this.props.classes.SelectedFilters} >
             <Paper className={this.props.classes.TotalCountBox} elevation={4} >
               <Typography type="body1" align="center" style={{ lineHeight: '1.4rem' }} >
@@ -196,6 +197,7 @@ class TopNavigation extends Component {
               </Typography>
             </Paper>
           </div>
+          : null}
         </div>
       </nav>
     </div>

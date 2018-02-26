@@ -25,6 +25,7 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Switch from 'material-ui/Switch';
+import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import { FormControlLabel } from 'material-ui/Form';
 import _ from 'lodash';
@@ -82,6 +83,7 @@ class ReportTable extends React.PureComponent {
       currentlyInCase: [],
       snackbarOpen: false,
       snackbarMessage: '',
+      loadingData: true,
 
       /**
        * Default widths for the columns of the table
@@ -126,6 +128,7 @@ class ReportTable extends React.PureComponent {
     this.props.getCaseReports(this.props.bin, this.props.userID)
       .then(bins => this.setState({
         data: bins,
+        loadingData: false,
       }));
 
     this.updateHighlightedRows();
@@ -144,9 +147,15 @@ class ReportTable extends React.PureComponent {
    */
   componentDidUpdate(prevProps) {
     if (prevProps.bin !== this.props.bin || !_.isEqual(this.props.filters, prevProps.filters)) {
+      this.setState({
+        loadingData: true,
+      });
       this.props.getCaseReports(this.props.bin, this.props.userID)
         .then((bins) => {
-          this.setState({ data: bins });
+          this.setState({
+            data: bins,
+            loadingData: false,
+          });
           this.changeExpandedDetails([]);
         });
     }
@@ -383,20 +392,15 @@ class ReportTable extends React.PureComponent {
       <div className="col-sm-3" style={{ marginBottom: '15px' }}>
         <Paper elevation={6} style={{ padding: '5px' }} >
           <div className="col-sm-12">
-            {
-              (this.props.bin === 'all reports')
-              ? (
-                <FormControlLabel
-                  control={
-                    <Switch
-                      onChange={this.handleToggleChange(row.row.primaryid)}
-                      color="primary"
-                    />
-                  }
-                  label="Primary Evidence"
-                />)
-              : null
-            }
+            <FormControlLabel
+              control={
+                <Switch
+                  onChange={this.handleToggleChange(row.row.primaryid)}
+                  color="primary"
+                />
+              }
+              label="Primary Evidence"
+            />
           </div>
           <div className="col-sm-12">
             <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
@@ -407,11 +411,14 @@ class ReportTable extends React.PureComponent {
         </Paper>
       </div>
       <div className={`${this.props.classes.sendToCaseContainer} col-sm-9`}>
-        <Typography style={{ position: 'absolute', fontSize: '14px', transform: 'translateX(3px) translateY(3px)' }} type="button">
-          Send Report to:
-        </Typography>
-        <Paper elevation={6} className={this.props.classes.moveToCaseDetailsContainer} >
-          {this.props.bins.map((bin, index) => (
+        <Paper elevation={6}>
+          <div className="col-sm-12" style={{ padding: '5px 10px' }}>
+            <Typography style={{ fontSize: '14px' }} type="button">
+              Send Report to:
+            </Typography>
+          </div>
+          <div className={this.props.classes.moveToCaseDetailsContainer}>
+            {this.props.bins.map((bin, index) => (
             (this.props.bin.toLowerCase() !== bin.name.toLowerCase())
               ? (
                 <Button
@@ -434,6 +441,7 @@ class ReportTable extends React.PureComponent {
               )
             : null
           ))}
+          </div>
         </Paper>
       </div>
       <div style={{ marginTop: '10px' }} className="col-sm-12">
@@ -456,39 +464,41 @@ class ReportTable extends React.PureComponent {
   render() {
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
-        {(this.state.tableHeight !== 0 && this.state.stillResizingTimer === '')
-          ? (
-            <Grid
-              rows={this.state.data}
-              columns={this.columns}
-              getRowId={row => row.primaryid}
-            >
-              <RowDetailState
-                expandedRows={this.state.expandedRows}
-                onExpandedRowsChange={this.changeExpandedDetails}
-              />
-              <DragDropProvider />
-              <SortingState
-                defaultSorting={[
-                  { columnName: 'Event Date', direction: 'asc' },
-                ]}
-              />
-              <IntegratedSorting
-                columnExtensions={this.state.customSorting}
-              />
-              <VirtualTable rowComponent={this.TableRow} height={this.state.tableHeight} />
-              <TableColumnResizing
-                columnWidths={this.state.widths}
-                onColumnWidthsChange={this.onColumnWidthsChange}
-              />
-              <TableHeaderRow showSortingControls />
-              <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
-              <TableRowDetail
-                contentComponent={this.renderDetailRowContent}
-              />
-            </Grid>
-            )
-          : null
+        {/*eslint-disable */}
+        {this.state.loadingData ? <div style={{ position: 'absolute', top: '50px', left: '0px', width: '100%', height: 'calc(100% - 50px)', backgroundColor: 'rgba(25, 25, 25, 0.5)', zIndex: '10000' }}> <div style={{ width: 'fit-content', position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)' }}>  <CircularProgress size={300} /> </div> </div> : 
+          (this.state.tableHeight !== 0 && this.state.stillResizingTimer === '')
+            ? (
+              <Grid
+                rows={this.state.data}
+                columns={this.columns}
+                getRowId={row => row.primaryid}
+              >
+                <RowDetailState
+                  expandedRows={this.state.expandedRows}
+                  onExpandedRowsChange={this.changeExpandedDetails}
+                />
+                <DragDropProvider />
+                <SortingState
+                  defaultSorting={[
+                    { columnName: 'Event Date', direction: 'asc' },
+                  ]}
+                />
+                <IntegratedSorting
+                  columnExtensions={this.state.customSorting}
+                />
+                <VirtualTable rowComponent={this.TableRow} height={this.state.tableHeight} />
+                <TableColumnResizing
+                  columnWidths={this.state.widths}
+                  onColumnWidthsChange={this.onColumnWidthsChange}
+                />
+                <TableHeaderRow showSortingControls />
+                <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
+                <TableRowDetail
+                  contentComponent={this.renderDetailRowContent}
+                />
+              </Grid>
+              )
+            : null
         }
 
         {/* ====== Snackbar for Notificaitons to the User ====== */}

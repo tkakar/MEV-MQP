@@ -63,7 +63,7 @@ export const makeUserTrash = userID => () => {
     },
     body: JSON.stringify({ userID }),
   };
-  fetch(`${process.env.REACT_APP_NODE_SERVER}/makeusertrash`, fetchData);
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/makeusertrash`, fetchData);
 };
 
 export const makeUserRead = userID => () => {
@@ -75,7 +75,7 @@ export const makeUserRead = userID => () => {
     },
     body: JSON.stringify({ userID }),
   };
-  fetch(`${process.env.REACT_APP_NODE_SERVER}/makeuserread`, fetchData);
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/makeuserread`, fetchData);
 };
 
 export const getUserInactiveCasesCount = userID => () => {
@@ -114,4 +114,25 @@ export const getUserActiveCasesCount = userID => () => {
       }
       return 0;
     });
-};
+  };
+
+ /**
+ * Queries the Database with the current userID and a bin name to create
+ * that bin in the database
+ */
+export const editUserBin = (userID, oldBinName, binName, binDesc) => () => {
+  const fetchData = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      userID,
+      oldBinName,
+      binName,
+      binDesc,
+    }),
+  };
+  return fetch(`${process.env.REACT_APP_NODE_SERVER}/edituserbin`, fetchData)
+  };

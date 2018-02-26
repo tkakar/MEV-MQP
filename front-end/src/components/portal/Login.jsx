@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { MuiThemeProvider, createMuiTheme, withStyles } from 'material-ui/styles';
 import { blue, green, red } from 'material-ui/colors';
 import Paper from 'material-ui/Paper';
+import Typography from 'material-ui/Typography';
 import { setUserInfo, makeUserTrash, makeUserRead, checkUserTrash, checkUserRead } from '../../actions/userActions';
 import MEVColors from '../../theme';
 
@@ -31,7 +32,9 @@ class Login extends Component {
   static propTypes = {
     setUserInfo: PropTypes.func.isRequired,
     makeUserTrash: PropTypes.func.isRequired,
+    makeUserRead: PropTypes.func.isRequired,
     checkUserTrash: PropTypes.func.isRequired,
+    checkUserRead: PropTypes.func.isRequired,
     userID: PropTypes.number.isRequired,
     isLoggedIn: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
@@ -44,7 +47,7 @@ class Login extends Component {
       type: 'none',
       message: '',
       logged_in: false,
-      email: '',
+      username: '',
     };
   }
 
@@ -61,13 +64,13 @@ class Login extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: this.state.email }),
+      body: JSON.stringify({ email: this.state.username }),
     };
     fetch(`${process.env.REACT_APP_NODE_SERVER}/saveuser`, fetchData)
       .then(() => {
         this.setState({
           type: 'success',
-          message: 'You have successfully been addded as a new user! Logging you in...',
+          message: 'Logging you in...',
           logged_in: true,
         });
         this.sendFormData();
@@ -76,16 +79,16 @@ class Login extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.state.email !== '') {
+    if (this.state.username !== '') {
       this.setState({ type: 'info', message: 'Sending...' }, this.sendFormData);
     } else {
-      this.setState({ type: 'danger', message: 'Please enter a value!' });
+      this.setState({ type: 'danger', message: 'Please enter a username!' });
     }
   }
 
   handleChange = (event) => {
     this.setState({
-      email: event.target.value,
+      username: event.target.value,
     });
   }
 
@@ -96,39 +99,41 @@ class Login extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: this.state.email }),
+      body: JSON.stringify({ email: this.state.username }),
     };
+
     fetch(`${process.env.REACT_APP_NODE_SERVER}/getuser`, fetchData)
       .then(response => response.json())
       .then((user) => {
         if (user.rows.length > 0) {
           this.props.setUserInfo(true, user.rows[0].email, user.rows[0].user_id);
-          this.props.checkUserTrash(user.rows[0].user_id)
+          const createDefaultCases = [];
+          createDefaultCases.push(this.props.checkUserTrash(user.rows[0].user_id)
             .then((trashFound) => {
               if (trashFound) {
-                console.log('user trash found');
-              } else {
-                this.props.makeUserTrash(user.rows[0].user_id);
+                return Promise.resolve();
               }
-              this.props.checkUserRead(user.rows[0].user_id)
-                .then((readFound) => {
-                  if (readFound) {
-                    console.log('user read case found');
-                  } else {
-                    this.props.makeUserRead(user.rows[0].user_id);
-                  }
-                  this.props.history.push('/dashboard');
-                });
+              return this.props.makeUserTrash(user.rows[0].user_id);
+            }));
+          createDefaultCases.push(this.props.checkUserRead(user.rows[0].user_id)
+            .then((readFound) => {
+              if (readFound) {
+                return Promise.resolve();
+              }
+              return this.props.makeUserRead(user.rows[0].user_id);
+            }));
+
+          Promise.all(createDefaultCases)
+            .then(() => {
+              this.props.history.push('/dashboard');
             });
         } else {
           this.setState({
-            type: 'danger',
-            message: 'You have not successfully logged in, but well add you as a user!',
-            logged_in: true,
+            type: 'info',
+            message: 'creating a new user',
           });
 
           this.saveUser();
-          console.log('userid', this.props.userID);
         }
       });
   }
@@ -141,14 +146,13 @@ class Login extends Component {
           <div className="About container">
             <div className="row">
               <div className="col-sm-12">
-                <h2>Login Page</h2>
+                <h2>Login</h2>
                 <p>You are already logged in!</p>
                 <div id="status" className={`alert alert-${this.state.type}`}>
                   {this.state.message}
                 </div>
               </div>
             </div>
-
           </div>
         </MuiThemeProvider>);
     } else {
@@ -157,18 +161,19 @@ class Login extends Component {
           <div className="About container">
             <div className="row">
               <div className="col-sm-12">
-                <Paper elevation={2} >
-                  <h2>Login Page</h2>
-                  <p><strong>Welcome to MEV</strong></p>
-                  <p>We are going to ask that you login to get started. If you have an email that you have already used to login you may continue to login as before.</p>
-                  <p><strong>New Users</strong></p>
-                  <p>If you are new, you may enter in an email to begin analyzing with a new account in our system. You will then be directed to the user dashboard where you can see/edit your user details.</p>
+                <Paper elevation={2} style={{ padding: '20px 20px 20px 20px', marginTop: '15px' }} >
+                  <Typography type="title" style={{ fontSize: '30px', color: '#333' }}>
+                    Sign in to Get Started
+                  </Typography>
+                  <Typography type="subheading" style={{ fontSize: '16px', color: '#333' }}>
+                    <i>Please enter a username to be directed to the system</i>
+                  </Typography>
+                  <br />
                   <div className="col-sm-8 col-sm-offset-2">
                     <form className="form-horizontal" action="" onSubmit={this.handleSubmit}>
                       <div className="form-group">
-                        <label htmlFor="inputEmail3" className="col-sm-1 control-label">Email</label>
-                        <div className="col-sm-8">
-                          <input type="email" className="form-control" id="inputEmail3" value={this.state.value} onChange={this.handleChange} placeholder="Email" />
+                        <div className="col-sm-10">
+                          <input className="form-control" id="inputUsername3" value={this.state.value} onChange={this.handleChange} placeholder="Username" />
                         </div>
                         <div className="col-sm-2">
                           <button type="submit" className="btn btn-default">Sign in</button>
@@ -177,7 +182,7 @@ class Login extends Component {
                       </div>
                     </form>
                   </div>
-                  <div id="status" className={`alert alert-${this.state.type}`}>
+                  <div id="status" className={`alert alert-${this.state.type}`} style={{ marginTop: '45px', marginBottom: '0px' }}>
                     {this.state.message}
                   </div>
                 </Paper>
