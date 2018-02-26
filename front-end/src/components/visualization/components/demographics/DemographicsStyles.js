@@ -17,12 +17,12 @@ export default {
     minHeight: '20px',
     position: 'absolute',
     right: '2px',
-    top: 'calc(20% + 25px)',
+    top: 'calc(20vh - 25px)',
     transition: 'top 200ms ease-in-out',
     zIndex: 900,
   },
   minimizeButtonMinimized: {
-    top: 'calc(5% + 25px)',
+    top: 'calc(5vh - 25px)',
   },
   maxHeight: {
     height: '100%',
