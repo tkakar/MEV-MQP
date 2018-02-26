@@ -54,6 +54,7 @@ class CustomTooltip extends Component {
 
   outcomeCodes = {
     size: 'Total Count',
+    serious: 'Severe',
     DE: 'Death',
     CA: 'Congenital Anomaly',
     DS: 'Disability',
@@ -61,7 +62,7 @@ class CustomTooltip extends Component {
     LT: 'Life-Threatening',
     RI: 'Required Intervention',
     OT: 'Other Serious',
-    UNK: 'Not Serious',
+    UNK: 'Not Severe',
   }
 
   renderToolTip = () => {
@@ -74,8 +75,21 @@ class CustomTooltip extends Component {
         <p className={this.props.classes.toolTipParagraph}>
           <b>{payload.name}</b>
         </p>
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['size']}: {payload['size']}
+        </p>
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['serious']}: {payload['size'] - payload['UNK']}
+        </p>
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['UNK']}: {payload['UNK']}
+        </p>
+        <hr style={{ margin: '5px 0px' }} />
+        <p className={this.props.classes.toolTipParagraph} >
+          Outcome Breakdown:
+        </p>
         {Object.keys(payload).map(key => (
-          (Object.keys(this.outcomeCodes).includes(key) && payload[key])
+          (Object.keys(this.outcomeCodes).includes(key) && payload[key] && !['serious', 'UNK', 'size'].includes(key))
             ? (
               <p
                 className={this.props.classes.toolTipParagraph}

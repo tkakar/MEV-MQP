@@ -2,6 +2,7 @@ export default {
   tableContainer: {
     height: '100%',
     margin: '20px',
+    overflow: 'hidden',
   },
   moveToCaseDetailsContainer: {
     display: 'flex',
@@ -20,10 +21,8 @@ export default {
   sendToCaseContainer: {
     position: 'relative',
   },
-  smallDetailRow: {
-    transition: 'width 200ms ease-in-out',
-  },
-  largeDetailRow: {
-    transition: 'width 200ms ease-in-out',
+  tableDetailCell: {
+    background: 'repeating-linear-gradient( -55deg, #fafafa 0px, #fafafa 30px, #f1f1f1 30px, #f1f1f1 50px)',
+    padding: '12px 24px',
   },
 };

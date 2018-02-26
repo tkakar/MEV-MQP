@@ -35,7 +35,6 @@ import ClearFilterIcon from '../../../resources/RemoveFromCaseIcon';
 import CaseIcon from '../../../resources/CaseIcon';
 import TrashIcon from '../../../resources/TrashIcon';
 import styles from './ReportTableStyles';
-import './ReportTable.css';
 
 /**
  * This is the component for the Report Table
@@ -68,8 +67,7 @@ class ReportTable extends React.PureComponent {
       moveToCaseDetailsContainer: PropTypes.string,
       caseGridList: PropTypes.string,
       sendToCaseContainer: PropTypes.string,
-      largeDetailRow: PropTypes.string,
-      smallDetailRow: PropTypes.string,
+      tableDetailCell: PropTypes.string,
     }).isRequired,
   }
 
@@ -388,7 +386,7 @@ class ReportTable extends React.PureComponent {
    * of the table
    */
   renderDetailRowContent = row => (
-    <div className={(this.props.summaryOpen) ? this.props.classes.smallDetailRow : this.props.classes.largeDetailRow} >
+    <div>
       <div className="col-sm-3" style={{ marginBottom: '15px' }}>
         <Paper elevation={6} style={{ padding: '5px' }} >
           <div className="col-sm-12">
@@ -486,7 +484,7 @@ class ReportTable extends React.PureComponent {
                 <IntegratedSorting
                   columnExtensions={this.state.customSorting}
                 />
-                <VirtualTable rowComponent={this.TableRow} height={this.state.tableHeight} />
+                <VirtualTable rowComponent={this.TableRow} height={2500} />
                 <TableColumnResizing
                   columnWidths={this.state.widths}
                   onColumnWidthsChange={this.onColumnWidthsChange}
@@ -494,6 +492,7 @@ class ReportTable extends React.PureComponent {
                 <TableHeaderRow showSortingControls />
                 <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
                 <TableRowDetail
+                  cellComponent={(props) => <TableRowDetail.Cell className={this.props.classes.tableDetailCell} {...props} />}
                   contentComponent={this.renderDetailRowContent}
                 />
               </Grid>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TrashLogo = props => (
+const TrashIcon = props => (
 <svg width="100%" height="100%" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" style={{ 'fillRule':'evenodd', 'clipRule':'evenodd', 'strokeLinejoin':'round', 'strokeMiterlimit':'1.41421', 'width': '30px', 'height': '35px' }}>
   <g transform="matrix(1,0,0,1,-6,0)">
       <path d="M10.942,18.57L12.443,2.628L25.238,5.869L25.106,12.678L27.219,24.387L16.345,29.843L10.942,18.57Z" style={{ 'fill':'rgb(242,250,255)', 'fillRule':'nonzero' }}/>
@@ -35,4 +35,4 @@ const TrashLogo = props => (
 </svg>
 );
 
-export default TrashLogo;
+export default TrashIcon;

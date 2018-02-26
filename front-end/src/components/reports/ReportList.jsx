@@ -18,6 +18,7 @@ import CaseSummaryListing from './components/CaseSummaryListing';
 import MEVColors from '../../theme';
 import { getUserCases, createUserBin } from '../../actions/reportActions';
 import CaseIcon from '../../resources/CaseIcon';
+import ReadCaseIcon from '../../resources/ReadCaseIcon';
 import NewCaseIcon from '../../resources/NewCaseIcon';
 import TrashIcon from '../../resources/TrashIcon';
 import AllReportsIcon from '../../resources/AllReportsIcon';
@@ -201,7 +202,7 @@ class ReportList extends Component {
               centered
             >
               <Tab icon={<AllReportsIcon />} label="All Reports" key="All Reports" name="All Reports" />
-              <Tab icon={<CaseIcon />} label="Read" key="Read" name="Read" />
+              <Tab icon={<ReadCaseIcon />} label="Read" key="Read" name="Read" />
               <Tab icon={<TrashIcon />} label="Trash" key="Trash" name="Trash" />
               <Tab icon={<NewCaseIcon />} label="New Case" name="New Case" />
               {this.state.userBins.map((bin) => {

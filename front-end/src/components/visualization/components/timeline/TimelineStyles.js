@@ -14,8 +14,9 @@ export default {
     width: '100%',
     margin: '0px',
     height: '15vh',
-    overflow: 'hidden',
+    overflowBottom: 'hidden',
     transition: 'all 200ms ease-in-out',
+    position: 'relative',
   },
   timelineContainerMinimized: {
     height: '5vh',

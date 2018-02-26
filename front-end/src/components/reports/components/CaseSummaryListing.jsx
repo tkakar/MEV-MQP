@@ -32,6 +32,7 @@ class CaseSummaryListing extends React.PureComponent {
   renderListItem = (bin) => {
     switch (bin.name) {
       case 'Trash':
+      case 'Read':
       case 'All Reports':
         return null;
       default:

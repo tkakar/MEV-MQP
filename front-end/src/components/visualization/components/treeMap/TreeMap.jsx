@@ -6,11 +6,13 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
+import Typography from 'material-ui/Typography';
 import { toggleMETypeFilter, toggleProductFilter, toggleStageFilter, toggleCauseFilter } from '../../../../actions/visualizationActions';
 import ClearFilterIcon from '../../../../resources/clearFilterIcon.svg';
 import CustomizedContent from './components/CustomizedContent';
 import styles from './TreeMapStyles';
 import CustomTooltip from './components/CustomTooltip';
+import './TreeMap.css';
 
 /**
  * This is the component for the TreeMap visualization
@@ -25,9 +27,11 @@ class TreeMap extends Component {
     classes: PropTypes.shape({
       mainVisualization: PropTypes.string,
       treemapVisualization: PropTypes.string,
+      treemapLabel: PropTypes.string,
       treePaper: PropTypes.string,
       clearFilterChip: PropTypes.string,
       chipAvatar: PropTypes.string,
+      treeMapColorLegend: PropTypes.string,
     }).isRequired,
   }
   constructor(props) {
@@ -134,10 +138,12 @@ class TreeMap extends Component {
     const firstTreeMap = document.getElementById('firstTreeMap');
     const firstTreeMapHeight = window.getComputedStyle(firstTreeMap, null).getPropertyValue('height');
     this.setState({
-      treeMapHeight: parseInt(firstTreeMapHeight, 10),
+      treeMapHeight: parseInt(firstTreeMapHeight, 10) - 10,
       mainWidth: document.getElementById('main-visualization').getBoundingClientRect().width - 20,
     });
   }
+
+  // style={{ fontSize: '13px', color: '#eee', textShadow: '0px 0px 8px #222' }}
 
   render = () => (
     <div
@@ -145,8 +151,34 @@ class TreeMap extends Component {
       className={this.props.classes.mainVisualization}
       style={{ height: this.props.mainVisHeight }}
     >
-      <p className={`${this.props.classes.treemapLabel}`}>ME Type:</p>
-      <div className={`${this.props.classes.treemapVisualization}`} id="firstTreeMap">
+      <div className={this.props.classes.treeMapColorLegend}>
+        <Typography
+          type="button"
+          className="pull-left"
+          style={{
+            fontSize: '13px',
+            color: '#eee',
+            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            letterSpacing: '1px',
+          }}
+        >
+          Least Severe
+        </Typography>
+        <Typography
+          type="button"
+          className="pull-right"
+          style={{
+            fontSize: '13px',
+            color: '#eee',
+            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            letterSpacing: '1px',
+          }}
+        >
+          Most Severe
+        </Typography>
+      </div>
+      <div className={`${this.props.classes.treemapVisualization} treeMapContainer`} id="firstTreeMap">
+        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Medication Error</p>
         <Chip
           avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
           label="Clear Filter"
@@ -188,8 +220,8 @@ class TreeMap extends Component {
           </Paper>
         </div>
       </div>
-      <p className={`${this.props.classes.treemapLabel}`}>Product:</p>
-      <div className={`${this.props.classes.treemapVisualization}`}>
+      <div className={`${this.props.classes.treemapVisualization} treeMapContainer`}>
+        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Product</p>
         <Chip
           avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
           label="Clear Filter"
@@ -220,8 +252,8 @@ class TreeMap extends Component {
           </Paper>
         </div>
       </div>
-      <p className={`${this.props.classes.treemapLabel}`}>Stage:</p>
-      <div className={`${this.props.classes.treemapVisualization}`}>
+      <div className={`${this.props.classes.treemapVisualization} treeMapContainer`}>
+        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Stage</p>
         <Chip
           avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
           label="Clear Filter"
@@ -252,8 +284,8 @@ class TreeMap extends Component {
           </Paper>
         </div>
       </div>
-      <p className={`${this.props.classes.treemapLabel}`}>Cause:</p>
-      <div className={`${this.props.classes.treemapVisualization}`}>
+      <div className={`${this.props.classes.treemapVisualization} treeMapContainer`}>
+        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Cause</p>
         <Chip
           avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
           label="Clear Filter"

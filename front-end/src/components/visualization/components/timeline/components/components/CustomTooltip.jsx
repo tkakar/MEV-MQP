@@ -44,6 +44,7 @@ class CustomTooltip extends Component {
 
   outcomeCodes = {
     count: 'Total Count',
+    serious: 'Severe',
     DE: 'Death',
     CA: 'Congenital Anomaly',
     DS: 'Disability',
@@ -51,12 +52,12 @@ class CustomTooltip extends Component {
     LT: 'Life-Threatening',
     RI: 'Required Intervention',
     OT: 'Other Serious',
-    UNK: 'Not Serious',
+    UNK: 'Not Severe',
   }
 
   itemCodes = {
-    serious: 'Serious Outcomes',
-    not_serious: 'Not Serious Outcomes',
+    serious: 'Severe Outcomes',
+    not_serious: 'Not Severe Outcomes',
   }
 
   /**

@@ -43,6 +43,7 @@ class CustomTooltip extends Component {
 
   outcomeCodes = {
     count: 'Total Count',
+    serious: 'Severe',
     DE: 'Death',
     CA: 'Congenital Anomaly',
     DS: 'Disability',
@@ -50,7 +51,7 @@ class CustomTooltip extends Component {
     LT: 'Life-Threatening',
     RI: 'Required Intervention',
     OT: 'Other Serious',
-    UNK: 'Not Serious',
+    UNK: 'Not Severe',
   }
 
   occupationTitleCodes = {
@@ -69,7 +70,7 @@ class CustomTooltip extends Component {
   }
 
   renderTooltipTitle = () => {
-    const payload = this.props.payload[0].payload;
+    const { payload } = this.props.payload[0];
     switch (this.props.demographic) {
       case 'occp_cod':
         return (
@@ -96,7 +97,20 @@ class CustomTooltip extends Component {
         <p className={this.props.classes.toolTipParagraph}>
           {this.renderTooltipTitle()}
         </p>
-        {Object.keys(payload).map(key => ((key !== this.props.demographic && key !== 'serious')
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['count']}: {payload['count']}
+        </p>
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['serious']}: {payload['serious']}
+        </p>
+        <p className={this.props.classes.toolTipParagraph} >
+          {this.outcomeCodes['UNK']}: {payload['UNK']}
+        </p>
+        <hr style={{ margin: '5px 0px' }} />
+        <p className={this.props.classes.toolTipParagraph} >
+          Outcome Breakdown:
+        </p>
+        {Object.keys(payload).map(key => ((key !== this.props.demographic && !['serious', 'UNK', 'count'].includes(key))
           ? (
             <p
               className={this.props.classes.toolTipParagraph}

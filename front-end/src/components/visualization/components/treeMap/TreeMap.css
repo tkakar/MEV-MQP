@@ -1,0 +1,3 @@
+div.treeMapContainer:hover > p.treeMapLabel {
+  opacity: 0;
+}

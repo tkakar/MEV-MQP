@@ -17,6 +17,9 @@ import Typography from 'material-ui/Typography';
 import Snackbar from 'material-ui/Snackbar';
 import GoToVisualizationIcon from '../../resources/goToVisualizationIcon.svg';
 import GoToReportsIcon from '../../resources/goToReportsIcon.svg';
+import CaseIcon from '../../resources/CaseIcon';
+import ReadCaseIcon from '../../resources/ReadCaseIcon';
+import TrashIcon from '../../resources/TrashIcon';
 import MEVColors from '../../theme';
 import UserReportTable from './userComponents/UserReportTable';
 import { getUserCases, archiveCase } from '../../actions/reportActions';
@@ -320,9 +323,24 @@ class Dashboard extends Component {
                     scrollable
                     scrollButtons="auto"
                   >
-                    {this.state.userBins.map((option, index) => (
-                      <Tab label={option} value={index} key={index} onClick={event => this.handleCaseClick(event, index)} />
-                    ))}
+                    {this.state.userBins.map((option, index) => {
+                      switch (option) {
+                        case 'Trash':
+                          return (
+                            <Tab icon={<TrashIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)}  />
+                          );
+                        case 'Read':
+                          return (
+                            <Tab icon={<ReadCaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)}  />
+                          );
+                        case 'All Reports':
+                          return null;
+                        default:
+                          return (
+                            <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)}  />
+                          );
+                      }
+                    })}
                   </Tabs>
                 </AppBar>
                 {this.state.userBins.map((option, index) => {
@@ -361,7 +379,7 @@ class Dashboard extends Component {
                               : null}
                           </Typography>
                           <Typography type="subheading" style={{ fontSize: '16px', color: '#333' }}>
-                            <i>{this.state.binDescs[this.state.case] || <p>No Description</p> }</i>
+                            <i>{this.state.binDescs[this.state.case] || 'No Description' }</i>
                           </Typography>
                           <br />
                           {

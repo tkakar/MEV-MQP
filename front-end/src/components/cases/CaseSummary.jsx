@@ -6,7 +6,6 @@ import Typography from 'material-ui/Typography';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, XAxis, YAxis, CartesianGrid, Bar } from 'recharts';
 import { getTagsinCase, getReportsInCases, getCaseNameByID } from '../../actions/reportActions';
 import annotationColors from '../editor/components/AnnotationColors';
-import MEVColors from '../../theme';
 
 const styles = {};
 
@@ -143,7 +142,6 @@ class CaseSummary extends Component {
           <YAxis dataKey="name" type="category" width={100}/>
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip
-            // content={<CustomTooltip />}
             offset={15}
             cursor={{ stroke: '#424242', strokeWidth: 1 }}
             wrapperStyle={{ padding: '4px', zIndex: 1000 }}
@@ -200,7 +198,7 @@ class CaseSummary extends Component {
           {this.toTitleCase(this.state.caseName)}
         </Typography>
         <Typography type="button">
-          {this.state.caseDescription}
+          {this.state.caseDescription || 'No Description' }
         </Typography>
         <Typography type="body1">
           Total Count of Reports: {this.state.reportsInCase.length}

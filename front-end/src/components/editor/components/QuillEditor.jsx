@@ -110,6 +110,10 @@ class QuillEditor extends Component {
     }
   }
 
+  setHeaderStyle(header) {
+    this.quill.format('header', header);
+  }
+
   saveWork = () => {
     if (!this.state.saving && !_.isEqual(this.state.current, this.state.saved)) {
       this.setState({
@@ -211,10 +215,6 @@ class QuillEditor extends Component {
   colorBackground(color) {
     const { index, length } = this.quill.getSelection();
     this.quill.formatText(index, length, 'background', color);
-  }
-
-  setHeaderStyle(header) {
-    this.quill.format('header', header);
   }
 
   customToolbar = () => (
