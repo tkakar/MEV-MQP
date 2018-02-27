@@ -31,6 +31,7 @@ import { FormControlLabel } from 'material-ui/Form';
 import _ from 'lodash';
 import { moveReport, getCaseReports, getReportNarrativeFromID, getReportsInCases } from '../../../actions/reportActions';
 import QuillEditor from '../../editor/components/QuillEditor';
+import ReadCaseIcon from '../../../resources/ReadCaseIcon';
 import ClearFilterIcon from '../../../resources/RemoveFromCaseIcon';
 import CaseIcon from '../../../resources/CaseIcon';
 import TrashIcon from '../../../resources/TrashIcon';
@@ -353,6 +354,17 @@ class ReportTable extends React.PureComponent {
         return (
           <div>
             <TrashIcon />
+            <Typography style={{ display: 'block' }} type="subheading">
+              {binName}
+            </Typography>
+          </div>
+        );
+      case 'Read':
+        return (
+          <div>
+            {(greyOutCaseIcon)
+              ? <ReadCaseIcon width={45} height={45} style={{ filter: 'grayscale(100%)' }} />
+              : <ReadCaseIcon width={45} height={45} />}
             <Typography style={{ display: 'block' }} type="subheading">
               {binName}
             </Typography>
