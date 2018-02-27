@@ -8,50 +8,74 @@ const Promise = require('bluebird');
 const os = require('os');
 const fs = require('fs')
 
-// Initialze a dummy cache for systems that can't run REDIS
-let cache = {
-  get: () => Promise.resolve(null),
-  send_command: (type, from, callback) => {
-    if (callback != null) {
-      callback('', null);
-    } else {
-      Promise.resolve(null);
+let cache;
+
+console.log('Checking for the redis cache');
+cache = redis.createClient({
+  retry_strategy: function (options) {
+    if (options.error && options.error.code === 'ECONNREFUSED') {
+        // End reconnecting on a specific error and flush all commands with a individual error
+        // Initialze a dummy cache for systems that can't run REDIS
+        cache = getDummyCache();
+        console.log('The redis server refused the connection');
+        return new Error('The redis server refused the connection');
     }
-  },
-  set: () => Promise.resolve(),
-};
+    if (options.total_retry_time > 1000 * 60 * 60) {
+        // End reconnecting after a specific timeout and flush all commands with a individual error
+        // Initialze a dummy cache for systems that can't run REDIS
+        cache = getDummyCache();
+        console.log('Redis retry time exhausted')
+        return new Error('Redis retry time exhausted');
+    }
+    if (options.attempt > 10) {
+        // End reconnecting with built in error
+        // Initialze a dummy cache for systems that can't run REDIS
+        cache = getDummyCache();
+        return undefined;
+    }
+    // reconnect after some numner of seconds
+    console.log('Trying to Connect to redis again')
+    return Math.min(options.attempt * 100, 3000);
+  }
+});
 
-// Connect to the REDIS cache if we are on MacOS or Liux
-if (os.platform() === 'linux' || os.platform() === 'darwin') {
-  console.log('on linux or mac, using local cache');
-  // cache = redis.createClient();
-}
+  cache.on('connect', () => {
+    console.log('Connected to the redis cache!');
+  });
 
-// We cannot use REDIS if on Windows
-if (os.platform() === 'win32') {
-  console.log('on window, not using local cache');
-}
-
-// Connect to the Database on Localhost
-// const db = new Client({
-//   host: 'localhost',
-//   user: 'mevuser',
-//   database: 'faers',
-//   password: 'mevmqp',
-//   port: 5432,
-//  });
-
-//Connect to the Database on WPI Server
-const db = new Client({
-  user: 'mevuser',
-  host: 'mev.wpi.edu',
+let db;
+// Connect to the Database on Localhost (with password)
+db = new Client({
+  host: 'localhost',
   database: 'faers',
+  user: 'mevuser',
   password: 'mevmqp',
-  port: '5432'
+  port: 5432,
 });
 
 db.connect()
-.catch(err => console.log(err))
+  .catch(err => { 
+    db.end();
+    // Connect to the Database on Localhost
+    db = new Client({
+      host: 'localhost',
+      database: 'faers',
+      port: 5432,
+    });
+    db.connect()
+      .catch(err => {
+        db.end();
+        console.log('No Local DB found, using remote')
+        //Connect to the Database on WPI Server
+        db = new Client({
+          user: 'mevuser',
+          host: 'mev.wpi.edu',
+          database: 'faers',
+          password: 'mevmqp',
+          port: '5432'
+        });
+      });
+  });
 
 const allowCrossDomain = function (req, res, next) {
   res.header('Access-Control-Allow-Origin', "*");
@@ -971,6 +995,18 @@ app.get('/update-data', (req, res) => {
   //   });
   // });
 });
+
+getDummyCache = () => ({
+  get: () => Promise.resolve(null),
+  send_command: (type, from, callback) => {
+    if (callback != null) {
+      callback('', null);
+    } else {
+      Promise.resolve(null);
+    }
+  },
+  set: () => Promise.resolve(),
+})
 
 app.listen(port);
 console.log('listening on ' + port)
