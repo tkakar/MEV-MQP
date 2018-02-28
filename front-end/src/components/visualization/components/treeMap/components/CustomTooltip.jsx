@@ -41,6 +41,7 @@ const styles = {
 class CustomTooltip extends Component {
   static propTypes = {
     active: PropTypes.bool.isRequired,
+    treeMapHeight: PropTypes.number,
     payload: PropTypes.arrayOf(PropTypes.object),
     classes: PropTypes.shape({
       toolTipStyle: PropTypes.string,
@@ -50,6 +51,7 @@ class CustomTooltip extends Component {
 
   static defaultProps = {
     payload: [],
+    treeMapHeight: 0,
   }
 
   outcomeCodes = {
@@ -70,8 +72,9 @@ class CustomTooltip extends Component {
     if (this.props.payload[0]) {
       payload = this.props.payload[0].payload;
     }
+    const translateVal = (this.props.treeMapHeight) ? `-100% + ${this.props.treeMapHeight}px` : '0px';
     return (
-      <div id="custom-tooltip" className={this.props.classes.toolTipStyle}>
+      <div id="custom-tooltip" className={this.props.classes.toolTipStyle} style={{ transform: `translateY(calc(${translateVal}))` }} >
         <p className={this.props.classes.toolTipParagraph}>
           <b>{payload.name}</b>
         </p>

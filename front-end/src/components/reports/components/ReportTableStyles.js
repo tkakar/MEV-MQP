@@ -1,8 +1,8 @@
 export default {
   tableContainer: {
-    height: '100%',
+    height: 'calc(100% - 55px)',
     margin: '20px',
-    overflow: 'hidden',
+    overflow: 'scroll',
   },
   moveToCaseDetailsContainer: {
     display: 'flex',

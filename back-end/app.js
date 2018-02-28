@@ -56,23 +56,23 @@ db = new Client({
 db.connect()
   .catch(err => { 
     db.end();
-    // Connect to the Database on Localhost
+    //Connect to the Database on WPI Server
     db = new Client({
-      host: 'localhost',
+      user: 'mevuser',
+      host: 'mev.wpi.edu',
       database: 'faers',
-      port: 5432,
+      password: 'mevmqp',
+      port: '5432'
     });
     db.connect()
       .catch(err => {
         db.end();
         console.log('No Local DB found, using remote')
-        //Connect to the Database on WPI Server
+        // Connect to the Database on Localhost
         db = new Client({
-          user: 'mevuser',
-          host: 'mev.wpi.edu',
+          host: 'localhost',
           database: 'faers',
-          password: 'mevmqp',
-          port: '5432'
+          port: 5432,
         });
       });
   });

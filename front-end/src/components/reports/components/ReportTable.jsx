@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  RowDetailState, SortingState, IntegratedSorting,
+  RowDetailState, SortingState, IntegratedSorting, PagingState, IntegratedPaging,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  VirtualTable,
+  Table,
   TableHeaderRow,
   DragDropProvider,
   TableColumnReordering,
   TableRowDetail,
+  PagingPanel,
   TableColumnResizing,
 } from '@devexpress/dx-react-grid-material-ui';
 import ExpansionPanel, {
@@ -83,6 +84,9 @@ class ReportTable extends React.PureComponent {
       snackbarOpen: false,
       snackbarMessage: '',
       loadingData: true,
+      pageSize: 0,
+      pageSizes: [10, 25, 50],
+      currentPage: 0,
 
       /**
        * Default widths for the columns of the table
@@ -312,6 +316,9 @@ class ReportTable extends React.PureComponent {
     }
   };
 
+  changeCurrentPage = currentPage => this.setState({ currentPage });
+  changePageSize = pageSize => this.setState({ pageSize });
+
   /**
    * Calculate the size of the table
    */
@@ -335,7 +342,7 @@ class ReportTable extends React.PureComponent {
         ? (incase.includes('read') && incase.length) === 1 ? 'RGBA(211,211,211, 0.2)' : 'RGBA(131, 255, 168, 0.2)'
         : '';
     return (
-      <VirtualTable.Row
+      <Table.Row
         {...props}
         style={{
           backgroundColor,
@@ -493,10 +500,20 @@ class ReportTable extends React.PureComponent {
                     { columnName: 'Event Date', direction: 'asc' },
                   ]}
                 />
+                <PagingState
+                  currentPage={this.state.currentPage}
+                  onCurrentPageChange={this.changeCurrentPage}
+                  pageSize={this.state.pageSize}
+                  onPageSizeChange={this.changePageSize}
+                />
                 <IntegratedSorting
                   columnExtensions={this.state.customSorting}
                 />
-                <VirtualTable rowComponent={this.TableRow} height={2500} />
+                <IntegratedPaging />
+                <Table rowComponent={this.TableRow} height={this.state.tableHeight} />
+                <PagingPanel
+                  pageSizes={this.state.pageSizes}
+                />
                 <TableColumnResizing
                   columnWidths={this.state.widths}
                   onColumnWidthsChange={this.onColumnWidthsChange}

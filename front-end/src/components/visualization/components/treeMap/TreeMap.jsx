@@ -221,7 +221,7 @@ class TreeMap extends Component {
         </div>
       </div>
       <div className={`${this.props.classes.treemapVisualization} treeMapContainer`}>
-        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Product</p>
+        <p className={`${this.props.classes.treemapLabel} treeMapLabel`}>Drug Name</p>
         <Chip
           avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
           label="Clear Filter"
@@ -308,7 +308,7 @@ class TreeMap extends Component {
               animationDuration={0}
             >
               <Tooltip
-                content={<CustomTooltip />}
+                content={<CustomTooltip treeMapHeight={this.state.treeMapHeight} />}
                 cursor={{ stroke: '#424242', strokeWidth: 1 }}
                 wrapperStyle={{ padding: '4px', zIndex: 1000 }}
               />

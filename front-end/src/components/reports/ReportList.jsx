@@ -274,7 +274,7 @@ class ReportList extends Component {
           </Modal>
 
           {/* ====== Floating Action Button for Going back to Main Visualization ====== */}
-          <div style={{ position: 'absolute', left: '20px', bottom: '20px' }} >
+          <div style={{ position: 'absolute', left: '0px', bottom: '0px' }} >
             <MaterialTooltip
               title="Go Back To Visualization"
               placement="top"
@@ -293,7 +293,7 @@ class ReportList extends Component {
           </div>
 
           {/* ====== Floating Action Button for Opening Case Summary ====== */}
-          <div style={{ position: 'absolute', right: '20px', bottom: '20px' }} >
+          <div style={{ position: 'absolute', right: '0px', bottom: '0px' }} >
             <MaterialTooltip
               title="Open Case Summary"
               placement="top"

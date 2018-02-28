@@ -104,8 +104,8 @@ class CurrentlySelectedFilters extends Component {
       if (e.target.closest(`.${this.props.classes.filterPaper}`) && e.target.closest(`.${this.props.classes.filterPaper}`).getAttribute('name')) {
         this.setState({
           mouseOverKey: e.target.closest(`.${this.props.classes.filterPaper}`).getAttribute('name'),
-          mouseX: e.screenX,
-          mouseY: e.screenY,
+          mouseX: e.pageX,
+          mouseY: e.pageY,
         });
       } else {
         this.setState({
@@ -150,6 +150,9 @@ class CurrentlySelectedFilters extends Component {
    * Toggles the filter in Redux State for the bar clicked on in the chart
    */
   handleFilterClickToggle = type => () => {
+    this.setState({
+      mouseOverKey: '',
+    });
     switch (type) {
       case 'sex':
         this.props.toggleSexFilter('CLEAR');
@@ -182,7 +185,7 @@ class CurrentlySelectedFilters extends Component {
   renderTooltip = () => {
     return (this.state.mouseOverKey !== '')
       ? (
-        <div id="SelectedFilter-Tooltip" className={this.props.classes.toolTipStyle} style={{ left: `${this.state.mouseX - 105}px`, top: `${this.state.mouseY - 110}px` }} >
+        <div id="SelectedFilter-Tooltip" className={this.props.classes.toolTipStyle} style={{ left: `${this.state.mouseX - 105}px`, top: `${this.state.mouseY}px` }} >
           {(this.state.mouseOverKey !== 'init_fda_dt')
             ? (
               <div>
