@@ -181,6 +181,13 @@ class Dashboard extends Component {
     sortedBinNames.push('Read');
     sortedBinNames.push('Trash');
     return sortedBinNames;
+  };
+
+  isActive = (cases) => {
+    if (this.state.binActives[cases]) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -336,8 +343,10 @@ class Dashboard extends Component {
                         case 'All Reports':
                           return null;
                         default:
+                          console.log('Active bin??', this.state.binActives);
+                          console.log('option??', option);
                           return (
-                            <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)}  />
+                            this.state.binActives[option.toLowerCase()] ? <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)} /> : <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)} style={{ filter: 'grayscale(100%)' }} />
                           );
                       }
                     })}
