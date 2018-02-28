@@ -25,4 +25,9 @@ export default {
     background: 'repeating-linear-gradient( -55deg, #fafafa 0px, #fafafa 30px, #f1f1f1 30px, #f1f1f1 50px)',
     padding: '12px 24px',
   },
+  tooltipStyle: {
+    fontSize: '10pt',
+    'pointer-events': 'none',
+    float: 'right',
+  },
 };

@@ -21,6 +21,7 @@ import ExpansionPanel, {
 } from 'material-ui/ExpansionPanel';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import Divider from 'material-ui/Divider';
+import MaterialTooltip from 'material-ui/Tooltip';
 import Snackbar from 'material-ui/Snackbar';
 import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
@@ -351,10 +352,6 @@ class ReportTable extends React.PureComponent {
     );
   };
 
-  handleToggleChange = primaryid => (event) => {
-    this.setState({ [primaryid]: event.target.checked });
-  }
-
   renderMoveToIcon = (binName, greyOutCaseIcon) => {
     switch (binName) {
       case 'Trash':
@@ -400,6 +397,26 @@ class ReportTable extends React.PureComponent {
     }
   }
 
+  handleToggleChange = primaryid => (event) => {
+    this.setState({ [primaryid]: event.target.checked });
+  }
+
+  /*
+  <MaterialTooltip
+              title="Open Case Summary"
+              placement="top"
+              enterDelay={50}
+              classes={{
+                tooltip: this.props.classes.tooltipStyle,
+                popper: this.props.classes.tooltipStyle,
+                }}
+            >
+              <Button fab style={{ margin: 12 }} color="primary" onClick={this.handleViewCaseSummary} >
+                <img src={ViewCaseSummary} className={this.props.classes.caseSummarySVG} alt="Open Case Summary" />
+              </Button>
+            </MaterialTooltip>
+
+  */
   /**
    * Defines the html content inside each expandable dropdown area for each row
    * of the table
@@ -411,12 +428,23 @@ class ReportTable extends React.PureComponent {
           <div className="col-sm-12">
             <FormControlLabel
               control={
-                <Switch
-                  onChange={this.handleToggleChange(row.row.primaryid)}
-                  color="primary"
-                />
+                <MaterialTooltip 
+                  title="This toggle does not update this report inside you're cases. You must re-add this report to a case for your change to appear"
+                  placement="top"
+                  enterDelay={50}
+                  classes={{
+                    tooltip: this.props.classes.tooltipStyle,
+                    popper: this.props.classes.tooltipStyle,
+                  }}
+                >
+                  <Switch
+                    onChange={this.handleToggleChange(row.row.primaryid)}
+                    color="primary"
+                    checked={this.state[row.row.primaryid]}
+                  />
+                </MaterialTooltip>
               }
-              label="Primary Evidence"
+              label={this.state[row.row.primaryid] ? 'Primary Evidence' : 'Supportive Evidence'}
             />
           </div>
           <div className="col-sm-12">
