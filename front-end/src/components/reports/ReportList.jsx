@@ -79,6 +79,15 @@ class ReportList extends Component {
     };
   }
 
+  updateTab = name => {
+    const array = this.state.userBins.filter(bin => (bin.name != 'trash' || bin.name != 'read')).map(bin => bin.name.toLowerCase());
+    const index = array.indexOf(name);
+    this.setState({
+      bin: name,
+      currentTab: index + 3,
+    });
+  }
+
   componentWillMount() {
     if (!this.props.isLoggedIn) {
       window.location = '/';
@@ -235,6 +244,7 @@ class ReportList extends Component {
           {/* ====== SideBar for Viewing the Case Summary ====== */}
           <div id="summary-sidebar" className={(this.state.summaryOpen) ? this.props.classes.openSummaryContainer : this.props.classes.closedSummaryContainer} >
             <CaseSummaryListing
+              updateTab={this.updateTab}
               bins={this.state.userBins}
               userID={this.props.userID}
               summaryOpen={this.state.summaryOpen}

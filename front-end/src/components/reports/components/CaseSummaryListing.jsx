@@ -63,6 +63,7 @@ class CaseSummaryListing extends React.PureComponent {
                   caseID={bin.case_id}
                   userID={this.props.userID}
                   summaryCounter={this.props.summaryCounter}
+                  updateTab={this.props.updateTab}
                 />
               </ExpansionPanelDetails>
             </ExpansionPanel>

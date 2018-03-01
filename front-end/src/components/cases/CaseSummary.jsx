@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, XAxis, YAxis, CartesianGrid, Bar } from 'recharts';
 import { getTagsinCase, getReportsInCases, getCaseNameByID } from '../../actions/reportActions';
 import annotationColors from '../editor/components/AnnotationColors';
@@ -186,6 +187,9 @@ class CaseSummary extends Component {
     )
     : null);
 
+  handleCaseChange = () => {
+    this.props.updateTab(this.state.caseName);
+  }
 
   render() {
     return (
@@ -193,6 +197,7 @@ class CaseSummary extends Component {
         <Typography type="display1">
           Case Details:
         </Typography>
+        <Button onClick={this.handleCaseChange} variant="raised" color='primary'> View This Case </Button>
         <br />
         <Typography type="headline">
           {this.toTitleCase(this.state.caseName)}
