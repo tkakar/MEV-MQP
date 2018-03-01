@@ -1,6 +1,6 @@
 export default {
   tableContainer: {
-    height: 'calc(100% - 55px)',
+    height: '100%',
     margin: '20px',
     overflow: 'scroll',
   },

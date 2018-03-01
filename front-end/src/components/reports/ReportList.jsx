@@ -79,15 +79,6 @@ class ReportList extends Component {
     };
   }
 
-  updateTab = name => {
-    const array = this.state.userBins.filter(bin => (bin.name != 'trash' || bin.name != 'read')).map(bin => bin.name.toLowerCase());
-    const index = array.indexOf(name);
-    this.setState({
-      bin: name,
-      currentTab: index + 3,
-    });
-  }
-
   componentWillMount() {
     if (!this.props.isLoggedIn) {
       window.location = '/';
@@ -104,10 +95,20 @@ class ReportList extends Component {
         if (bins) {
           this.setState({
             userBins: [{ name: 'All Reports', case_id: -1 }].concat(bins.filter(bin => bin.active)
-                .map(bin => ({ name: this.toTitleCase(bin.name), case_id: bin.case_id })),),
+              .map(bin => ({ name: this.toTitleCase(bin.name), case_id: bin.case_id }))),
           });
         }
       });
+  }
+
+  updateTab = (name) => {
+    const userCreatedArray = this.state.userBins.map(bin => bin.name.toLowerCase()).filter(bin => (bin !== 'trash' && bin !== 'read' && bin !== 'all reports' && bin !== 'new case'));
+    const array = ['all reports', 'read', 'trash', 'new case'].concat(userCreatedArray);
+    const index = array.indexOf(name);
+    this.setState({
+      bin: name,
+      currentTab: index,
+    });
   }
 
   /**
@@ -284,7 +285,7 @@ class ReportList extends Component {
           </Modal>
 
           {/* ====== Floating Action Button for Going back to Main Visualization ====== */}
-          <div style={{ position: 'absolute', left: '0px', bottom: '0px' }} >
+          <div style={{ position: 'absolute', left: '0px', bottom: '0px', padding: '20px' }} >
             <MaterialTooltip
               title="Go Back To Visualization"
               placement="top"
@@ -303,7 +304,7 @@ class ReportList extends Component {
           </div>
 
           {/* ====== Floating Action Button for Opening Case Summary ====== */}
-          <div style={{ position: 'absolute', right: '0px', bottom: '0px' }} >
+          <div style={{ position: 'absolute', right: '0px', bottom: '0px', padding: '20px' }} >
             <MaterialTooltip
               title="Open Case Summary"
               placement="top"

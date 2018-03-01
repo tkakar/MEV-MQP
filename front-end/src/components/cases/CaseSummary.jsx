@@ -132,6 +132,10 @@ class CaseSummary extends Component {
     primary: '#0CE88E',
   };
 
+  handleCaseChange = () => {
+    this.props.updateTab(this.state.caseName);
+  }
+
   renderBarChart = () => ((this.state.barChartData.length > 0)
     ? (
       <ResponsiveContainer width="100%" height={300} >
@@ -187,17 +191,13 @@ class CaseSummary extends Component {
     )
     : null);
 
-  handleCaseChange = () => {
-    this.props.updateTab(this.state.caseName);
-  }
-
   render() {
     return (
       <div style={{ width: '100%' }} >
+        <Button className="pull-right" onClick={this.handleCaseChange} raised color="primary">View Case Reports</Button>
         <Typography type="display1">
           Case Details:
         </Typography>
-        <Button onClick={this.handleCaseChange} variant="raised" color='primary'> View This Case </Button>
         <br />
         <Typography type="headline">
           {this.toTitleCase(this.state.caseName)}

@@ -160,9 +160,25 @@ class TreeMap extends Component {
             color: '#eee',
             textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
             letterSpacing: '1px',
+            transform: 'translateX(calc(-100% - 5px))',
           }}
         >
           Least Severe
+        </Typography>
+        <Typography
+          type="button"
+          style={{
+            fontSize: '13px',
+            color: '#eee',
+            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            letterSpacing: '1px',
+            position: 'absolute',
+            left: '50%',
+            width: 'fit-content',
+            // transform: 'translateX(-50%)',
+          }}
+        >
+          Legend
         </Typography>
         <Typography
           type="button"
@@ -172,6 +188,7 @@ class TreeMap extends Component {
             color: '#eee',
             textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
             letterSpacing: '1px',
+            transform: 'translateX(calc(100% + 5px))',
           }}
         >
           Most Severe

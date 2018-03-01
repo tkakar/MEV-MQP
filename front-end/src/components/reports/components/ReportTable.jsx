@@ -352,6 +352,10 @@ class ReportTable extends React.PureComponent {
     );
   };
 
+  handleToggleChange = primaryid => (event) => {
+    this.setState({ [primaryid]: event.target.checked });
+  }
+
   renderMoveToIcon = (binName, greyOutCaseIcon) => {
     switch (binName) {
       case 'Trash':
@@ -367,7 +371,7 @@ class ReportTable extends React.PureComponent {
         return (
           <div>
             {(greyOutCaseIcon)
-              ? <ReadCaseIcon width={45} height={45} style={{ filter: 'grayscale(100%)' }} />
+              ? <ReadCaseIcon width={45} height={45} style={{ filter: 'hue-rotate(270deg)' }} />
               : <ReadCaseIcon width={45} height={45} />}
             <Typography style={{ display: 'block' }} type="subheading">
               {binName}
@@ -387,7 +391,7 @@ class ReportTable extends React.PureComponent {
         return (
           <div>
             {(greyOutCaseIcon)
-              ? <CaseIcon width={45} height={45} style={{ filter: 'grayscale(100%)' }} />
+              ? <CaseIcon width={45} height={45} style={{ filter: 'hue-rotate(270deg)' }} />
               : <CaseIcon width={45} height={45} />}
             <Typography style={{ display: 'block' }} type="subheading">
               {binName}
@@ -397,26 +401,7 @@ class ReportTable extends React.PureComponent {
     }
   }
 
-  handleToggleChange = primaryid => (event) => {
-    this.setState({ [primaryid]: event.target.checked });
-  }
 
-  /*
-  <MaterialTooltip
-              title="Open Case Summary"
-              placement="top"
-              enterDelay={50}
-              classes={{
-                tooltip: this.props.classes.tooltipStyle,
-                popper: this.props.classes.tooltipStyle,
-                }}
-            >
-              <Button fab style={{ margin: 12 }} color="primary" onClick={this.handleViewCaseSummary} >
-                <img src={ViewCaseSummary} className={this.props.classes.caseSummarySVG} alt="Open Case Summary" />
-              </Button>
-            </MaterialTooltip>
-
-  */
   /**
    * Defines the html content inside each expandable dropdown area for each row
    * of the table
@@ -428,7 +413,7 @@ class ReportTable extends React.PureComponent {
           <div className="col-sm-12">
             <FormControlLabel
               control={
-                <MaterialTooltip 
+                <MaterialTooltip
                   title="This toggle does not update this report inside you're cases. You must re-add this report to a case for your change to appear"
                   placement="top"
                   enterDelay={50}
@@ -464,28 +449,28 @@ class ReportTable extends React.PureComponent {
           </div>
           <div className={this.props.classes.moveToCaseDetailsContainer}>
             {this.props.bins.map((bin, index) => (
-            (this.props.bin.toLowerCase() !== bin.name.toLowerCase())
-              ? (
-                <Button
-                  flat="true"
-                  key={bin.case_id}
-                  className={this.props.classes.caseGridList}
-                  onClick={() => {
-                    this.handleMoveReport(
-                      row.row.primaryid,
-                      this.props.bins[index].name.toLowerCase(),
-                      this.state[row.row.primaryid],
-                    );
-                  }}
-                >
-                  {(this.state.currentlyInCase[row.row.primaryid]
-                  && this.state.currentlyInCase[row.row.primaryid].includes(bin.name.toLowerCase()))
-                    ? this.renderMoveToIcon(bin.name, true)
-                    : this.renderMoveToIcon(bin.name)}
-                </Button>
-              )
-            : null
-          ))}
+              (this.props.bin.toLowerCase() !== bin.name.toLowerCase())
+                ? (
+                  <Button
+                    flat="true"
+                    key={bin.case_id}
+                    className={this.props.classes.caseGridList}
+                    onClick={() => {
+                      this.handleMoveReport(
+                        row.row.primaryid,
+                        this.props.bins[index].name.toLowerCase(),
+                        this.state[row.row.primaryid],
+                      );
+                    }}
+                  >
+                    {(this.state.currentlyInCase[row.row.primaryid]
+                      && this.state.currentlyInCase[row.row.primaryid].includes(bin.name.toLowerCase()))
+                      ? this.renderMoveToIcon(bin.name, true)
+                      : this.renderMoveToIcon(bin.name)}
+                  </Button>
+                )
+                : null
+            ))}
           </div>
         </Paper>
       </div>
@@ -510,7 +495,7 @@ class ReportTable extends React.PureComponent {
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
         {/*eslint-disable */}
-        {this.state.loadingData ? <div style={{ position: 'absolute', top: '50px', left: '0px', width: '100%', height: 'calc(100% - 50px)', backgroundColor: 'rgba(25, 25, 25, 0.5)', zIndex: '10000' }}> <div style={{ width: 'fit-content', position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)' }}>  <CircularProgress size={300} /> </div> </div> : 
+        {this.state.loadingData ? <div style={{ position: 'absolute', top: '50px', left: '0px', width: '100%', height: 'calc(100% - 50px)', backgroundColor: 'rgba(25, 25, 25, 0.5)', zIndex: '10000' }}> <div style={{ width: 'fit-content', position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)' }}>  <CircularProgress size={300} /> </div> </div> :
           (this.state.tableHeight !== 0 && this.state.stillResizingTimer === '')
             ? (
               <Grid
@@ -553,7 +538,7 @@ class ReportTable extends React.PureComponent {
                   contentComponent={this.renderDetailRowContent}
                 />
               </Grid>
-              )
+            )
             : null
         }
 
