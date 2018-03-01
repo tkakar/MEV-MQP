@@ -82,6 +82,7 @@ class ReportTable extends React.PureComponent {
       tableHeight: 0,
       stillResizingTimer: '',
       currentlyInCase: [],
+      evidenceType: {},
       snackbarOpen: false,
       snackbarMessage: '',
       loadingData: true,
@@ -136,6 +137,7 @@ class ReportTable extends React.PureComponent {
       }));
 
     this.updateHighlightedRows();
+    this.updateEvidenceRows();
   }
 
   componentDidMount() {
@@ -156,6 +158,7 @@ class ReportTable extends React.PureComponent {
       });
       this.props.getCaseReports(this.props.bin, this.props.userID)
         .then((bins) => {
+          this.updateEvidenceRows();
           this.setState({
             data: bins,
             loadingData: false,
@@ -249,9 +252,9 @@ class ReportTable extends React.PureComponent {
 
   updateHighlightedRows = () => {
     this.props.getReportsInCases(this.props.userID)
-      .then((primaryids) => {
+      .then((response) => {
         this.setState({
-          currentlyInCase: primaryids.reduce((acc, row) => {
+          currentlyInCase: response.reduce((acc, row) => {
             const caseNames = (acc[row.primaryid])
               ? acc[row.primaryid].concat(row.name)
               : [row.name];
@@ -263,6 +266,20 @@ class ReportTable extends React.PureComponent {
         });
       });
   }
+
+  updateEvidenceRows = () => {
+    this.props.getReportsInCases(this.props.userID)
+      .then((response) => {
+        this.setState({
+          evidenceType: response.filter(row => row.name.toLowerCase() === this.props.bin.toLowerCase())
+            .reduce((acc, row) => ({
+              ...acc,
+              [row.primaryid]: row.type,
+            }), {}),
+        });
+      });
+  }
+
 
   updateSummary = () => {
     this.props.incrementSummary();
@@ -296,24 +313,26 @@ class ReportTable extends React.PureComponent {
   /**
    * Sends a backend request to move a report from one bin to another
    */
-  handleMoveReport = (primaryid, toBin, type) => {
-    this.props.moveReport(primaryid, this.props.bin, toBin, this.props.userID, type ? 'primary' : 'supportive')
+  handleMoveReport = (primaryid, fromBin, toBin, type) => {
+    this.props.moveReport(primaryid, fromBin, toBin, this.props.userID, type ? 'primary' : 'supportive')
       .then(() =>
         this.props.getCaseReports(this.props.bin, this.props.userID)
           .then(reports => this.setState({ data: reports }))
           .then(() => {
             this.updateSummary();
             this.updateHighlightedRows();
+            this.updateEvidenceRows();
             this.setState({
               snackbarOpen: true,
               snackbarMessage: `Report ${primaryid} Moved to ${this.props.toTitleCase(toBin)}`,
             });
           }));
-    if (this.props.bin !== 'all reports' || toBin === 'trash') {
+    if (toBin === 'trash') {
       const newExpandedRows = this.state.expandedRows;
       newExpandedRows.splice(this.state.expandedRows.indexOf(primaryid.toString()), 1);
       this.changeExpandedDetails(newExpandedRows);
       this.updateHighlightedRows();
+      this.updateEvidenceRows();
     }
   };
 
@@ -332,16 +351,36 @@ class ReportTable extends React.PureComponent {
     });
   }
 
+  COLORS = {
+    supportive: 'rgba(12, 200, 232, 0.25)',
+    primary: 'rgba(12, 232, 142, 0.25)',
+  };
+
   /**
    * This returns the table Row component with the added background color
    * if the report is in any case for the current user
    */
   TableRow = ({ row, ...props }) => {
-    const incase = this.state.currentlyInCase[props.tableRow.rowId];
-    const backgroundColor =
-      (incase && this.props.bin === 'all reports')
-        ? (incase.includes('read') && incase.length) === 1 ? 'RGBA(211,211,211, 0.2)' : 'RGBA(131, 255, 168, 0.2)'
-        : '';
+    let incase;
+    let evidenceType;
+    let backgroundColor;
+    switch (this.props.bin) {
+      case 'all reports':
+        incase = this.state.currentlyInCase[props.tableRow.rowId];
+        if (!incase) {
+          backgroundColor = '';
+        } else {
+          backgroundColor = (incase.includes('read') && incase.length === 1) ? 'RGBA(211,211,211, 0.2)' : 'RGBA(131, 255, 168, 0.2)';
+        }
+        break;
+      case 'trash':
+      case 'read':
+        backgroundColor = '';
+        break;
+      default:
+        evidenceType = this.state.evidenceType[props.tableRow.rowId];
+        backgroundColor = (evidenceType === 'primary') ? this.COLORS.primary : this.COLORS.supportive;
+    }
     return (
       <Table.Row
         {...props}
@@ -352,8 +391,17 @@ class ReportTable extends React.PureComponent {
     );
   };
 
-  handleToggleChange = primaryid => (event) => {
-    this.setState({ [primaryid]: event.target.checked });
+  handleToggleChange = primaryid => (event, checked) => {
+    if (!(this.props.bin === 'all reports' || this.props.bin === 'read' || this.props.bin === 'trash')) {
+      this.handleMoveReport(
+        primaryid,
+        '',
+        this.props.bin,
+        checked,
+      );
+    } else {
+      this.setState({ [primaryid]: checked });
+    }
   }
 
   renderMoveToIcon = (binName, greyOutCaseIcon) => {
@@ -401,6 +449,54 @@ class ReportTable extends React.PureComponent {
     }
   }
 
+  renderTypeToggle = (row) => {
+    return (this.props.bin === 'all reports' || this.props.bin === 'read' || this.props.bin === 'trash')
+      ? (
+        <MaterialTooltip
+          title="This toggle does not update this report inside you're cases. You must re-add this report to a case for your change to appear"
+          placement="top"
+          enterDelay={50}
+          classes={{
+            tooltip: this.props.classes.tooltipStyle,
+            popper: this.props.classes.tooltipStyle,
+          }}
+        >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.state[row.row.primaryid]}
+                onChange={this.handleToggleChange(row.row.primaryid)}
+                color="primary"
+              />
+            }
+            label={this.state[row.row.primaryid] ? 'Primary Evidence' : 'Supportive Evidence'}
+          />
+        </MaterialTooltip>
+      )
+      : (
+        <MaterialTooltip
+          title="This updates the evidence type for this report in only this case"
+          placement="top"
+          enterDelay={50}
+          classes={{
+            tooltip: this.props.classes.tooltipStyle,
+            popper: this.props.classes.tooltipStyle,
+          }}
+        >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.state.evidenceType[row.row.primaryid] === 'primary'}
+                onChange={this.handleToggleChange(row.row.primaryid)}
+                color="primary"
+              />
+            }
+            label={(this.state.evidenceType[row.row.primaryid] === 'primary') ? 'Primary Evidence' : 'Supportive Evidence'}
+          />
+        </MaterialTooltip>
+      );
+  }
+
 
   /**
    * Defines the html content inside each expandable dropdown area for each row
@@ -411,26 +507,7 @@ class ReportTable extends React.PureComponent {
       <div className="col-sm-3" style={{ marginBottom: '15px' }}>
         <Paper elevation={6} style={{ padding: '5px' }} >
           <div className="col-sm-12">
-            <FormControlLabel
-              control={
-                <MaterialTooltip
-                  title="This toggle does not update this report inside you're cases. You must re-add this report to a case for your change to appear"
-                  placement="top"
-                  enterDelay={50}
-                  classes={{
-                    tooltip: this.props.classes.tooltipStyle,
-                    popper: this.props.classes.tooltipStyle,
-                  }}
-                >
-                  <Switch
-                    onChange={this.handleToggleChange(row.row.primaryid)}
-                    color="primary"
-                    checked={this.state[row.row.primaryid]}
-                  />
-                </MaterialTooltip>
-              }
-              label={this.state[row.row.primaryid] ? 'Primary Evidence' : 'Supportive Evidence'}
-            />
+            {this.renderTypeToggle(row)}
           </div>
           <div className="col-sm-12">
             <Link href="/" to={`/pdf/${row.row.primaryid}`} target="_blank">
@@ -458,6 +535,7 @@ class ReportTable extends React.PureComponent {
                     onClick={() => {
                       this.handleMoveReport(
                         row.row.primaryid,
+                        this.props.bin,
                         this.props.bins[index].name.toLowerCase(),
                         this.state[row.row.primaryid],
                       );
@@ -534,7 +612,7 @@ class ReportTable extends React.PureComponent {
                 <TableHeaderRow showSortingControls />
                 <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
                 <TableRowDetail
-                  cellComponent={(props) => <TableRowDetail.Cell className={this.props.classes.tableDetailCell} {...props} />}
+                  cellComponent={(props) => <TableRowDetail.Cell className={this.props.classes.tableDetailCell} {...props} /> }
                   contentComponent={this.renderDetailRowContent}
                 />
               </Grid>

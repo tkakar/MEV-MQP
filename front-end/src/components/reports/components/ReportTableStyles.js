@@ -28,6 +28,5 @@ export default {
   tooltipStyle: {
     fontSize: '10pt',
     'pointer-events': 'none',
-    float: 'right',
   },
 };

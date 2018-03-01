@@ -343,8 +343,6 @@ class Dashboard extends Component {
                         case 'All Reports':
                           return null;
                         default:
-                          console.log('Active bin??', this.state.binActives);
-                          console.log('option??', option);
                           return (
                             this.state.binActives[option.toLowerCase()] ? <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)} /> : <Tab icon={<CaseIcon />} label={option} key={option} value={index} onClick={event => this.handleCaseClick(event, index)} style={{ filter: 'grayscale(100%)' }} />
                           );

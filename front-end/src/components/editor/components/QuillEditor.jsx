@@ -64,13 +64,14 @@ class QuillEditor extends Component {
   }
 
   componentDidMount() {
+    // Auto save the text every 10 seocnds
     window.addEventListener('beforeunload', this.onUnload);
-    this.autosave = setInterval(() => this.saveWork(), 10000);
+    // this.autosave = setInterval(() => this.saveWork(), 10000);
   }
 
   componentWillUnmount() {
     window.removeEventListener('beforeunload', this.onUnload);
-    clearInterval(this.autosave);
+    // clearInterval(this.autosave);
   }
 
   onUnload = () => this.saveWork();
@@ -283,7 +284,7 @@ class QuillEditor extends Component {
                 onChange={this.handleChange}
                 modules={this.modules}
                 theme="snow"
-                // readOnly
+                readOnly
               />
               : null
           }

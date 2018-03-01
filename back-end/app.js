@@ -431,14 +431,15 @@ app.post('/getreportsincases', (req, res) => {
   console.log('got a report in cases request with body:\n ', req.body);
   if (req.body.userID) {
     let query = 'SELECT DISTINCT name, * '
-    + 'FROM cases '
+    + `FROM cases `
     + `WHERE user_id='${req.body.userID}' `
-    + `AND NOT primaryid='-1'`;
+    + `AND NOT primaryid='-1' `
+    + `AND active=TRUE`;
     
     if (req.body.caseName) {
       query += ` AND name='${req.body.caseName}'`;
     }
-    
+
     console.log(query)
     db.query(query, (err, data) => {
       res.status(200).send(data);
@@ -516,42 +517,58 @@ app.post('/binreport', (req, res) => {
   caseIDQuery = `SELECT DISTINCT case_id FROM cases WHERE name = '${req.body.toBin}' AND user_id = ${req.body.userID}`;
   console.log(caseIDQuery);
   db.query(caseIDQuery, (err, caseIDResult) => {
-    let caseID;
-    if(req.body.toBin !== 'all reports'){
-      caseID = caseIDResult.rows[0].case_id;
-    }
-    toQuery = 'INSERT INTO cases (case_id, primaryid, name, user_id, type) '
-    + `VALUES ('${caseID}', ${req.body.primaryid}, '${req.body.toBin}', ${req.body.userID}, '${req.body.type}') `
-    + `ON CONFLICT (case_id, primaryid) DO UPDATE `
-    + `SET type = '${req.body.type}' `
-    + `WHERE cases.case_id = '${caseID}' AND cases.primaryid = ${req.body.primaryid} AND cases.name = '${req.body.toBin}' AND cases.user_id = ${req.body.userID}`;
-    fromQuery = 'DELETE FROM cases '
-    + `WHERE primaryid = ${req.body.primaryid} AND `
-    + `user_id = ${req.body.userID} AND name = '${req.body.fromBin}'`;
+    if (caseIDResult.rows.length) {
+      let caseID;
+      if(req.body.toBin !== 'all reports'){
+        caseID = caseIDResult.rows[0].case_id;
+      }
+      toQuery = 'INSERT INTO cases (case_id, primaryid, name, user_id, type) '
+      + `VALUES ('${caseID}', ${req.body.primaryid}, '${req.body.toBin}', ${req.body.userID}, '${req.body.type}') `
+      + `ON CONFLICT (case_id, primaryid) DO UPDATE `
+      + `SET type = '${req.body.type}' `
+      + `WHERE cases.case_id = '${caseID}' AND cases.primaryid = ${req.body.primaryid} AND cases.name = '${req.body.toBin}' AND cases.user_id = ${req.body.userID}`;
 
-    if (req.body.toBin === 'trash') {
+      console.log(toQuery)
+
       fromQuery = 'DELETE FROM cases '
       + `WHERE primaryid = ${req.body.primaryid} AND `
-      + `user_id = ${req.body.userID} AND NOT name = '${req.body.toBin}'`;
-    }
+      + `user_id = ${req.body.userID} AND name = '${req.body.fromBin}'`;
 
-    if ((req.body.toBin === 'trash' || req.body.fromBin !== 'all reports') && req.body.toBin !== 'all reports') {
-      console.log(toQuery, fromQuery);
-      db.query(toQuery, (err, toData) => {
-        db.query(fromQuery, (err, fromData) => {
-          res.status(200).send();
+      if (req.body.toBin === 'trash') {
+        fromQuery = 'DELETE FROM cases '
+        + `WHERE primaryid = ${req.body.primaryid} AND `
+        + `user_id = ${req.body.userID} AND NOT name = '${req.body.toBin}'`;
+      }
+
+      if ((req.body.toBin === 'trash' || req.body.fromBin !== 'all reports') && req.body.toBin !== 'all reports') {
+        console.log(toQuery, fromQuery);
+        db.query(toQuery, (err, toData) => {
+          db.query(fromQuery, (err, fromData) => {
+            res.status(200).send();
+          });
         });
-      });
-    } else if (req.body.fromBin === 'all reports' && req.body.toBin !== 'all reports') {
-      console.log(toQuery);
-      db.query(toQuery, (err, toData) => {
-          res.status(200).send();
-      });
-    } else if (req.body.fromBin !== 'all reports' && req.body.toBin === 'all reports') {
-      console.log(fromQuery);
-      db.query(fromQuery, (err, fromData) => {
-          res.status(200).send(fromData);
-      });
+      } else if (req.body.fromBin === 'all reports' && req.body.toBin !== 'all reports') {
+        console.log(toQuery);
+        db.query(toQuery, (err, toData) => {
+            res.status(200).send();
+        });
+      } else if (req.body.fromBin !== 'all reports' && req.body.toBin === 'all reports') {
+        console.log(fromQuery);
+        db.query(fromQuery, (err, fromData) => {
+            res.status(200).send(fromData);
+        });
+      }
+    } else {
+      if (req.body.toBin === 'all reports') {
+        fromQuery = 'DELETE FROM cases '
+        + `WHERE primaryid = ${req.body.primaryid} AND `
+        + `user_id = ${req.body.userID} AND name = '${req.body.fromBin}'`;
+
+        console.log(fromQuery);
+        db.query(fromQuery, (err, fromData) => {
+            res.status(200).send(fromData);
+        });
+      }
     }
   });
 })
@@ -681,7 +698,7 @@ app.put('/archivecase', (req, res) => {
   let query =
   'UPDATE cases '
 + `SET active = '${req.body.active}' `
-+ `WHERE name = '${req.body.name}' AND user_id = '${req.body.userID}' AND primaryid = -1`
++ `WHERE name = '${req.body.name}' AND user_id = '${req.body.userID}'`
   console.log(query);
   db.query(query, (err, data) => {
     res.status(200).send();
@@ -810,6 +827,8 @@ app.post('/getvis', (req, res) => {
       })
     })
   })
+
+
 });
 
 /**

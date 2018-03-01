@@ -16,25 +16,14 @@ import {
   TableColumnResizing,
 } from '@devexpress/dx-react-grid-material-ui';
 import { withStyles } from 'material-ui/styles';
-import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
-import QuillEditor from '../../editor/components/QuillEditor';
-import Switch from 'material-ui/Switch';
-import {
-  FormLabel,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  FormHelperText,
-} from 'material-ui/Form';
 import ExpansionPanel, {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
 } from 'material-ui/ExpansionPanel';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import CaseIcon from '../../../resources/CaseIcon';
 import { moveReport, getCaseReports } from '../../../actions/reportActions';
 
 const styles = {};

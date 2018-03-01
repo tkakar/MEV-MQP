@@ -157,9 +157,8 @@ class TreeMap extends Component {
           className="pull-left"
           style={{
             fontSize: '13px',
-            color: '#eee',
-            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-            letterSpacing: '1px',
+            color: '#333',
+            textShadow: '0px 0px 20px #222',
             transform: 'translateX(calc(-100% - 5px))',
           }}
         >
@@ -168,14 +167,14 @@ class TreeMap extends Component {
         <Typography
           type="button"
           style={{
-            fontSize: '13px',
+            fontSize: '12px',
             color: '#eee',
             textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
             letterSpacing: '1px',
             position: 'absolute',
             left: '50%',
             width: 'fit-content',
-            // transform: 'translateX(-50%)',
+            transform: 'translateX(-50%)',
           }}
         >
           Legend
@@ -185,9 +184,8 @@ class TreeMap extends Component {
           className="pull-right"
           style={{
             fontSize: '13px',
-            color: '#eee',
-            textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-            letterSpacing: '1px',
+            color: '#333',
+            textShadow: '0px 0px 20px #222',
             transform: 'translateX(calc(100% + 5px))',
           }}
         >
@@ -293,9 +291,9 @@ class TreeMap extends Component {
               animationDuration={0}
             >
               <Tooltip
-                content={<CustomTooltip />}
+                content={<CustomTooltip treeMapHeight={this.state.treeMapHeight} />}
                 cursor={{ stroke: '#424242', strokeWidth: 1 }}
-                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000, height: `${this.state.treeMapHeight}px` }}
               />
             </Treemap>
           </Paper>
@@ -327,7 +325,7 @@ class TreeMap extends Component {
               <Tooltip
                 content={<CustomTooltip treeMapHeight={this.state.treeMapHeight} />}
                 cursor={{ stroke: '#424242', strokeWidth: 1 }}
-                wrapperStyle={{ padding: '4px', zIndex: 1000 }}
+                wrapperStyle={{ padding: '4px', zIndex: 1000, height: `${this.state.treeMapHeight}px` }}
               />
             </Treemap>
           </Paper>

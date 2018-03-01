@@ -84,7 +84,10 @@ class CaseSummary extends Component {
 
   getTagData = () => {
     const barChartData = Object.keys(this.state.tags).reduce((acc, key) => {
-      return acc.concat({ name: key.toUpperCase(), count: this.state.tags[key].length });
+      return acc.concat({
+        name: (key.toUpperCase() === 'SEX') ? 'GENDER' : key.toUpperCase(),
+        count: this.state.tags[key].length,
+      });
     }, []);
 
     this.setState({
@@ -155,7 +158,7 @@ class CaseSummary extends Component {
           <Bar dataKey="count" stroke="#444" >
             {
               this.state.barChartData.map(entry =>
-                <Cell key={entry} fill={annotationColors[entry.name.toLowerCase()]} />)
+                <Cell key={entry} fill={annotationColors[(entry.name === 'GENDER') ? 'sex' : entry.name.toLowerCase()]} />)
             }
           </Bar>
         </BarChart>
