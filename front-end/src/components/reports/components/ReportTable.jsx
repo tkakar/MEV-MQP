@@ -86,6 +86,7 @@ class ReportTable extends React.PureComponent {
       snackbarOpen: false,
       snackbarMessage: '',
       loadingData: true,
+      keepTableWhileLoading: false,
       pageSize: 0,
       pageSizes: [10, 25, 50],
       currentPage: 0,
@@ -315,24 +316,32 @@ class ReportTable extends React.PureComponent {
    */
   handleMoveReport = (primaryid, fromBin, toBin, type) => {
     this.props.moveReport(primaryid, fromBin, toBin, this.props.userID, type ? 'primary' : 'supportive')
-      .then(() =>
-        this.props.getCaseReports(this.props.bin, this.props.userID)
-          .then(reports => this.setState({ data: reports }))
-          .then(() => {
-            this.updateSummary();
-            this.updateHighlightedRows();
-            this.updateEvidenceRows();
-            this.setState({
-              snackbarOpen: true,
-              snackbarMessage: `Report ${primaryid} Moved to ${this.props.toTitleCase(toBin)}`,
-            });
-          }));
-    if (toBin === 'trash') {
+      .then(() => {
+        if (toBin === 'trash' || toBin === 'all reports') {
+          this.setState({
+            loadingData: true,
+            keepTableWhileLoading: true,
+          });
+          this.props.getCaseReports(this.props.bin, this.props.userID)
+            .then(reports => this.setState({
+              data: reports,
+              loadingData: false,
+              keepTableWhileLoading: false,
+            }));
+        } else {
+          this.updateHighlightedRows();
+          this.updateEvidenceRows();
+        }
+        this.updateSummary();
+        this.setState({
+          snackbarOpen: true,
+          snackbarMessage: `Report ${primaryid} Moved to ${this.props.toTitleCase(toBin)}`,
+        });
+      });
+    if (toBin === 'trash' || toBin === 'all reports') {
       const newExpandedRows = this.state.expandedRows;
       newExpandedRows.splice(this.state.expandedRows.indexOf(primaryid.toString()), 1);
       this.changeExpandedDetails(newExpandedRows);
-      this.updateHighlightedRows();
-      this.updateEvidenceRows();
     }
   };
 
@@ -573,8 +582,16 @@ class ReportTable extends React.PureComponent {
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
         {/*eslint-disable */}
-        {this.state.loadingData ? <div style={{ position: 'absolute', top: '50px', left: '0px', width: '100%', height: 'calc(100% - 50px)', backgroundColor: 'rgba(25, 25, 25, 0.5)', zIndex: '10000' }}> <div style={{ width: 'fit-content', position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)' }}>  <CircularProgress size={300} /> </div> </div> :
-          (this.state.tableHeight !== 0 && this.state.stillResizingTimer === '')
+        {(this.state.loadingData)
+          ? <div
+              style={{ position: 'absolute', top: '50px', left: '0px', width: '100%', height: 'calc(100% - 50px)', backgroundColor: 'rgba(25, 25, 25, 0.5)', zIndex: '10000' }}
+            >
+              <div style={{ width: 'fit-content', position: 'absolute', top: '50%', left: '50%', transform: 'translateY(-50%) translateX(-50%)' }}> 
+                <CircularProgress size={300} />
+              </div>
+            </div>
+          : null}
+          {(this.state.tableHeight !== 0 && this.state.stillResizingTimer === '' && (!this.state.loadingData || this.state.keepTableWhileLoading))
             ? (
               <Grid
                 rows={this.state.data}
