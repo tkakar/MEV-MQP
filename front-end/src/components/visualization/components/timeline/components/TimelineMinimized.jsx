@@ -185,7 +185,7 @@ class TimelineMinimized extends Component {
             </Link>
           </MaterialTooltip>
           <Button raised color="primary" id="setDateBtn" style={{ display: 'none' }} >Set Date!</Button>
-          <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/16/2017 - 03/31/2017" id="dateRangePicker" style={{ display: 'none' }} />
+          <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/24/2017 - 03/31/2017" id="dateRangePicker" style={{ display: 'none' }} />
         </Paper>
       </Grid>
     );

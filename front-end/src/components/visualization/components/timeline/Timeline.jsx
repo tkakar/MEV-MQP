@@ -42,9 +42,10 @@ class Timeline extends Component {
       previewEndX: '0',
       currentlyFilteredStartDate: 0,
       currentlyFilteredEndDate: 0,
-      currentlyFilteredDateRange: '03/16/2017 - 03/31/2017',
-      currentlyHighlightedDateRange: '03/16/2017 - 03/31/2017',
+      currentlyFilteredDateRange: '03/24/2017 - 03/31/2017',
+      currentlyHighlightedDateRange: '03/24/2017 - 03/31/2017',
 
+      noDataFound: false,
       currentlySelecting: false,
       mouseMovePosition: '0',
       mouseZoomLocation: '0',
@@ -54,12 +55,11 @@ class Timeline extends Component {
   componentWillMount() {
     // Loads the Timeline Data into redux state to be used in the Timeline component
     this.props.getEntireTimeline();
-  }
 
-  componentDidMount() {
     if (this.props.demographicSexData.length === 0) {
-      this.updateDateRangePickerTextBox('03/16/2017 - 03/31/2017');
-      this.updateSelectedDate()('');
+      this.setState({
+        noDataFound: true,
+      });
     }
   }
 

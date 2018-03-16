@@ -57,7 +57,7 @@ class TopNavigation extends Component {
     this.props.toggleStageFilter('CLEAR');
     this.props.toggleCauseFilter('CLEAR');
     this.props.setSelectedDate({
-      startDate: 20170316,
+      startDate: 20170324,
       endDate: 20170331,
     });
   }

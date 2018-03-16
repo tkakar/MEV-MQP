@@ -2,7 +2,14 @@ export default {
   dateSelectedTextField: {
     width: '100%',
     'font-size': '0.8em',
-    display: 'none',
+  },
+  datePickerModal: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    padding: '20px',
+    width: '600px',
   },
   gridContainer: {
     padding: '0px 2px',
