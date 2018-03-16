@@ -76,6 +76,7 @@ class ReportList extends Component {
       currentTab: 0,
       summaryOpen: false,
       summaryCounter: 0,
+      searchedReports:[],
     };
   }
 
@@ -102,12 +103,13 @@ class ReportList extends Component {
   }
 
   updateTab = (name) => {
-    const userCreatedArray = this.state.userBins.map(bin => bin.name.toLowerCase()).filter(bin => (bin !== 'trash' && bin !== 'read' && bin !== 'all reports' && bin !== 'new case'));
-    const array = ['all reports', 'read', 'trash', 'new case'].concat(userCreatedArray);
+    const userCreatedArray = this.state.userBins.map(bin => bin.name.toLowerCase()).filter(bin => (bin !== 'trash' && bin !== 'read' && bin !== 'all reports' && bin !== 'new case' && bin !== 'searched reports'));
+    const array = ['all reports', 'searched reports', 'read', 'trash', 'new case'].concat(userCreatedArray);
     const index = array.indexOf(name);
     this.setState({
       bin: name,
       currentTab: index,
+      searchedReports: this.props.searchedReports,
     });
   }
 
@@ -121,15 +123,21 @@ class ReportList extends Component {
    */
   handleTabClick = (event, currentTab) => {
     // If the Current tab is the New Case tab, open the Modal
-    if (currentTab === 3) {
+    if (currentTab === 4) {
       this.setState({
         currentTab,
         newCaseModalOpen: true,
       });
+    } else if (currentTab === 1) {  // This is the searched tab
+      //***************  Searched reports can be accessed */
+        if(this.props.searchedReports.length > 0)
+          this.setState({ currentTab, searchedReports : this.props.searchedReports , bin: 'searched reports', })
+
     } else {
       this.setState({
         currentTab,
         bin: event.currentTarget.getAttribute('name').toLowerCase(),
+        searchedReports: []
       });
     }
   };
@@ -197,6 +205,7 @@ class ReportList extends Component {
   }
 
   render() {
+    // console.log(this.state.searchedReports)
     return (
       <MuiThemeProvider theme={defaultTheme} >
         <div className={this.props.classes.ReportList} >
@@ -212,14 +221,17 @@ class ReportList extends Component {
               centered
             >
               <Tab icon={<AllReportsIcon />} label="All Reports" key="All Reports" name="All Reports" />
+              <Tab icon={<AllReportsIcon />} label="Searched Reports" name="Searched Reports" />
               <Tab icon={<ReadCaseIcon />} label="Read" key="Read" name="Read" />
               <Tab icon={<TrashIcon />} label="Trash" key="Trash" name="Trash" />
               <Tab icon={<NewCaseIcon />} label="New Case" name="New Case" />
+              
               {this.state.userBins.map((bin) => {
                 switch (bin.name) {
                   case 'Trash':
                   case 'All Reports':
                   case 'Read':
+                  case 'Searched Reports':
                   return null;
                   default:
                     return (
@@ -239,6 +251,7 @@ class ReportList extends Component {
               toTitleCase={this.toTitleCase}
               tableClass={this.state.summaryOpen}
               incrementSummary={this.updateSummary}
+              searchedReports = {this.state.searchedReports}
             />
           </div>
 
@@ -343,6 +356,8 @@ class ReportList extends Component {
 const mapStateToProps = state => ({
   userID: state.user.userID,
   isLoggedIn: state.user.isLoggedIn,
+    /**********  Searched reports */
+  searchedReports: state.all_reports.searched_reports,
 });
 
 /**

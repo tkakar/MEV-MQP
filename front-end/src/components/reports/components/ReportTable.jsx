@@ -31,7 +31,7 @@ import { CircularProgress } from 'material-ui/Progress';
 import Typography from 'material-ui/Typography';
 import { FormControlLabel } from 'material-ui/Form';
 import _ from 'lodash';
-import { moveReport, getCaseReports, getReportNarrativeFromID, getReportsInCases } from '../../../actions/reportActions';
+import { moveReport, getCaseReports, getReportNarrativeFromID, getReportsInCases , setAllReports} from '../../../actions/reportActions';
 import QuillEditor from '../../editor/components/QuillEditor';
 import ReadCaseIcon from '../../../resources/ReadCaseIcon';
 import ClearFilterIcon from '../../../resources/RemoveFromCaseIcon';
@@ -39,12 +39,14 @@ import CaseIcon from '../../../resources/CaseIcon';
 import TrashIcon from '../../../resources/TrashIcon';
 import styles from './ReportTableStyles';
 
+
 /**
  * This is the component for the Report Table
  */
 class ReportTable extends React.PureComponent {
   static propTypes = {
     getCaseReports: PropTypes.func.isRequired,
+    setAllReports: PropTypes.func.isRequired,
     moveReport: PropTypes.func.isRequired,
     getReportNarrativeFromID: PropTypes.func.isRequired,
     getReportsInCases: PropTypes.func.isRequired,
@@ -65,6 +67,7 @@ class ReportTable extends React.PureComponent {
     }).isRequired,
     bin: PropTypes.string.isRequired,
     userID: PropTypes.number.isRequired,
+    searchReports: PropTypes.array,
     classes: PropTypes.shape({
       tableContainer: PropTypes.string,
       moveToCaseDetailsContainer: PropTypes.string,
@@ -78,6 +81,7 @@ class ReportTable extends React.PureComponent {
     super(props);
     this.state = {
       data: [],
+      allData:[],
       expandedRows: [],
       tableHeight: 0,
       stillResizingTimer: '',
@@ -131,12 +135,17 @@ class ReportTable extends React.PureComponent {
    * Sends fetch request to retrieve list of reports to be shown in table
    */
   componentWillMount() {
-    this.props.getCaseReports(this.props.bin, this.props.userID)
-      .then(bins => this.setState({
-        data: bins,
+    if(this.props.bin !== 'searched reports'){
+      this.props.getCaseReports(this.props.bin, this.props.userID)
+      .then(reports => {
+        this.props.setAllReports(reports)
+        this.setState({
+        data: reports,
+        allData: reports,
         loadingData: false,
-      }));
-
+      })
+      });
+    }
     this.updateHighlightedRows();
     this.updateEvidenceRows();
   }
@@ -148,24 +157,39 @@ class ReportTable extends React.PureComponent {
     window.addEventListener('resize', this.resizeTimer);
   }
 
+  componentWillReceiveProps(nextProps){
+    // console.log(this.state.allData)
+    if (nextProps.searchedReports.length!==0){
+      console.log(nextProps)
+      this.setState({ data:nextProps.searchedReports});
+    }
+  }
+
   /**
    * Checks if the selected bin in the ReportList component changes and retrieves
    * new list of reports if necessary
    */
   componentDidUpdate(prevProps) {
     if (prevProps.bin !== this.props.bin || !_.isEqual(this.props.filters, prevProps.filters)) {
-      this.setState({
-        loadingData: true,
-      });
-      this.props.getCaseReports(this.props.bin, this.props.userID)
-        .then((bins) => {
-          this.updateEvidenceRows();
+      if(this.props.bin !== 'searched reports'){
           this.setState({
-            data: bins,
-            loadingData: false,
+            loadingData: true,
           });
-          this.changeExpandedDetails([]);
-        });
+      
+          this.props.getCaseReports(this.props.bin, this.props.userID)
+            .then((reports) => {
+              this.props.setAllReports(reports);
+              this.updateEvidenceRows();
+              this.setState({
+                data: reports,
+                loadingData: false,
+              });
+              this.changeExpandedDetails([]);
+            });
+      }
+      // else {
+      //   this.updateEvidenceRows();
+      // }
     }
   }
 
@@ -269,16 +293,23 @@ class ReportTable extends React.PureComponent {
   }
 
   updateEvidenceRows = () => {
-    this.props.getReportsInCases(this.props.userID)
-      .then((response) => {
-        this.setState({
-          evidenceType: response.filter(row => row.name.toLowerCase() === this.props.bin.toLowerCase())
-            .reduce((acc, row) => ({
-              ...acc,
-              [row.primaryid]: row.type,
-            }), {}),
+    if(this.props.bin !== 'searched reports'){
+      this.props.getReportsInCases(this.props.userID)
+        .then((response) => {
+          this.setState({
+            evidenceType: response.filter(row => row.name.toLowerCase() === this.props.bin.toLowerCase())
+              .reduce((acc, row) => ({
+                ...acc,
+                [row.primaryid]: row.type,
+              }), {}),
+          });
         });
-      });
+      }
+      else{
+        this.setState({
+          evidenceType:[],
+        })
+      }    
   }
 
 
@@ -579,6 +610,8 @@ class ReportTable extends React.PureComponent {
   )
 
   render() {
+
+    console.log(this.state.data)
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
         {/*eslint-disable */}
@@ -594,7 +627,7 @@ class ReportTable extends React.PureComponent {
           {(this.state.tableHeight !== 0 && this.state.stillResizingTimer === '' && (!this.state.loadingData || this.state.keepTableWhileLoading))
             ? (
               <Grid
-                rows={this.state.data}
+                rows={ this.state.data}
                 columns={this.columns}
                 getRowId={row => row.primaryid}
               >
@@ -676,6 +709,7 @@ export default connect(
   {
     moveReport,
     getCaseReports,
+    setAllReports,
     getReportNarrativeFromID,
     getReportsInCases,
   },

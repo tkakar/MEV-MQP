@@ -209,5 +209,12 @@ export const archiveCase = (name, active, userID) => () => {
     }),
   };
 
+
   return fetch(`${process.env.REACT_APP_NODE_SERVER}/archivecase`, fetchData);
 };
+
+export const setAllReports = reports =>
+  dispatch => dispatch({ type: 'SET_ALL_REPORTS', all_reports: reports });
+
+export const setSearchedReports = reports =>
+  dispatch => dispatch({ type: 'SET_SEARCHED_REPORTS', searched_reports: reports });
