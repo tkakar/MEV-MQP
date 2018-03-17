@@ -79,6 +79,8 @@
 ## Working on the Front End
 To make changes to the UI and other aspects of the front end, you must edit assets found in the front-end folder.
 
+## Working with React + Redux
+
 ## Working on the Visualization page
 Assets for the visualization page exist within the visualization folder src/components/visualization.  
 visualization/App.js uses the components for the treemaps, demographics, and timeline which assets are each in their respective folder inside visualization/components.

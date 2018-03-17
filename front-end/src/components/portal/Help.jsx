@@ -61,13 +61,17 @@ class Help extends Component {
     classes: PropTypes.shape({
     }).isRequired,
   }
-  state = {
-    value: 0,
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 0,
+    };
   }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
-  asd = () => 123;
 
   render() {
     return (

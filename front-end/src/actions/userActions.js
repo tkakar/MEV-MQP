@@ -2,7 +2,6 @@
  * Gets the data to build the timeline for the entire database
  */
 export const setUserInfo = (isLoggedIn, userEmail, userID) => (dispatch) => {
-  console.log(isLoggedIn, userEmail, userID);
   return dispatch({ type: 'SET_USER', userInfo: { isLoggedIn, userEmail, userID } });
 };
 
@@ -19,7 +18,6 @@ export const checkUserTrash = userID => () => {
   return fetch(`${process.env.REACT_APP_NODE_SERVER}/getusertrash`, fetchData)
     .then(response => response.json())
     .then((bins) => {
-      console.log('Checking for user', bins);
       if (bins.rows.length > 0) {
         return true;
       }
@@ -43,7 +41,6 @@ export const checkUserRead = userID => () => {
   return fetch(`${process.env.REACT_APP_NODE_SERVER}/getuserread`, fetchData)
     .then(response => response.json())
     .then((bins) => {
-      console.log('Checking for user', bins);
       if (bins.rows.length > 0) {
         return true;
       }

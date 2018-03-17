@@ -57,6 +57,7 @@ class Timeline extends Component {
     this.props.getEntireTimeline();
 
     if (this.props.demographicSexData.length === 0) {
+      this.updateSelectedDate('')();
       this.setState({
         noDataFound: true,
       });
@@ -113,11 +114,15 @@ class Timeline extends Component {
    * Sets the currently selected date from the text box into the Redux State
    */
   updateSelectedDate = setDateBtnClass => () => {
-    const dateRange = document.getElementById('dateRangePicker').value;
+    let dateRange;
+    try {
+      dateRange = document.getElementById('dateRangePicker').value;
+      // Remove Glow on set date button after it has been clicked
+      document.getElementById('setDateBtn').classList.remove(setDateBtnClass);
+    } catch (err) {
+      dateRange = this.state.currentlyFilteredDateRange;
+    }
     const dates = this.getUnformattedDateFromFormattedRange(dateRange);
-
-    // Remove Glow on set date button after it has been clicked
-    document.getElementById('setDateBtn').classList.remove(setDateBtnClass);
 
     // When the date range changes we should update the reference area
     this.setState({

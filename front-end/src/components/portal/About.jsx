@@ -30,8 +30,6 @@ class About extends Component {
     }).isRequired,
   }
 
-  asd = () => 123;
-
   render() {
     return (
       <MuiThemeProvider theme={defaultTheme} >
