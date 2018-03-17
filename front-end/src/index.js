@@ -16,6 +16,7 @@ import reducers from './reducers/index';
 import App from './components/visualization/App';
 import Login from './components/portal/Login';
 import About from './components/portal/About';
+import Help from './components/portal/Help';
 import Dashboard from './components/portal/Dashboard';
 import ReportList from './components/reports/ReportList';
 import NarrativeAnnotator from './components/editor/NarrativeAnnotator';
@@ -77,6 +78,15 @@ ReactDOM.render(
                 <div>
                   <TopNavigation showFilters={true}/>
                   <ReportList { ...props } />
+                </div>
+              );
+            }}
+          />
+          <Route path="/help" component={(props) => {
+              return (
+                <div>
+                  <TopNavigation showFilters={false}/>
+                  <Help { ...props } />
                 </div>
               );
             }}
