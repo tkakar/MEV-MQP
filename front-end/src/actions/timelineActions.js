@@ -15,7 +15,6 @@ export const getEntireTimeline = () => (dispatch) => {
   fetch(`${process.env.REACT_APP_NODE_SERVER}/gettimelinedata`, fetchData)
     .then(response => response.json())
     .then((allReports) => {
-      console.log('Got timeline');
       dispatch({ type: 'SET_ENTIRE_TIMELINE', entireTimelineData: allReports });
     })
     .catch((err) => {

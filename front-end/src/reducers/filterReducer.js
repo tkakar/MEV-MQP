@@ -1,6 +1,6 @@
 const initialFilterState = {
   init_fda_dt: {
-    start: 20170316,
+    start: 20170324,
     end: 20170331,
   },
   sex: [],

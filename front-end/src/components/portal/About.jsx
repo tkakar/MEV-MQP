@@ -30,22 +30,17 @@ class About extends Component {
     }).isRequired,
   }
 
-  asd = () => 123;
-
   render() {
     return (
       <MuiThemeProvider theme={defaultTheme} >
         <div className="About container">
           <div className="row">
             <div className="col-sm-12">
-              <h2>About Page</h2>
               <h3>Medication Error and Adverse Reaction Trend Visualizer</h3>
-              <p>The Medication Error and Adverse Reaction trend visualizer compiles medication error and adverse reaction reports and visualizes them in a way that is easy to analyze and manipulate. The proposed layout for the interface below.</p>
-
-              <p>The layout consists of three main sections. The center portion of the interface contains tree-mappings that display information about the selected reports. A majority of the interface is dedicated to this visualization because it holds the most significant data, which users can use to extrapolate trends. On the left side of the interface is the demographics bar which contains visualizations for the gender, age, and location breakdowns of selected reports. The lower section of the layout consists of two time-based tools- the timeline and calendar. The timeline displays how many reports were filed in a given week and changes color depending on the severity of those reports. When a time frame is selected, the visualizations in the timeline and demographics sections change accordingly to reflect the updated information. All of the sections are interactive and update dynamically to changes made in other parts of the interface.</p>
+              <h5>This is a system to view, analyze and classify reports from the FDA Adverse Event Reporting System (FAERS).</h5>
             </div>
             <div className="col-sm-4">
-              <h3>Developers</h3>
+              <h4>Developers</h4>
               <ul>
                 <li>Derek Murphy - Computer Science 2018</li>
                 <li>Oliver Spring - Computer Science 2018</li>
@@ -54,21 +49,36 @@ class About extends Component {
               </ul>
             </div>
             <div className="col-sm-4">
-              <h3>Faculty Advisor</h3>
+              <h4>Faculty Advisor</h4>
               <ul>
                 <li>Professor Elke Rundensteiner</li>
               </ul>
             </div>
             <div className="col-sm-4">
-              <h3>Graduate Student Mentors</h3>
+              <h4>Graduate Student Mentors</h4>
               <ul>
                 <li>Tabassum Kakar</li>
                 <li>Xiao Qin</li>
               </ul>
             </div>
             <div className="col-sm-12">
-              <h3>FDA Contacts</h3>
-              <p>[To get names from tabassum!]</p>
+              <h4>FDA Contacts</h4>
+              <div style={{ marginLeft: '10px' }}>
+                <p><strong>Suranjan De</strong>, MS, MBA.</p>
+                <p>Deputy Director, Regulatory Science Staff (RSS), Office of Surveillance & Epidemiology, CDER, FDA</p>
+                <p><strong>Sanjay K. Sahoo</strong>, MS, MBA.</p>
+                <p>Team Lead (Acting) Regulatory Science Staff (RSS), Office of Surveillance & Epidemiology, CDER, FDA</p>
+                <h4>FDA Safety Evaluators:</h4>
+                <ul>
+                  <li>Christian Cao</li>
+                  <li>Monica Munoz</li>
+                  <li>Tingting Gao</li>
+                  <li>Jo Wyeth</li>
+                  <li>Oanh Dang</li>
+                  <li>Cathy Miller</li>
+                  <li>Madhuri Patel</li>
+                </ul>
+              </div>
             </div>
           </div>
 

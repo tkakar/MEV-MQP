@@ -49,18 +49,18 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script type="text/javascript" >
-      $( document ).ready(function() {
+      function initializeDatePicker() {
         $('#dateRangePicker').daterangepicker({
-          autoApply: false,
+          autoApply: true,
           linkedCalendars: false,
           alwaysShowCalendars: true,
-          startDate: '3/16/2017',
+          startDate: '3/24/2017',
           endDate: '3/31/2017',
           drops: 'up',
         }, function(start, end, label) {
           // console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
         });
-      });
+      }
     </script>
   </body>
 </html>

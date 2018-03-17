@@ -5,6 +5,8 @@ import { withStyles } from 'material-ui/styles';
 import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
+import Modal from 'material-ui/Modal';
 import Button from 'material-ui/Button';
 import MaterialTooltip from 'material-ui/Tooltip';
 import { Area, AreaChart, CartesianGrid, XAxis, Tooltip, ResponsiveContainer, ReferenceArea } from 'recharts';
@@ -44,9 +46,11 @@ class TimelineMaximized extends Component {
     currentlyHighlightedDateRange: PropTypes.string.isRequired,
     currentlySelecting: PropTypes.bool.isRequired,
     mouseMovePosition: PropTypes.string.isRequired,
+    noDataFound: PropTypes.bool.isRequired,
 
     classes: PropTypes.shape({
       dateSelectedTextField: PropTypes.string,
+      datePickerModal: PropTypes.string,
       gridContainer: PropTypes.string,
       timelineChartWrapperMaximized: PropTypes.string,
       timelineChartMaximized: PropTypes.string,
@@ -57,6 +61,13 @@ class TimelineMaximized extends Component {
       reportsButtonSVG: PropTypes.string,
       tooltipStyle: PropTypes.string,
     }).isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalOpen: false,
+    };
   }
 
   componentDidMount() {
@@ -124,6 +135,28 @@ class TimelineMaximized extends Component {
       }
     }, true);
   }
+
+  setDateHandler = (event) => {
+    this.handleDatePickerClose();
+    this.props.updateSelectedDate(this.props.classes.unselectedSetDateButton)(event);
+  }
+
+  openDatePickerHandler = () => {
+    // Initialize the JQuery Date Picker
+    window.initializeDatePicker();
+    this.setState({
+      modalOpen: true,
+    });
+  }
+
+  /**
+   * Handler for Closing the Date Picker Modal
+   */
+  handleDatePickerClose = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  };
 
   /**
    * Dummy data that is used to show an empty graph while the timeline is loading
@@ -255,10 +288,24 @@ class TimelineMaximized extends Component {
             raised
             color="primary"
             className={this.props.classes.setDateButton}
-            onClick={this.props.updateSelectedDate(this.props.classes.unselectedSetDateButton)}
+            onClick={this.setDateHandler}
             id="setDateBtn"
           >
-            Set Date!
+            Set Date
+          </Button>
+          <Button
+            raised
+            color="primary"
+            onClick={this.openDatePickerHandler}
+            style={{
+              position: 'absolute',
+              right: '90px',
+              zIndex: 800,
+              transform: 'translate(-2px, 3px)',
+            }}
+            id="openDatePicker"
+          >
+            Calendar Date Picker
           </Button>
           <div className={this.props.classes.timelineChartMaximized} id="timeline-chart" >
             {(this.props.entireTimelineData.length > 1)
@@ -285,7 +332,32 @@ class TimelineMaximized extends Component {
               </Button>
             </Link>
           </MaterialTooltip>
-          <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/16/2017 - 03/31/2017" id="dateRangePicker" />
+
+          {/* ====== Modal for Creating a New Case ====== */}
+          <Modal
+            aria-labelledby="simple-modal-title"
+            aria-describedby="simple-modal-description"
+            open
+            onClose={this.handleDatePickerClose}
+            style={{ visibility: (this.state.modalOpen) ? 'visible' : 'hidden' }}
+          >
+            <Paper elevation={8} className={this.props.classes.datePickerModal} >
+              <Typography type="title" id="modal-title">
+                Select a Date Range
+              </Typography>
+              <hr />
+              <TextField className={this.props.classes.dateSelectedTextField} label="Selected Date Range" defaultValue="03/24/2017 - 03/31/2017" id="dateRangePicker" />
+              <Button
+                raised
+                onClick={this.setDateHandler}
+                style={{ margin: '12px 0px' }}
+                id="setDateBtn"
+                color="primary"
+              >
+                Set Date
+              </Button>
+            </Paper>
+          </Modal>
         </Paper>
       </Grid>
     );

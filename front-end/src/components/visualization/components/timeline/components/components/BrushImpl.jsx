@@ -28,7 +28,7 @@ class BrushImpl extends Brush {
         delta = -1;
       }
     } else {
-      console.log('DeltaY is 0');
+      // console.log('DeltaY is 0');
     }
 
     if (delta > 0) {
@@ -92,7 +92,7 @@ class BrushImpl extends Brush {
         }
       }
     } else {
-      console.log('DeltaY is 0');
+      // console.log('DeltaY is 0');
     }
 
     const prevValue = this.state[movingTravellerId];

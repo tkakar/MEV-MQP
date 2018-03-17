@@ -57,7 +57,7 @@ class TopNavigation extends Component {
     this.props.toggleStageFilter('CLEAR');
     this.props.toggleCauseFilter('CLEAR');
     this.props.setSelectedDate({
-      startDate: 20170316,
+      startDate: 20170324,
       endDate: 20170331,
     });
   }
@@ -150,12 +150,26 @@ class TopNavigation extends Component {
                 </div>
                 <div className={`${this.props.classes.wpiLogoContainer}`} >
                   <img src={wpiLogo} className={`${this.props.classes.wpiLogoClass} img-responsive`} />
+                  <Link to="/help" className={this.props.classes.listLink}>
+                    <Typography style={{
+ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block',
+}}
+                    >
+                      Help&nbsp;
+                    </Typography>
+                  </Link>
+                  <Typography style={{
+ fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block',
+}}
+                  >
+                      |
+                  </Typography>
                   <Link to="/about" className={this.props.classes.listLink}>
                     <Typography style={{
  fontSize: '12px', color: '#fff', marginTop: '15px', display: 'inline-block',
 }}
                     >
-                      About&nbsp;
+                      &nbsp;About&nbsp;
                     </Typography>
                   </Link>
                   <Typography style={{
