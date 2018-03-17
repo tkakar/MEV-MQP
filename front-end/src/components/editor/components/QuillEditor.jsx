@@ -11,6 +11,9 @@ import Button from 'material-ui/Button';
 import { getReportNarrativeFromID } from '../../../actions/reportActions';
 import styles from './QuillEditorStyles';
 import annotationColors from './AnnotationColors';
+import Highlighter from 'react-highlight-words';
+// import styles from 'react-highlight-words.example.css'
+// import latinize from 'latinize';
 import './NarrativeAnnotator.css';
 
 class QuillEditor extends Component {
@@ -43,6 +46,8 @@ class QuillEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      searching:false,
+      valueAttr:'Search..',
       loading: true,
       current: {
         reportText: '',
@@ -52,6 +57,12 @@ class QuillEditor extends Component {
         reportText: '',
         tags: [],
       },
+      textHighlight:{
+        searchText:'    ',
+        textToHighlight:'FDA contacted the patient for follow-up after',
+        activeIndex: -1,
+        caseSensitive: false
+      }
     };
   }
 
@@ -74,7 +85,7 @@ class QuillEditor extends Component {
     // clearInterval(this.autosave);
   }
 
-  onUnload = () => this.saveWork();
+  onUnload = () => this.saveWork()
 
   getTextFromID = (id) => {
     if (isNaN(id)) {
@@ -109,6 +120,7 @@ class QuillEditor extends Component {
           }
         });
     }
+    
   }
 
   setHeaderStyle(header) {
@@ -149,6 +161,27 @@ class QuillEditor extends Component {
         .catch(err => console.log(err));
     }
   }
+
+
+  display =() =>{
+    return <div>
+        {/* {this.customToolbar()} */}
+        {
+          (!this.state.loading)
+            ? <ReactQuill
+              id={`${this.props.primaryid}` || 'react-quill'}
+              value={this.state.current.reportText}
+              onChange={this.handleChange}
+              modules={this.modules}
+              theme="snow"
+              readOnly
+            />
+            : null
+        }
+    </div>    
+
+  }
+
 
   handleChange = (value) => {
     const drugRE = `background-color: ${annotationColors.drug};`;
@@ -218,6 +251,29 @@ class QuillEditor extends Component {
     this.quill.formatText(index, length, 'background', color);
   }
 
+  searchTextBox =(event) => {
+    this.setState({valueAttr: event.target.value});
+    // console.log(event)
+
+    if (event.target.value==='') {
+       this.setState({searching:false})
+    }
+    else
+        this.setState({searching:true})
+
+
+    this.setState({textHighlight:{searchText: event.target.value},
+     
+    })
+    
+
+  }
+
+  clearText= () =>{
+    this.setState({valueAttr: ''})
+
+  }
+
   customToolbar = () => (
     <div id={`react-quill-${this.props.primaryid}`} style={{ padding: '4px' }}>
       <select defaultValue="false" className="ql-header" style={{ height: '36px', margin: '4px' }}>
@@ -225,33 +281,40 @@ class QuillEditor extends Component {
         <option value="2" />
         <option value="false" />
       </select>
-      <Button className="ql-colorBackground" value={annotationColors.drug} style={{ padding: '0px', margin: '4px', background: annotationColors.drug }}>
+      <Button className="ql-colorBackground" value={annotationColors.drug} style={{ padding: '0px', margin: '2px', background: annotationColors.drug}}>
         Drug
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.reaction} style={{ padding: '0px', margin: '4px', background: annotationColors.reaction }}>
+      <Button className="ql-colorBackground" value={annotationColors.reaction} style={{ padding: '0px', margin: '2px', background: annotationColors.reaction }}>
         Adverse Reaction
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.dosage} style={{ padding: '0px', margin: '4px', background: annotationColors.dosage }}>
+      <Button className="ql-colorBackground" value={annotationColors.dosage} style={{ padding: '0px', margin: '2px', background: annotationColors.dosage }}>
         Dosage
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.age} style={{ padding: '0px', margin: '4px', background: annotationColors.age }}>
+      <Button className="ql-colorBackground" value={annotationColors.age} style={{ padding: '0px', margin: '2px', background: annotationColors.age }}>
         Age
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.sex} style={{ padding: '0px', margin: '4px', background: annotationColors.sex }}>
+      <Button className="ql-colorBackground" value={annotationColors.sex} style={{ padding: '0px', margin: '2px', background: annotationColors.sex }}>
         Gender
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.weight} style={{ padding: '0px', margin: '4px', background: annotationColors.weight }}>
+      <Button className="ql-colorBackground" value={annotationColors.weight} style={{ padding: '0px', margin: '2px', background: annotationColors.weight }}>
         Weight
       </Button>
-      <Button className="ql-colorBackground" value={annotationColors.indication} style={{ padding: '0px', margin: '4px', background: annotationColors.indication }}>
+      <Button className="ql-colorBackground" value={annotationColors.indication} style={{ padding: '0px', margin: '2px', background: annotationColors.indication }}>
         Indication
       </Button>
-      <Button className="ql-colorBackground" value="" style={{ padding: '0px', margin: '4px' }}>
-        Clear
-      </Button>
-      <Button className="ql-colorBackground pull-right" value={annotationColors.interesting} style={{ padding: '0px', margin: '4px', background: annotationColors.interesting }}>
+      <Button className="ql-colorBackground" value={annotationColors.interesting} style={{ padding: '0px', margin: '2px', background: annotationColors.interesting }}>
         Interesting
       </Button>
+      <Button className="ql-colorBackground" value="" style={{ padding: '0px', margin: '2px', minWidth:'15px', width: '15px'}}>
+        Clear
+      </Button>
+      {/* <Button className="ql-colorBackground pull-right" value={annotationColors.interesting} style={{ padding: '0px', margin: '4px', background: annotationColors.interesting }}>
+        Interesting
+      </Button> */}
+      {/* <label className="ql-colorBackground pull" value="search" style={{ padding: '0px', margin: '4px'}}>
+        Search
+      </label> */}
+      <input className="ql-colorBackground pull-right" id="SearchTextbox" value= "Search.." ref={el => this.inputEntry = el} type="text" name="search" value = {this.state.valueAttr}  onClick= {this.clearText} onChange={this.searchTextBox}  style={{ padding: '0px', margin: '0px' }} />
     </div>
   )
 
@@ -271,23 +334,37 @@ class QuillEditor extends Component {
   };
 
   render() {
+  
+    const { ...props } = this.props
+    const { activeIndex, caseSensitive, searchText } = this.state.textHighlight
+    const  textToHighlight = this.state.current.reportText;
+    // console.log(searchText)
+
+    const searchWords= searchText.split(/\s/).filter(word => word)
+    // console.log(searchWords)
     return (
       <div className={`${this.props.classes.pdfView} container`}>
         {/* ====== Quil editor for Annotating the Report Text ====== */}
+
+
         <Paper elevation={4} className={this.props.classes.paperWindow}>
-          {this.customToolbar()}
-          {
-            (!this.state.loading)
-              ? <ReactQuill
-                id={`${this.props.primaryid}` || 'react-quill'}
-                value={this.state.current.reportText}
-                onChange={this.handleChange}
-                modules={this.modules}
-                theme="snow"
-                readOnly
-              />
-              : null
-          }
+        {this.customToolbar()}
+        {(!this.state.searching)
+          ?this.display() 
+          : (
+
+            <Highlighter
+            activeClassName={styles.Active}
+            activeIndex={this.state.textHighlight.activeIndex}
+            caseSensitive={this.state.textHighlightcaseSensitive}
+            highlightClassName={styles.Highlight}
+            highlightStyle={{ fontWeight: 'normal', backgroundColor : '#ffd54f' }}
+            searchWords={searchWords}
+            textToHighlight={textToHighlight}
+          />
+          )
+        }
+
         </Paper>
 
         {/* ====== Save Button Area ====== */}
@@ -307,6 +384,7 @@ class QuillEditor extends Component {
               className={this.props.classes.buttonProgress}
             />}
         </div>
+      
       </div>
     );
   }

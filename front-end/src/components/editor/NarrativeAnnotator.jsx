@@ -43,6 +43,10 @@ class NarrativeAnnotator extends Component {
         <div className="row">
           <div className="col-sm-12">
             <h1>Report Narrative</h1>
+            {/* <label className="ql-colorBackground pull-right" value="search" style={{ padding: '0px', margin: '4px'}}>
+             Search
+            </label>
+            <input className="ql-colorBackground pull-right"  type="text" name="search"   onChange={event => this.setState({textHighlight:{searchText: event.target.value}})}  style={{ padding: '0px', margin: '0px' }} /> */}
             <QuillEditor match={this.props.match} />
           </div>
         </div>
