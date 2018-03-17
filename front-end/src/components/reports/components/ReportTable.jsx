@@ -530,31 +530,41 @@ class ReportTable extends React.PureComponent {
         <Paper elevation={6}>
           <div className="col-sm-12" style={{ padding: '5px 10px' }}>
             <Typography style={{ fontSize: '14px' }} type="button">
-              Send Report to:
+              Add Report to Case:
             </Typography>
           </div>
           <div className={this.props.classes.moveToCaseDetailsContainer}>
             {this.props.bins.map((bin, index) => (
               (this.props.bin.toLowerCase() !== bin.name.toLowerCase())
                 ? (
-                  <Button
-                    flat="true"
-                    key={bin.case_id}
-                    className={this.props.classes.caseGridList}
-                    onClick={() => {
-                      this.handleMoveReport(
-                        row.row.primaryid,
-                        this.props.bin,
-                        this.props.bins[index].name.toLowerCase(),
-                        this.state[row.row.primaryid],
-                      );
+                  <MaterialTooltip
+                    title={(bin.name.toLowerCase() === 'trash') ? 'Warning: Adding this report to the Trash also removes the report from any other cases it is in' : 'Adds this report to this case'}
+                    placement="top"
+                    enterDelay={50}
+                    classes={{
+                      tooltip: this.props.classes.tooltipStyle,
+                      popper: this.props.classes.tooltipStyle,
                     }}
                   >
-                    {(this.state.currentlyInCase[row.row.primaryid]
-                      && this.state.currentlyInCase[row.row.primaryid].includes(bin.name.toLowerCase()))
-                      ? this.renderMoveToIcon(bin.name, true)
-                      : this.renderMoveToIcon(bin.name)}
-                  </Button>
+                    <Button
+                      flat="true"
+                      key={bin.case_id}
+                      className={this.props.classes.caseGridList}
+                      onClick={() => {
+                        this.handleMoveReport(
+                          row.row.primaryid,
+                          this.props.bin,
+                          this.props.bins[index].name.toLowerCase(),
+                          this.state[row.row.primaryid],
+                        );
+                      }}
+                    >
+                      {(this.state.currentlyInCase[row.row.primaryid]
+                        && this.state.currentlyInCase[row.row.primaryid].includes(bin.name.toLowerCase()))
+                        ? this.renderMoveToIcon(bin.name, true)
+                        : this.renderMoveToIcon(bin.name)}
+                    </Button>
+                  </MaterialTooltip>
                 )
                 : null
             ))}

@@ -306,7 +306,7 @@ class ReportList extends Component {
           {/* ====== Floating Action Button for Opening Case Summary ====== */}
           <div style={{ position: 'absolute', right: '0px', bottom: '0px', padding: '20px' }} >
             <MaterialTooltip
-              title="Open Case Summary"
+              title={(this.state.summaryOpen) ? 'Close Case Summary' : 'Open Case Summary'}
               placement="top"
               enterDelay={50}
               classes={{
