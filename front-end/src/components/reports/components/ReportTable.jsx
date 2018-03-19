@@ -620,8 +620,6 @@ class ReportTable extends React.PureComponent {
   )
 
   render() {
-
-    console.log(this.state.data)
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
         {/*eslint-disable */}

@@ -4,15 +4,16 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import {
-  RowDetailState, SortingState, IntegratedSorting,
+  RowDetailState, SortingState, IntegratedSorting, PagingState, IntegratedPaging,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
-  VirtualTable,
+  Table,
   TableHeaderRow,
   DragDropProvider,
   TableColumnReordering,
   TableRowDetail,
+  PagingPanel,
   TableColumnResizing,
 } from '@devexpress/dx-react-grid-material-ui';
 import { withStyles } from 'material-ui/styles';
@@ -56,6 +57,9 @@ class UserReportTable extends React.PureComponent {
     this.state = {
       data: [],
       expandedRows: [],
+      pageSize: 0,
+      pageSizes: [10, 25, 50],
+      currentPage: 0,
     };
 
     this.changeExpandedDetails = (expandedRows) => {
@@ -193,8 +197,18 @@ class UserReportTable extends React.PureComponent {
             { columnName: 'Event Date', direction: 'asc' },
           ]}
         />
+        <PagingState
+          currentPage={this.state.currentPage}
+          onCurrentPageChange={this.changeCurrentPage}
+          pageSize={this.state.pageSize}
+          onPageSizeChange={this.changePageSize}
+        />
         <IntegratedSorting />
-        <VirtualTable />
+        <IntegratedPaging />
+        <Table />
+        <PagingPanel
+          pageSizes={this.state.pageSizes}
+        />
         <TableColumnResizing columnWidths={this.columnWidths} />
         <TableHeaderRow showSortingControls />
         <TableColumnReordering defaultOrder={this.columns.map(column => column.name)} />
