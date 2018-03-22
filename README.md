@@ -37,6 +37,9 @@
 4. Start the server by running `npm run startBoth`. This starts the node server and the redis cache
 5. Detach from the screen by pressing `ctrl + a` followed by `d`
 
+#### Starting PostgreSQL
+  - If you need to restart the database for any reason, type the command `sudo systemctl restart postgresql.service`
+
 ### Remote Deploy
 1. SSH into the `mev.wpi.edu` machine and stop the node server with `ctrl-c`
 2. Inside of the `mev-mqp` folder run the `deploy.sh` file as '`sh deploy.sh` *`username`*' where username is your user account name on the `mev.wpi.edu` machine. 
