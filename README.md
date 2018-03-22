@@ -258,3 +258,8 @@ Our backend is a one file server that receives requests sent from the front end 
 
 ### Adding and modifying endpoints
 We use the express library (https://expressjs.com/) for our backend and documentation for use can be found at https://expressjs.com/en/4x/api.html#app.
+
+
+### DB Schema
+[Link to the FAERS database](https://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/UCM350391.pdf)  
+[PostgreSQL Schema](https://github.com/mlzbernauer/FAERS)
