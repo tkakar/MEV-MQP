@@ -26,6 +26,7 @@ class Timeline extends Component {
       }),
     ).isRequired,
     demographicSexData: PropTypes.array.isRequired,
+    selectedDate: PropTypes.object.isRequired,
     classes: PropTypes.shape({
       minimizeButton: PropTypes.string,
       timelineContainer: PropTypes.string,
@@ -38,12 +39,7 @@ class Timeline extends Component {
     this.state = {
       selectedStartX: '0',
       selectedEndX: '0',
-      previewStartX: '0',
-      previewEndX: '0',
-      currentlyFilteredStartDate: 0,
-      currentlyFilteredEndDate: 0,
       currentlyFilteredDateRange: '03/24/2017 - 03/31/2017',
-      currentlyHighlightedDateRange: '03/24/2017 - 03/31/2017',
 
       noDataFound: false,
       currentlySelecting: false,
@@ -62,7 +58,14 @@ class Timeline extends Component {
         noDataFound: true,
       });
     }
+
+    // Read the redux state for the currently selected timeline to set the highlighted box
+    this.setState({
+      selectedStartX: this.props.selectedDate.start,
+      selectedEndX: this.props.selectedDate.end,
+    });
   }
+
 
   /**
    * Returns the current location of the mouse (relative to the Graph)
@@ -101,12 +104,9 @@ class Timeline extends Component {
    */
   updateDateRangePickerTextBox = (dateRange) => {
     const datePicker = document.getElementById('dateRangePicker');
-    if (datePicker.value !== dateRange) {
+    if (datePicker && datePicker.value !== dateRange) {
       datePicker.value = dateRange;
       document.getElementById('dateRangePicker').dispatchEvent(new Event('keyup'));
-      this.setState({
-        currentlyHighlightedDateRange: `${dateRange}`,
-      });
     }
   }
 
@@ -126,11 +126,9 @@ class Timeline extends Component {
 
     // When the date range changes we should update the reference area
     this.setState({
-      previewStartX: `${dates.startDate}`,
-      previewEndX: `${dates.endDate}`,
+      selectedStartX: `${dates.startDate}`,
+      selectedEndX: `${dates.endDate}`,
 
-      currentlyFilteredStartDate: dates.startDate,
-      currentlyFilteredEndDate: dates.endDate,
       currentlyFilteredDateRange: `${dateRange}`,
     });
 
@@ -197,8 +195,8 @@ class Timeline extends Component {
             getmouseZoomLocation={this.getmouseZoomLocation}
             getUnformattedDateFromFormattedRange={this.getUnformattedDateFromFormattedRange}
             formatDate={this.formatDate}
-            previewStartX={this.state.previewStartX}
-            previewEndX={this.state.previewEndX}
+            selectedStartX={this.state.selectedStartX}
+            selectedEndX={this.state.selectedEndX}
           />
           : <TimelineMaximized
             entireTimelineData={this.props.entireTimelineData}
@@ -220,6 +218,7 @@ class Timeline extends Component {
 const mapStateToProps = state => ({
   entireTimelineData: state.timeline.entireTimelineData,
   demographicSexData: state.demographic.sex,
+  selectedDate: state.filters.init_fda_dt,
 });
 
 /**

@@ -1,4 +1,4 @@
-# MEV-MQP
+# MEV-MQP - Adverse Reaction Reports Analysis Tool (ARRAT)
 
 ## Setup
 ### Dependencies

@@ -40,10 +40,7 @@ class TimelineMaximized extends Component {
 
     selectedStartX: PropTypes.string.isRequired,
     selectedEndX: PropTypes.string.isRequired,
-    previewStartX: PropTypes.string.isRequired,
-    previewEndX: PropTypes.string.isRequired,
     currentlyFilteredDateRange: PropTypes.string.isRequired,
-    currentlyHighlightedDateRange: PropTypes.string.isRequired,
     currentlySelecting: PropTypes.bool.isRequired,
     mouseMovePosition: PropTypes.string.isRequired,
     noDataFound: PropTypes.bool.isRequired,
@@ -76,7 +73,6 @@ class TimelineMaximized extends Component {
       this.props.updateTimelineState({
         currentlySelecting: true,
         selectedStartX: this.props.mouseMovePosition,
-        previewStartX: this.props.mouseMovePosition,
       });
 
       // Make the Set Date button Orange since we are no longer selected the range we have filtered for
@@ -88,7 +84,6 @@ class TimelineMaximized extends Component {
       // Clear  the Other end to start a new selection TODO
       this.props.updateTimelineState({
         selectedEndX: '0',
-        previewEndX: '0',
       });
       e.preventDefault();
     }, false);
@@ -96,13 +91,12 @@ class TimelineMaximized extends Component {
     // Add listener for when the user clicks and drags to select a time range for filtering.
     document.getElementById('timeline-chart').addEventListener('mouseup', () => {
       let dateRange;
-      const previewEndXVal = (this.props.mouseMovePosition === this.props.selectedStartX)
+      const selectedEndXVal = (this.props.mouseMovePosition === this.props.selectedStartX)
         ? Number(this.props.mouseMovePosition) + 1
         : this.props.mouseMovePosition;
       this.props.updateTimelineState({
         currentlySelecting: false,
-        selectedEndX: this.props.mouseMovePosition,
-        previewEndX: `${previewEndXVal}`,
+        selectedEndX: `${selectedEndXVal}`,
       });
 
       if (this.props.selectedEndX > this.props.selectedStartX) {
@@ -119,17 +113,17 @@ class TimelineMaximized extends Component {
     document.getElementById('timeline-chart').addEventListener('mousemove', () => {
       let dateRange;
       if (this.props.currentlySelecting) {
-        if (this.props.previewEndX !== this.props.mouseMovePosition) {
-          this.props.updateTimelineState({ previewEndX: `${this.props.mouseMovePosition}` });
+        if (this.props.selectedEndX !== this.props.mouseMovePosition) {
+          this.props.updateTimelineState({ selectedEndX: `${this.props.mouseMovePosition}` });
         }
-        if (this.props.previewEndX > this.props.selectedStartX) {
-          dateRange = this.props.formatDateRange(this.props.selectedStartX, this.props.previewEndX);
+        if (this.props.selectedEndX > this.props.selectedStartX) {
+          dateRange = this.props.formatDateRange(this.props.selectedStartX, this.props.selectedEndX);
           this.props.updateDateRangePickerTextBox(dateRange);
-        } else if (this.props.previewEndX === this.props.selectedStartX) {
-          dateRange = this.props.formatDateRange(this.props.selectedStartX, this.props.previewEndX);
+        } else if (this.props.selectedEndX === this.props.selectedStartX) {
+          dateRange = this.props.formatDateRange(this.props.selectedStartX, this.props.selectedEndX);
           this.props.updateDateRangePickerTextBox(dateRange);
         } else {
-          dateRange = this.props.formatDateRange(this.props.previewEndX, this.props.selectedStartX);
+          dateRange = this.props.formatDateRange(this.props.selectedEndX, this.props.selectedStartX);
           this.props.updateDateRangePickerTextBox(dateRange);
         }
       }
@@ -144,6 +138,8 @@ class TimelineMaximized extends Component {
   openDatePickerHandler = () => {
     // Initialize the JQuery Date Picker
     window.initializeDatePicker();
+    // Update date range picker text box
+    this.props.updateDateRangePickerTextBox(this.props.formatDateRange(this.props.selectedStartX, this.props.selectedEndX));
     this.setState({
       modalOpen: true,
     });
@@ -217,8 +213,8 @@ class TimelineMaximized extends Component {
           </linearGradient>
         </defs>
         <ReferenceArea
-          x1={this.props.previewStartX}
-          x2={this.props.previewEndX}
+          x1={this.props.selectedStartX}
+          x2={this.props.selectedEndX}
           stroke="red"
           strokeOpacity={0.3}
           xAxisId={0}

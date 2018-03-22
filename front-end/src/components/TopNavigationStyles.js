@@ -26,6 +26,7 @@ export default {
     'font-size': '32px',
     color: '#fff !important',
     'font-weight': '700',
+    paddingLeft: '20px',
   },
   drawerToggleContainer: {
     zIndex: '10002',
@@ -78,5 +79,10 @@ export default {
     width: '100px',
     height: '37px',
     margin: '4px',
+  },
+  tooltipStyle: {
+    fontSize: '10pt',
+    'pointer-events': 'none',
+    float: 'right',
   },
 };

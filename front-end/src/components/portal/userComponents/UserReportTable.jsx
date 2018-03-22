@@ -106,6 +106,26 @@ class UserReportTable extends React.PureComponent {
       name: 'primaryid',
     },
     {
+      title: 'Case ID',
+      name: 'caseid',
+    },
+    {
+      title: 'Case Version',
+      name: 'caseversion',
+    },
+    {
+      title: 'Age',
+      name: 'age_year',
+    },
+    {
+      title: 'Sex',
+      name: 'sex',
+    },
+    {
+      title: 'Weight',
+      name: 'wt_lb',
+    },
+    {
       title: 'Drugs',
       name: 'drugname',
     },
@@ -127,13 +147,16 @@ class UserReportTable extends React.PureComponent {
    * Default widths for the columns of the table
    */
   columnWidths = {
-    init_fda_dt: 80,
-    primaryid: 80,
+    init_fda_dt: 85,
+    primaryid: 90,
     caseid: 80,
-    caseversion: 50,
-    drugname: 100,
-    me_type: 100,
-    outc_cod: 75,
+    caseversion: 95,
+    age_year: 50,
+    sex: 50,
+    wt_lb: 65,
+    drugname: 200,
+    me_type: 180,
+    outc_cod: 85,
     report_text: 200,
   };
 

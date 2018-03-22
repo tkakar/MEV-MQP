@@ -36,7 +36,7 @@ class About extends Component {
         <div className="About container">
           <div className="row">
             <div className="col-sm-12">
-              <h3>Medication Error and Adverse Reaction Trend Visualizer</h3>
+              <h3>Adverse Reaction Reports Analysis Tool</h3>
               <h5>This is a system to view, analyze and classify reports from the FDA Adverse Event Reporting System (FAERS).</h5>
             </div>
             <div className="col-sm-4">

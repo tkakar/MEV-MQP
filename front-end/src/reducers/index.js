@@ -16,5 +16,5 @@ export default {
   mainVisualization,
   timeline,
   user,
-  all_reports
+  all_reports,
 };

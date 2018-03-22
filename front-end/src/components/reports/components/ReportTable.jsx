@@ -293,7 +293,7 @@ class ReportTable extends React.PureComponent {
   }
 
   updateEvidenceRows = () => {
-    if(this.props.bin !== 'searched reports'){
+    if (this.props.bin !== 'searched reports') {
       this.props.getReportsInCases(this.props.userID)
         .then((response) => {
           this.setState({
@@ -304,12 +304,11 @@ class ReportTable extends React.PureComponent {
               }), {}),
           });
         });
-      }
-      else{
-        this.setState({
-          evidenceType:[],
-        })
-      }    
+    } else {
+      this.setState({
+        evidenceType: [],
+      });
+    }
   }
 
 

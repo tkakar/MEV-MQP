@@ -28,8 +28,8 @@ class TimelineMinimized extends Component {
     getUnformattedDateFromFormattedRange: PropTypes.func.isRequired,
     formatDate: PropTypes.func.isRequired,
 
-    previewStartX: PropTypes.string.isRequired,
-    previewEndX: PropTypes.string.isRequired,
+    selectedStartX: PropTypes.string.isRequired,
+    selectedEndX: PropTypes.string.isRequired,
 
     classes: PropTypes.shape({
       dateSelectedTextField: PropTypes.string,
@@ -103,8 +103,8 @@ class TimelineMinimized extends Component {
           </linearGradient>
         </defs>
         <ReferenceArea
-          x1={this.props.previewStartX}
-          x2={this.props.previewEndX}
+          x1={this.props.selectedStartX}
+          x2={this.props.selectedEndX}
           stroke="red"
           strokeOpacity={0.3}
           xAxisId={0}

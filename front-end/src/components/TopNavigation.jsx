@@ -10,6 +10,7 @@ import Chip from 'material-ui/Chip';
 import Avatar from 'material-ui/Avatar';
 import Button from 'material-ui/Button';
 import List, { ListItem, ListItemText } from 'material-ui/List';
+import MaterialTooltip from 'material-ui/Tooltip';
 import Divider from 'material-ui/Divider';
 import { setUserInfo } from '../actions/userActions';
 import CurrentlySelectedFilters from './components/CurrentlySelectedFilters';
@@ -25,6 +26,7 @@ class TopNavigation extends Component {
     setUserInfo: PropTypes.func.isRequired,
     totalCount: PropTypes.number.isRequired,
     classes: PropTypes.shape({
+      tooltipStyle: PropTypes.string,
     }).isRequired,
   }
 
@@ -184,7 +186,7 @@ class TopNavigation extends Component {
           </div>
           <div className="navbar-header pull-right">
             <a className={`${this.props.classes.logo} navbar-brand`} href="/">
-              MEV
+              ARRAT
             </a>
           </div>
           {this.props.showFilters ? 
@@ -199,13 +201,23 @@ class TopNavigation extends Component {
             </Paper>
             <CurrentlySelectedFilters />
             <Paper className={`${this.props.classes.filterPaper} pull-right`} elevation={4}>
-              <Chip
-                avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
-                onClick={this.handleClearFilters}
-                className={this.props.classes.clearFilterChip}
-                style={{ transform: `translateY(-5px) translateX(${100 - 13}px)` }}
-                classes={{ label: this.props.classes.chipLabel }}
-              />
+              <MaterialTooltip
+                title="Note: This does not clear the date range, it only sets it back to the most recent week of data."
+                placement="top"
+                enterDelay={50}
+                classes={{
+                  tooltip: this.props.classes.tooltipStyle,
+                  popper: this.props.classes.tooltipStyle,
+                  }}
+              >
+                <Chip
+                  avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
+                  onClick={this.handleClearFilters}
+                  className={this.props.classes.clearFilterChip}
+                  style={{ transform: `translateY(-5px) translateX(${100 - 13}px)` }}
+                  classes={{ label: this.props.classes.chipLabel }}
+                />
+              </MaterialTooltip>
               <Typography type="subheading" align="center" style={{ lineHeight: '2.3rem' }} >
                 Clear Filters
               </Typography>
