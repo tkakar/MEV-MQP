@@ -221,7 +221,7 @@ class ReportList extends Component {
               centered
             >
               <Tab icon={<AllReportsIcon />} label="All Reports" key="All Reports" name="All Reports" />
-              <Tab icon={<AllReportsIcon />} label="Searched Reports" name="Searched Reports" />
+              <Tab icon={<AllReportsIcon />} label="Recommended Reports" name="Searched Reports" />
               <Tab icon={<ReadCaseIcon />} label="Read" key="Read" name="Read" />
               <Tab icon={<TrashIcon />} label="Trash" key="Trash" name="Trash" />
               <Tab icon={<NewCaseIcon />} label="New Case" name="New Case" />

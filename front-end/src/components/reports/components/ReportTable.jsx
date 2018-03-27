@@ -109,7 +109,7 @@ class ReportTable extends React.PureComponent {
         drugname: 200,
         me_type: 180,
         outc_cod: 85,
-        report_text: 200,
+        report_text: 500,
       },
 
       /**
@@ -160,7 +160,7 @@ class ReportTable extends React.PureComponent {
   componentWillReceiveProps(nextProps){
     // console.log(this.state.allData)
     if (nextProps.searchedReports.length!==0){
-      console.log(nextProps)
+      // console.log(nextProps)
       this.setState({ data:nextProps.searchedReports});
     }
   }
@@ -290,6 +290,14 @@ class ReportTable extends React.PureComponent {
           }, {}),
         });
       });
+  }
+
+  cleanNarrtive =() =>{
+
+    for (var i=0;i<this.state.data.length;i++){
+      // console.log(this.state.data[i].report_text)
+      this.state.data[i].report_text = this.state.data[i].report_text.replace(/<(?:.|\n)*?>/gm, '');
+    }
   }
 
   updateEvidenceRows = () => {
@@ -620,6 +628,7 @@ class ReportTable extends React.PureComponent {
   )
 
   render() {
+    this.cleanNarrtive();
     return (
       <Paper id="table-container" className={this.props.classes.tableContainer} elevation={4}>
         {/*eslint-disable */}

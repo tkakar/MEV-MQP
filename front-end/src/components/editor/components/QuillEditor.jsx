@@ -174,7 +174,7 @@ class QuillEditor extends Component {
               onChange={this.handleChange}
               modules={this.modules}
               theme="snow"
-              readOnly
+              // readOnly
             />
             : null
         }

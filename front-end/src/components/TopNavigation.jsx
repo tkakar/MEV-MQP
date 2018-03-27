@@ -57,8 +57,8 @@ class TopNavigation extends Component {
     this.props.toggleStageFilter('CLEAR');
     this.props.toggleCauseFilter('CLEAR');
     this.props.setSelectedDate({
-      startDate: 20170324,
-      endDate: 20170331,
+      startDate: 20170226,
+      endDate: 20170304,
     });
   }
 
@@ -184,7 +184,7 @@ class TopNavigation extends Component {
           </div>
           <div className="navbar-header pull-right">
             <a className={`${this.props.classes.logo} navbar-brand`} href="/">
-              MEV
+              ConText
             </a>
           </div>
           {this.props.showFilters ? 
@@ -198,18 +198,18 @@ class TopNavigation extends Component {
               </Typography>
             </Paper>
             <CurrentlySelectedFilters />
-            <Paper className={`${this.props.classes.filterPaper} pull-right`} elevation={4}>
+            {/* <Paper className={`${this.props.classes.filterPaper} pull-right`} elevation={4}> 
               <Chip
                 avatar={<Avatar src={ClearFilterIcon} alt="Clear Filters" className={this.props.classes.chipAvatar} />}
                 onClick={this.handleClearFilters}
                 className={this.props.classes.clearFilterChip}
                 style={{ transform: `translateY(-5px) translateX(${100 - 13}px)` }}
                 classes={{ label: this.props.classes.chipLabel }}
-              />
-              <Typography type="subheading" align="center" style={{ lineHeight: '2.3rem' }} >
+              /> 
+              <Typography type="subheading" align="center" style={{ lineHeight: '2.3rem'}} >
                 Clear Filters
               </Typography>
-            </Paper>
+            </Paper> */}
           </div>
           : null}
         </div>
