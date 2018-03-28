@@ -56,6 +56,7 @@ db = new Client({
 db.connect()
   .catch(err => { 
     db.end();
+    console.log('No Local DB found, using remote')
     //Connect to the Database on WPI Server
     db = new Client({
       user: 'mevuser',
@@ -67,7 +68,6 @@ db.connect()
     db.connect()
       .catch(err => {
         db.end();
-        console.log('No Local DB found, using remote')
         // Connect to the Database on Localhost
         db = new Client({
           host: 'localhost',
@@ -96,13 +96,13 @@ const options = {
   root: __dirname + '/',
 }
 
-app.get('*', (req, res) => {
-  res.sendFile('build/index.html', options, (err) => {
-    if (err) {
-      console.log(err)
-    }
-  });
-})
+// app.get('*', (req, res) => {
+//   res.sendFile('build/index.html', options, (err) => {
+//     if (err) {
+//       console.log(err)
+//     }
+//   });
+// })
 
 /**
  * Creates the string of a SQL WHERE statement (Starts with AND) for Sex Filtering
@@ -894,7 +894,7 @@ function writeSQL(dataRows, drugReactions, meTypesArray, drugNamesArray, causesA
         + `WHERE primaryid=${pidRow.primaryid};\n`;
       
       // console.log(updateDemoRowQuery);
-      wstream.write(updateDemoRowQuery);
+      // wstream.write(updateDemoRowQuery);
       
       const drugNamesforPID = [];
       // Generate 1-4 random drugs for this primary id
@@ -980,9 +980,8 @@ app.get('/update-data', (req, res) => {
   //           const drugReactions = {};
 
   //           let promiseChain = Promise.resolve();
-  //           let promises = [];
 
-  //           let query = `SELECT primaryid FROM demo`
+  //           let query = `SELECT primaryid FROM demo WHERE init_fda_dt > '20170101'`
 
   //           let dataChunk;
   //           const chunkSize = 100000;
@@ -1013,6 +1012,60 @@ app.get('/update-data', (req, res) => {
   //     });
   //   });
   // });
+});
+
+app.get('/update-report-text', (req, res) => {
+  // fs.readdir("../../text_data", "utf8", function (error, fileNames) {
+
+  //   if (error) {
+  //     res.status(500);
+  //     return;
+  //   }
+
+  //   const textNarratives = [];
+
+  //   let promiseChain = Promise.resolve();
+
+  //   fileNames.forEach(function(filename) {
+  //     textNarratives.push(fs.readFileSync("../../text_data/" + filename, 'utf-8'))
+  //   });
+
+
+  //   let query = `SELECT primaryid FROM demo WHERE init_fda_dt > '20170101'`
+
+
+  //   let dataChunk;
+  //   const chunkSize = 10000;
+  //   let dataChunkStart = 0;
+  //   let dataChunkEnd = chunkSize;
+
+
+  //   db.query(query, (err, allData) => {
+  //     while ((dataChunk = allData.rows.slice(dataChunkStart, dataChunkEnd)).length !== 0) {
+  //       const asd = dataChunk;
+  //       console.log('Adding .then in while')
+  //       promiseChain = promiseChain.then(() => {
+  //         asd.forEach((primaryid, i) => {
+  //           let updateQuery =
+  //             'UPDATE demo '
+  //             + 'SET report_text = $$' + textNarratives[i%textNarratives.length] + '$$, tags = $${}$$ '
+  //             + 'WHERE primaryid = ' + primaryid.primaryid;
+  
+  //             db.query(updateQuery, (err, data) => {
+  //               console.log('Sent!',primaryid.primaryid , err)
+  //             });
+  //         })
+  //       });
+  //       dataChunkStart += chunkSize;
+  //       dataChunkEnd += chunkSize;
+  //     }
+  //     console.log('Adding last .then')
+  //     promiseChain.then(() => {
+  //       console.log('Done!')
+  //       res.status(200);
+  //     })
+  //   })
+  // })
 });
 
 getDummyCache = () => ({

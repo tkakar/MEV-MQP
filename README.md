@@ -12,6 +12,7 @@
 1. Run the command '```createdb faers```' in your command line interface
 2. Download our DB dump file from the Google Drive called latest.sql
 3. Run the command '```psql faers < latest.sql```' to import data into the database (this may take some time)
+4. Connect to the database using ```sudo -u mevuser psql faers```.
 
 #### Dump PostgreSQL DB
 1. run the command '```pg_dump -h localhost -U mevuser -W -d faers > latest.sql```' in the postgres command line interface
