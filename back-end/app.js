@@ -96,13 +96,13 @@ const options = {
   root: __dirname + '/',
 }
 
-// app.get('*', (req, res) => {
-//   res.sendFile('build/index.html', options, (err) => {
-//     if (err) {
-//       console.log(err)
-//     }
-//   });
-// })
+app.get('*', (req, res) => {
+  res.sendFile('build/index.html', options, (err) => {
+    if (err) {
+      console.log(err)
+    }
+  });
+})
 
 /**
  * Creates the string of a SQL WHERE statement (Starts with AND) for Sex Filtering
