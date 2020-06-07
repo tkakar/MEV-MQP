@@ -1,6 +1,5 @@
 # Medication Error Visualization
 
-## About
 This is a visual analytics tool to screen adverse event reports to identify and analyze critical medication errors.
  
 Please read the [Publication](IVAPP_2019_24_CR%20(1).pdf) for more details.
